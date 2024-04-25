@@ -1,0 +1,6 @@
+@Bountous_X_Accolite_Job_Portal_HostAddress = http://localhost:5234
+
+GET {{Bountous_X_Accolite_Job_Portal_HostAddress}}/
+Accept: application/json
+
+###
