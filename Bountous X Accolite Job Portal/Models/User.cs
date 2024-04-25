@@ -12,5 +12,15 @@ namespace Bountous_X_Accolite_Job_Portal.Models
         public string Country { get; set; }
         public string ZipCode { get; set; }
         public DateTime CreatedAt { get; set; }
+
+        public User(string FirstName, string LastName, string Email, string Password)
+        {
+            this.FirstName = FirstName;
+            this.LastName = LastName;
+            this.Email = Email;
+            this.PasswordHash = Password;
+            this.CreatedAt = DateTime.Now;
+        }
     }
+
 }
