@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\vishal.s_INT1587\\Desktop\\JobPortal_WebAPI\\Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj": {}
+    "C:\\Assignments\\Dot-Net Projects\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj": {}
   },
   "projects": {
-    "C:\\Users\\vishal.s_INT1587\\Desktop\\JobPortal_WebAPI\\Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj": {
+    "C:\\Assignments\\Dot-Net Projects\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\vishal.s_INT1587\\Desktop\\JobPortal_WebAPI\\Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj",
+        "projectUniqueName": "C:\\Assignments\\Dot-Net Projects\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj",
         "projectName": "Bountous X Accolite Job Portal",
-        "projectPath": "C:\\Users\\vishal.s_INT1587\\Desktop\\JobPortal_WebAPI\\Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj",
-        "packagesPath": "C:\\Users\\vishal.s_INT1587\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\vishal.s_INT1587\\Desktop\\JobPortal_WebAPI\\Bountous X Accolite Job Portal\\obj\\",
+        "projectPath": "C:\\Assignments\\Dot-Net Projects\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj",
+        "packagesPath": "C:\\Users\\Ankit.G_INT1580\\.nuget\\packages\\",
+        "outputPath": "C:\\Assignments\\Dot-Net Projects\\JobPortal_Backend\\Bountous X Accolite Job Portal\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\vishal.s_INT1587\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Ankit.G_INT1580\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
