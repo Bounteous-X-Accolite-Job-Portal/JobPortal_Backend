@@ -1,9 +1,12 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
 
 namespace Bountous_X_Accolite_Job_Portal.Models
 {
     public class User : IdentityUser
     {
+        [Key]
+        public int UserId {  get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string AddressLine1 { get; set; }
