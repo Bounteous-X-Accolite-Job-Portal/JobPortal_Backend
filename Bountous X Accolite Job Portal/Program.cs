@@ -1,4 +1,9 @@
 
+using Bountous_X_Accolite_Job_Portal.Data;
+using Bountous_X_Accolite_Job_Portal.Models;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+
 namespace Bountous_X_Accolite_Job_Portal
 {
     public class Program
@@ -8,6 +13,23 @@ namespace Bountous_X_Accolite_Job_Portal
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+            builder.Services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseSqlServer(
+                        builder.Configuration.GetConnectionString("DefaultConnection")
+                    ));
+
+            builder.Services.Configure<IdentityOptions>(options =>
+            {
+                options.Password.RequiredLength = 4;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequireDigit = false;
+                options.Password.RequireNonAlphanumeric = false;
+            });
+
+            builder.Services.AddIdentity<User, IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
 
             // CORS
             builder.Services.AddCors(options => options.AddPolicy(name: "FrontendUI",
