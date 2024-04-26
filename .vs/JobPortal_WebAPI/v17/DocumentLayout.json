@@ -3,36 +3,32 @@
   "WorkspaceRootPath": "C:\\Users\\shagun.p_int1590\\Desktop\\JobPortal_Backend\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\shagun.p_int1590\\Desktop\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Migrations\\20240425101947_updatephon.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Bountous X Accolite Job Portal\\Migrations\\20240425101947_updatephon.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\shagun.p_int1590\\Desktop\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Migrations\\20240425101859_updatephone.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Bountous X Accolite Job Portal\\Migrations\\20240425101859_updatephone.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0FFFF4ED-1FD1-4AA5-B96D-A907C3FFB4F6}|Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj|c:\\users\\shagun.p_int1590\\desktop\\jobportal_backend\\bountous x accolite job portal\\models\\employee.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0FFFF4ED-1FD1-4AA5-B96D-A907C3FFB4F6}|Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj|solutionrelative:bountous x accolite job portal\\models\\employee.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0FFFF4ED-1FD1-4AA5-B96D-A907C3FFB4F6}|Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj|c:\\users\\shagun.p_int1590\\desktop\\jobportal_backend\\bountous x accolite job portal\\data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0FFFF4ED-1FD1-4AA5-B96D-A907C3FFB4F6}|Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj|solutionrelative:bountous x accolite job portal\\data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{0FFFF4ED-1FD1-4AA5-B96D-A907C3FFB4F6}|Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj|c:\\users\\shagun.p_int1590\\desktop\\jobportal_backend\\bountous x accolite job portal\\models\\designation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{0FFFF4ED-1FD1-4AA5-B96D-A907C3FFB4F6}|Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj|solutionrelative:bountous x accolite job portal\\models\\designation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0FFFF4ED-1FD1-4AA5-B96D-A907C3FFB4F6}|Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj|c:\\users\\shagun.p_int1590\\desktop\\jobportal_backend\\bountous x accolite job portal\\models\\jobcategory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0FFFF4ED-1FD1-4AA5-B96D-A907C3FFB4F6}|Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj|solutionrelative:bountous x accolite job portal\\models\\jobcategory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{0FFFF4ED-1FD1-4AA5-B96D-A907C3FFB4F6}|Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj|c:\\users\\shagun.p_int1590\\desktop\\jobportal_backend\\bountous x accolite job portal\\models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{0FFFF4ED-1FD1-4AA5-B96D-A907C3FFB4F6}|Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj|solutionrelative:bountous x accolite job portal\\models\\user.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\shagun.p_int1590\\Desktop\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Migrations\\20240425100041_update designation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Bountous X Accolite Job Portal\\Migrations\\20240425100041_update designation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{0FFFF4ED-1FD1-4AA5-B96D-A907C3FFB4F6}|Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj|c:\\users\\shagun.p_int1590\\desktop\\jobportal_backend\\bountous x accolite job portal\\models\\employee.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0FFFF4ED-1FD1-4AA5-B96D-A907C3FFB4F6}|Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj|solutionrelative:bountous x accolite job portal\\models\\employee.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\shagun.p_int1590\\Desktop\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Migrations\\20240425100010_designation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Bountous X Accolite Job Portal\\Migrations\\20240425100010_designation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\shagun.p_int1590\\Desktop\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Migrations\\20240426050457_location.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Bountous X Accolite Job Portal\\Migrations\\20240426050457_location.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0FFFF4ED-1FD1-4AA5-B96D-A907C3FFB4F6}|Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj|c:\\users\\shagun.p_int1590\\desktop\\jobportal_backend\\bountous x accolite job portal\\migrations\\20240425101947_updatephon.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0FFFF4ED-1FD1-4AA5-B96D-A907C3FFB4F6}|Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj|solutionrelative:bountous x accolite job portal\\migrations\\20240425101947_updatephon.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0FFFF4ED-1FD1-4AA5-B96D-A907C3FFB4F6}|Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj|c:\\users\\shagun.p_int1590\\desktop\\jobportal_backend\\bountous x accolite job portal\\data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0FFFF4ED-1FD1-4AA5-B96D-A907C3FFB4F6}|Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj|solutionrelative:bountous x accolite job portal\\data\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{0FFFF4ED-1FD1-4AA5-B96D-A907C3FFB4F6}|Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj|c:\\users\\shagun.p_int1590\\desktop\\jobportal_backend\\bountous x accolite job portal\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
@@ -45,6 +41,18 @@
     {
       "AbsoluteMoniker": "D:0:0:{0FFFF4ED-1FD1-4AA5-B96D-A907C3FFB4F6}|Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj|c:\\users\\shagun.p_int1590\\desktop\\jobportal_backend\\bountous x accolite job portal\\migrations\\20240425093016_empadd.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{0FFFF4ED-1FD1-4AA5-B96D-A907C3FFB4F6}|Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj|solutionrelative:bountous x accolite job portal\\migrations\\20240425093016_empadd.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0FFFF4ED-1FD1-4AA5-B96D-A907C3FFB4F6}|Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj|c:\\users\\shagun.p_int1590\\desktop\\jobportal_backend\\bountous x accolite job portal\\migrations\\20240425101859_updatephone.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0FFFF4ED-1FD1-4AA5-B96D-A907C3FFB4F6}|Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj|solutionrelative:bountous x accolite job portal\\migrations\\20240425101859_updatephone.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0FFFF4ED-1FD1-4AA5-B96D-A907C3FFB4F6}|Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj|c:\\users\\shagun.p_int1590\\desktop\\jobportal_backend\\bountous x accolite job portal\\migrations\\20240425100041_update designation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0FFFF4ED-1FD1-4AA5-B96D-A907C3FFB4F6}|Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj|solutionrelative:bountous x accolite job portal\\migrations\\20240425100041_update designation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0FFFF4ED-1FD1-4AA5-B96D-A907C3FFB4F6}|Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj|c:\\users\\shagun.p_int1590\\desktop\\jobportal_backend\\bountous x accolite job portal\\migrations\\20240425100010_designation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0FFFF4ED-1FD1-4AA5-B96D-A907C3FFB4F6}|Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj|solutionrelative:bountous x accolite job portal\\migrations\\20240425100010_designation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -54,37 +62,50 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 4,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
+              "Title": "JobCategory.cs",
+              "DocumentMoniker": "C:\\Users\\shagun.p_int1590\\Desktop\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Models\\JobCategory.cs",
+              "RelativeDocumentMoniker": "Bountous X Accolite Job Portal\\Models\\JobCategory.cs",
+              "ToolTip": "C:\\Users\\shagun.p_int1590\\Desktop\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Models\\JobCategory.cs",
+              "RelativeToolTip": "Bountous X Accolite Job Portal\\Models\\JobCategory.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAMAAAAFAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-26T05:21:08.754Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "20240426050457_location.cs",
+              "DocumentMoniker": "C:\\Users\\shagun.p_int1590\\Desktop\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Migrations\\20240426050457_location.cs",
+              "RelativeDocumentMoniker": "Bountous X Accolite Job Portal\\Migrations\\20240426050457_location.cs",
+              "ToolTip": "C:\\Users\\shagun.p_int1590\\Desktop\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Migrations\\20240426050457_location.cs",
+              "RelativeToolTip": "Bountous X Accolite Job Portal\\Migrations\\20240426050457_location.cs",
+              "ViewState": "AQIAAAYAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-26T05:04:57.347Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
               "Title": "20240425101947_updatephon.cs",
               "DocumentMoniker": "C:\\Users\\shagun.p_int1590\\Desktop\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Migrations\\20240425101947_updatephon.cs",
               "RelativeDocumentMoniker": "Bountous X Accolite Job Portal\\Migrations\\20240425101947_updatephon.cs",
               "ToolTip": "C:\\Users\\shagun.p_int1590\\Desktop\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Migrations\\20240425101947_updatephon.cs",
               "RelativeToolTip": "Bountous X Accolite Job Portal\\Migrations\\20240425101947_updatephon.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "ViewState": "AQIAAAYAAAAAAAAAAAAAAAwAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-04-25T10:19:48.091Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "20240425101859_updatephone.cs",
-              "DocumentMoniker": "C:\\Users\\shagun.p_int1590\\Desktop\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Migrations\\20240425101859_updatephone.cs",
-              "RelativeDocumentMoniker": "Bountous X Accolite Job Portal\\Migrations\\20240425101859_updatephone.cs",
-              "ToolTip": "C:\\Users\\shagun.p_int1590\\Desktop\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Migrations\\20240425101859_updatephone.cs",
-              "RelativeToolTip": "Bountous X Accolite Job Portal\\Migrations\\20240425101859_updatephone.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-04-25T10:18:59.234Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 11,
               "Title": "20240425100041_update designation.cs",
               "DocumentMoniker": "C:\\Users\\shagun.p_int1590\\Desktop\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Migrations\\20240425100041_update designation.cs",
               "RelativeDocumentMoniker": "Bountous X Accolite Job Portal\\Migrations\\20240425100041_update designation.cs",
@@ -92,12 +113,62 @@
               "RelativeToolTip": "Bountous X Accolite Job Portal\\Migrations\\20240425100041_update designation.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-04-25T10:00:41.573Z",
+              "WhenOpened": "2024-04-25T10:00:41.573Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Designation.cs",
+              "DocumentMoniker": "C:\\Users\\shagun.p_int1590\\Desktop\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Models\\Designation.cs",
+              "RelativeDocumentMoniker": "Bountous X Accolite Job Portal\\Models\\Designation.cs",
+              "ToolTip": "C:\\Users\\shagun.p_int1590\\Desktop\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Models\\Designation.cs",
+              "RelativeToolTip": "Bountous X Accolite Job Portal\\Models\\Designation.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA4AAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-25T09:28:28.979Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 3,
+              "Title": "Employee.cs",
+              "DocumentMoniker": "C:\\Users\\shagun.p_int1590\\Desktop\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Models\\Employee.cs",
+              "RelativeDocumentMoniker": "Bountous X Accolite Job Portal\\Models\\Employee.cs",
+              "ToolTip": "C:\\Users\\shagun.p_int1590\\Desktop\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Models\\Employee.cs",
+              "RelativeToolTip": "Bountous X Accolite Job Portal\\Models\\Employee.cs",
+              "ViewState": "AQIAABEAAAAAAAAAAAAIwBsAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-25T09:08:06.09Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "User.cs",
+              "DocumentMoniker": "C:\\Users\\shagun.p_int1590\\Desktop\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Models\\User.cs",
+              "RelativeDocumentMoniker": "Bountous X Accolite Job Portal\\Models\\User.cs",
+              "ToolTip": "C:\\Users\\shagun.p_int1590\\Desktop\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Models\\User.cs",
+              "RelativeToolTip": "Bountous X Accolite Job Portal\\Models\\User.cs",
+              "ViewState": "AQIAAAYAAAAAAAAAAAAAAAkAAAAtAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-25T09:08:12.782Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "20240425101859_updatephone.cs",
+              "DocumentMoniker": "C:\\Users\\shagun.p_int1590\\Desktop\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Migrations\\20240425101859_updatephone.cs",
+              "RelativeDocumentMoniker": "Bountous X Accolite Job Portal\\Migrations\\20240425101859_updatephone.cs",
+              "ToolTip": "C:\\Users\\shagun.p_int1590\\Desktop\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Migrations\\20240425101859_updatephone.cs",
+              "RelativeToolTip": "Bountous X Accolite Job Portal\\Migrations\\20240425101859_updatephone.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-04-25T10:18:59.234Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
               "Title": "appsettings.json",
               "DocumentMoniker": "C:\\Users\\shagun.p_int1590\\Desktop\\JobPortal_Backend\\Bountous X Accolite Job Portal\\appsettings.json",
               "RelativeDocumentMoniker": "Bountous X Accolite Job Portal\\appsettings.json",
@@ -105,51 +176,11 @@
               "RelativeToolTip": "Bountous X Accolite Job Portal\\appsettings.json",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2024-04-25T09:39:05.235Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-04-25T09:39:05.235Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "Designation.cs",
-              "DocumentMoniker": "C:\\Users\\shagun.p_int1590\\Desktop\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Models\\Designation.cs",
-              "RelativeDocumentMoniker": "Bountous X Accolite Job Portal\\Models\\Designation.cs",
-              "ToolTip": "C:\\Users\\shagun.p_int1590\\Desktop\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Models\\Designation.cs",
-              "RelativeToolTip": "Bountous X Accolite Job Portal\\Models\\Designation.cs",
-              "ViewState": "AQIAAAYAAAAAAAAAAAAAABAAAAAnAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-04-25T09:28:28.979Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "User.cs",
-              "DocumentMoniker": "C:\\Users\\shagun.p_int1590\\Desktop\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Models\\User.cs",
-              "RelativeDocumentMoniker": "Bountous X Accolite Job Portal\\Models\\User.cs",
-              "ToolTip": "C:\\Users\\shagun.p_int1590\\Desktop\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Models\\User.cs",
-              "RelativeToolTip": "Bountous X Accolite Job Portal\\Models\\User.cs",
-              "ViewState": "AQIAAAgAAAAAAAAAAAAQwBAAAAApAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-04-25T09:08:12.782Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "Employee.cs",
-              "DocumentMoniker": "C:\\Users\\shagun.p_int1590\\Desktop\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Models\\Employee.cs",
-              "RelativeDocumentMoniker": "Bountous X Accolite Job Portal\\Models\\Employee.cs",
-              "ToolTip": "C:\\Users\\shagun.p_int1590\\Desktop\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Models\\Employee.cs",
-              "RelativeToolTip": "Bountous X Accolite Job Portal\\Models\\Employee.cs",
-              "ViewState": "AQIAAAUAAAAAAAAAAAAxwBIAAAAWAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-04-25T09:08:06.09Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 9,
               "Title": "20240425093016_empAdd.cs",
               "DocumentMoniker": "C:\\Users\\shagun.p_int1590\\Desktop\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Migrations\\20240425093016_empAdd.cs",
               "RelativeDocumentMoniker": "Bountous X Accolite Job Portal\\Migrations\\20240425093016_empAdd.cs",
@@ -157,12 +188,11 @@
               "RelativeToolTip": "Bountous X Accolite Job Portal\\Migrations\\20240425093016_empAdd.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-04-25T09:30:17.361Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-04-25T09:30:17.361Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 8,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\shagun.p_int1590\\Desktop\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Program.cs",
               "RelativeDocumentMoniker": "Bountous X Accolite Job Portal\\Program.cs",
@@ -170,12 +200,11 @@
               "RelativeToolTip": "Bountous X Accolite Job Portal\\Program.cs",
               "ViewState": "AQIAAD0AAAAAAAAAAAAgwAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-04-25T09:29:11.569Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-04-25T09:29:11.569Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 6,
               "Title": "ApplicationDbContext.cs",
               "DocumentMoniker": "C:\\Users\\shagun.p_int1590\\Desktop\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Data\\ApplicationDbContext.cs",
               "RelativeDocumentMoniker": "Bountous X Accolite Job Portal\\Data\\ApplicationDbContext.cs",
@@ -183,12 +212,11 @@
               "RelativeToolTip": "Bountous X Accolite Job Portal\\Data\\ApplicationDbContext.cs",
               "ViewState": "AQIAAAUAAAAAAAAAAAAuwBAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-04-25T09:14:01.935Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-04-25T09:14:01.935Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 12,
               "Title": "20240425100010_designation.cs",
               "DocumentMoniker": "C:\\Users\\shagun.p_int1590\\Desktop\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Migrations\\20240425100010_designation.cs",
               "RelativeDocumentMoniker": "Bountous X Accolite Job Portal\\Migrations\\20240425100010_designation.cs",
@@ -196,8 +224,7 @@
               "RelativeToolTip": "Bountous X Accolite Job Portal\\Migrations\\20240425100010_designation.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-04-25T10:00:11.02Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-04-25T10:00:11.02Z"
             }
           ]
         }
