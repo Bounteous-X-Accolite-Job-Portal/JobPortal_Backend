@@ -17,7 +17,13 @@ public class Emplyoee: IdentityUser
 	public string Password { get; set; }
 
 	public string PhoneNo { get; set; }
+
 	public int DesignationId {  get; set; }
 	public Designation Designation { get; set; }
+
+	
+
+	//public int CategoryId { get; set; }
+	//public JobCategory JobCategory { get; set; }
 
 }

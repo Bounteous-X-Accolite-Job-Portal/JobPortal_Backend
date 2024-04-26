@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Bountous_X_Accolite_Job_Portal.Models
 {
-    public class Designation : IdentityUser
+    public class Designation :IdentityUser
     {
         [Key]
         public int DesignationId {  get; set; }

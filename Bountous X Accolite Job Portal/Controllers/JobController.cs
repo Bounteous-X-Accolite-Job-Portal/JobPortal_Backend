@@ -17,7 +17,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
         }
 
         [HttpDelete]
-        public JsonResult deleteById(string id)
+        public JsonResult deleteById(Guid id)
         {
             var job = context.Jobs.FirstOrDefault(x => x.JobId == id);
             if (job != null)
@@ -39,7 +39,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
         }
 
         [HttpGet("/GetByJobId")]
-        public JsonResult GetJob(string id)
+        public JsonResult GetJob(Guid id)
         {
             var job = context.Jobs.FirstOrDefault(x => x.JobId == id);
             if (job != null)
@@ -55,7 +55,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
         }
 
         [HttpPut]
-        public JsonResult PutJob(string id, string loc, string desc, DateTime dt)
+        public JsonResult PutJob(Guid id, string loc, string desc, DateTime dt)
         {
             var job = context.Jobs.FirstOrDefault(x => x.JobId == id);
             if (job != null)
