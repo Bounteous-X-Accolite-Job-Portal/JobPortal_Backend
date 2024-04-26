@@ -16,6 +16,6 @@ namespace Bountous_X_Accolite_Job_Portal.Models
         public string qualifiicaton { get; set; }
         public string Experience { get; set; }
         public int EmployeeId { get; set; }
-        public Emplyoee EmployeeName { get; set; }
+        public Emplyoee Employee { get; set; }
     }
 }
