@@ -8,7 +8,10 @@ namespace Bountous_X_Accolite_Job_Portal.Data
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) {}
 
-        public DbSet<User> User {  get; set; }
+        public DbSet<User> Users {  get; set; }
+        public DbSet<Candidate> Candidates { get; set; }    
+        public DbSet<Employee> Employees { get; set; }  
+        public DbSet<Designation> Designations { get; set; }
 
     }
 }
