@@ -55,7 +55,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
         }
 
         [HttpPut]
-        public JsonResult PutJob(string id, string loc, string desc, DateOnly dt)
+        public JsonResult PutJob(string id, string loc, string desc, DateTime dt)
         {
             var job = context.Jobs.FirstOrDefault(x => x.JobId == id);
             if (job != null)
