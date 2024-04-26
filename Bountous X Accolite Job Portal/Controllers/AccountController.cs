@@ -18,7 +18,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
         }
 
         [HttpPost]
-        [Route("login")]
+        [Route("register")]
         public async Task<IActionResult> Register(RegisterViewModel registerUser)
         {
             if (!ModelState.IsValid)
@@ -36,7 +36,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
         }
 
         [HttpPost]
-        [Route("register")]
+        [Route("login")]
         public async Task<IActionResult> Login(UserLoginViewModel loginUser)
         {
             if(!ModelState.IsValid)
