@@ -10,6 +10,7 @@ namespace Bountous_X_Accolite_Job_Portal.Models
         public int StartYear { get; set; }
         public int EndYear { get; set; }
         public double Grade { get; set; }  
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
         public Guid? InstitutionId { get; set; }
         public virtual EducationInstitution? EducationInstitution { get; set; }
         public Guid? DegreeId { get; set; }
