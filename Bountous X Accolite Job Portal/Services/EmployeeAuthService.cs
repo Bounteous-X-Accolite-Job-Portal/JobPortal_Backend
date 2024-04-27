@@ -35,7 +35,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
         public async Task<bool> Register(EmployeeRegisterViewModel RegisterEmployee)
         {
             var employee = new Employee();
-            employee.EmpId = RegisterEmployee.EmpId;
+            employee.EmpId = RegisterEmployee.EmpId;  // company employee id
             employee.FirstName = RegisterEmployee.FirstName;
             employee.LastName = RegisterEmployee.LastName;
             employee.Email = RegisterEmployee.Email;

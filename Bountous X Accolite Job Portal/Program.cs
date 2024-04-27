@@ -19,7 +19,7 @@ namespace Bountous_X_Accolite_Job_Portal
             // Add services to the container.
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
-                        builder.Configuration.GetConnectionString("DefaultConnection")
+                        builder.Configuration.GetConnectionString("LocalConnection")
                     ));
 
             //builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -64,6 +64,7 @@ namespace Bountous_X_Accolite_Job_Portal
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<IEmployeeAuthService, EmployeeAuthService>();
             builder.Services.AddScoped<IDesignationService, DesignationService>();
+            builder.Services.AddScoped<IEducationInstitutionService, EducationInstitutionService>();
 
 
             var app = builder.Build();
