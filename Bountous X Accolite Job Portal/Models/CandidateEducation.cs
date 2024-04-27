@@ -15,5 +15,7 @@ namespace Bountous_X_Accolite_Job_Portal.Models
         public virtual EducationInstitution? EducationInstitution { get; set; }
         public Guid? DegreeId { get; set; }
         public virtual Degree? Degree { get; set; }  
+        public Guid? CandidateId { get; set; }
+        public virtual Candidate? Candidate { get; set; }
     }
 }

@@ -1,8 +1,6 @@
 ﻿using Bountous_X_Accolite_Job_Portal.Models;
 using Bountous_X_Accolite_Job_Portal.Models.DegreeViewModel;
 using Bountous_X_Accolite_Job_Portal.Models.DegreeViewModel.DegreeResponseViewModel;
-using Bountous_X_Accolite_Job_Portal.Models.EducationInstitutionViewModel;
-using Bountous_X_Accolite_Job_Portal.Services;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -26,7 +24,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
 
         [HttpGet]
         [Route("getAllDegrees")]
-        public async Task<AllDegreeResponseViewModel> GetAllDegrees()
+        public AllDegreeResponseViewModel GetAllDegrees()
         {
             List<DegreeViewModel> degrees = _degreeService.GetAllDegree();
 
@@ -39,7 +37,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
 
         [HttpGet]
         [Route("getDegree/{id}")]
-        public async Task<DegreeResponseViewModel> GetDegree(Guid id)
+        public DegreeResponseViewModel GetDegree(Guid id)
         {
             DegreeResponseViewModel response = _degreeService.GetDegree(id);
             return response;
