@@ -11,6 +11,6 @@ namespace Bountous_X_Accolite_Job_Portal.Models
 
         //  [ForeignKey(nameof(DesignationId))]
         public Guid? EmpId { get; set; }
-        public Employee? Employee { get; set; }
+        public virtual Employee? Employee { get; set; }
     }
 }

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Bountous_X_Accolite_Job_Portal.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigration : Migration
+    public partial class AddedEducationsectionsalongwithinstitutionanddegree : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -54,7 +54,7 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                     DesignationId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     DesignationName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     EmpId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
@@ -145,6 +145,48 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Degrees",
+                columns: table => new
+                {
+                    DegreeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    DegreeName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DurationInYears = table.Column<int>(type: "int", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EmpId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    EmployeeId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Degrees", x => x.DegreeId);
+                    table.ForeignKey(
+                        name: "FK_Degrees_Employees_EmployeeId",
+                        column: x => x.EmployeeId,
+                        principalTable: "Employees",
+                        principalColumn: "EmployeeId");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "EducationInstitutions",
+                columns: table => new
+                {
+                    InstitutionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    InstitutionOrSchool = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UniversityOrBoard = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EmpId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    EmployeeId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EducationInstitutions", x => x.InstitutionId);
+                    table.ForeignKey(
+                        name: "FK_EducationInstitutions_Employees_EmployeeId",
+                        column: x => x.EmployeeId,
+                        principalTable: "Employees",
+                        principalColumn: "EmployeeId");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetUserClaims",
                 columns: table => new
                 {
@@ -229,6 +271,34 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "CandidateEducations",
+                columns: table => new
+                {
+                    EducationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    InstitutionOrSchoolName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    StartYear = table.Column<int>(type: "int", nullable: false),
+                    EndYear = table.Column<int>(type: "int", nullable: false),
+                    Grade = table.Column<double>(type: "float", nullable: false),
+                    InstitutionId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    EducationInstitutionInstitutionId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    DegreeId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CandidateEducations", x => x.EducationId);
+                    table.ForeignKey(
+                        name: "FK_CandidateEducations_Degrees_DegreeId",
+                        column: x => x.DegreeId,
+                        principalTable: "Degrees",
+                        principalColumn: "DegreeId");
+                    table.ForeignKey(
+                        name: "FK_CandidateEducations_EducationInstitutions_EducationInstitutionInstitutionId",
+                        column: x => x.EducationInstitutionInstitutionId,
+                        principalTable: "EducationInstitutions",
+                        principalColumn: "InstitutionId");
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -279,6 +349,26 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_CandidateEducations_DegreeId",
+                table: "CandidateEducations",
+                column: "DegreeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CandidateEducations_EducationInstitutionInstitutionId",
+                table: "CandidateEducations",
+                column: "EducationInstitutionInstitutionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Degrees_EmployeeId",
+                table: "Degrees",
+                column: "EmployeeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EducationInstitutions_EmployeeId",
+                table: "EducationInstitutions",
+                column: "EmployeeId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Employees_DesignationId",
                 table: "Employees",
                 column: "DesignationId",
@@ -304,10 +394,19 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "CandidateEducations");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Degrees");
+
+            migrationBuilder.DropTable(
+                name: "EducationInstitutions");
 
             migrationBuilder.DropTable(
                 name: "Candidates");
