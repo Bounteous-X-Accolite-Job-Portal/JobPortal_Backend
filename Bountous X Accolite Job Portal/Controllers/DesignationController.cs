@@ -1,6 +1,7 @@
 ﻿using Bountous_X_Accolite_Job_Portal.Models;
 using Bountous_X_Accolite_Job_Portal.Models.DesignationViewModel;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -9,6 +10,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class DesignationController : ControllerBase
     {
         private readonly UserManager<User> _userManager;
