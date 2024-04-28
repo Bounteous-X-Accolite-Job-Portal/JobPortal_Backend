@@ -68,7 +68,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             return response;
         }
 
-        [HttpPost]
+        [HttpPut]
         [Route("updateInstution")]
         public async Task<InstitutionResponseViewModel> UpdateInstitution(UpdateInstitutionViewModel updateInstitution)
         {
@@ -95,7 +95,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             return response;    
         }
 
-        [HttpPost]
+        [HttpDelete]
         [Route("removeInstitution/{id}")]
         public async Task<InstitutionResponseViewModel> RemoveInstitution(Guid id)
         {

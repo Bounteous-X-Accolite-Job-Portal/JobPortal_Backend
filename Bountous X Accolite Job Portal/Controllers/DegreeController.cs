@@ -70,7 +70,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             return response;
         }
 
-        [HttpPost]
+        [HttpPut]
         [Route("updateDegree")]
         public async Task<DegreeResponseViewModel> UpdateDegree(UpdateDegreeViewModel updateDegree)
         {
@@ -97,7 +97,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             return response;
         }
 
-        [HttpPost]
+        [HttpDelete]
         [Route("removeDegree/{id}")]
         public async Task<DegreeResponseViewModel> RemoveDegree(Guid id)
         {

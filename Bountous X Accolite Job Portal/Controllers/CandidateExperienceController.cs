@@ -91,7 +91,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             return response;
         }
 
-        [HttpPost]
+        [HttpPut]
         [Route("updateExperience")]
         public async Task<CandidateExperienceResponseViewModel> UpdateExperience(UpdateCandidateExperienceViewModel updateExperience)
         {
@@ -132,7 +132,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             return response;
         }
 
-        [HttpPost]
+        [HttpDelete]
         [Route("removeExperience/{Id}")]
         public async Task<CandidateExperienceResponseViewModel> RemoveExperience(Guid Id)
         {
