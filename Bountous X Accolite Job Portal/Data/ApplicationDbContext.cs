@@ -15,6 +15,8 @@ namespace Bountous_X_Accolite_Job_Portal.Data
         public DbSet<EducationInstitution> EducationInstitutions { get; set; }
         public DbSet<Degree> Degrees { get; set; }
         public DbSet<CandidateEducation> CandidateEducations { get; set; }
+        public DbSet<Company> Company { get; set; }
+        public DbSet<CandidateExperience> CandidateExperience { get; set; }
         
     }
 }
