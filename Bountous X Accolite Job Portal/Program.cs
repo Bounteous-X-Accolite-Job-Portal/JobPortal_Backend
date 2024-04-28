@@ -67,6 +67,7 @@ namespace Bountous_X_Accolite_Job_Portal
             builder.Services.AddScoped<IEducationInstitutionService, EducationInstitutionService>();
             builder.Services.AddScoped<IDegreeService, DegreeService>();
             builder.Services.AddScoped<ICandidateEducationService, CandidateEducationService>();
+            builder.Services.AddScoped<ICompanyService, CompanyService>();
 
 
             var app = builder.Build();
