@@ -7,6 +7,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
 using Bountous_X_Accolite_Job_Portal.Services;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Bountous_X_Accolite_Job_Portal.Helpers;
+using Microsoft.OpenApi.Any;
+using Microsoft.OpenApi.Models;
 
 namespace Bountous_X_Accolite_Job_Portal
 {
@@ -53,9 +56,25 @@ namespace Bountous_X_Accolite_Job_Portal
 
 
             builder.Services.AddControllers();
+
+            builder.Services.AddControllers()
+                .AddJsonOptions(opt =>
+                {
+                    opt.JsonSerializerOptions.Converters.Add(new DateOnlyJsonConverter());
+                });
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            builder.Services.AddSwaggerGen(opt =>
+                opt.MapType<DateOnly>(() => new OpenApiSchema
+                {
+                    Type = "string",
+                    Format = "date",
+                    Example = new OpenApiString(DateTime.Today.ToString("yyyy-MM-dd"))
+                })
+            );
 
             // adding for getting logged in user
             builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -68,6 +87,7 @@ namespace Bountous_X_Accolite_Job_Portal
             builder.Services.AddScoped<IDegreeService, DegreeService>();
             builder.Services.AddScoped<ICandidateEducationService, CandidateEducationService>();
             builder.Services.AddScoped<ICompanyService, CompanyService>();
+            builder.Services.AddScoped<ICandidateExperienceService, CandidateExperienceService>();
 
 
             var app = builder.Build();
