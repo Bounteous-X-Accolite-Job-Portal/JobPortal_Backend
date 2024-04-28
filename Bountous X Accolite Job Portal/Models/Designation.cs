@@ -4,20 +4,15 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Bountous_X_Accolite_Job_Portal.Models
 {
-    public class Designation :IdentityUser
+    public class Designation
     {
         [Key]
-        public int DesignationId {  get; set; }
-
+        public int DesignationId { get; set; }
         public string DesignationName { get; set; }
+        public DateTime? CreatedAt { get; set; } = DateTime.Now;
 
-        public DateTime CreatedAt { get; set; }
-
-    //  [ForeignKey(nameof(DesignationId))]
-        public int EmpId {  get; set; }
-
-        public Emplyoee Emplyoee { get; set; }
-
-
+        //  [ForeignKey(nameof(DesignationId))]
+        public Guid? EmpId { get; set; }
+        public Employee? Employee { get; set; }
     }
 }
