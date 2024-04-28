@@ -1,9 +1,6 @@
 ﻿using Bountous_X_Accolite_Job_Portal.Models;
 using Bountous_X_Accolite_Job_Portal.Models.CompanyViewModel;
 using Bountous_X_Accolite_Job_Portal.Models.CompanyViewModel.CompanyResponseViewModel;
-using Bountous_X_Accolite_Job_Portal.Models.DegreeViewModel;
-using Bountous_X_Accolite_Job_Portal.Models.DegreeViewModel.DegreeResponseViewModel;
-using Bountous_X_Accolite_Job_Portal.Services;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -68,7 +65,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             return response;
         }
 
-        [HttpPost]
+        [HttpPut]
         [Route("updateCompany")]
         public async Task<CompanyResponseViewModel> UpdateCompany(UpdateCompanyViewModel updateCompany)
         {
@@ -95,7 +92,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             return response;
         }
 
-        [HttpPost]
+        [HttpDelete]
         [Route("removeCompany/{id}")]
         public async Task<CompanyResponseViewModel> RemoveCompany(Guid id)
         {
