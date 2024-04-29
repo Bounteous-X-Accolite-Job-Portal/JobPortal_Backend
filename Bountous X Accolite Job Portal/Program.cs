@@ -3,6 +3,10 @@ using Bountous_X_Accolite_Job_Portal.Data;
 using Bountous_X_Accolite_Job_Portal.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection;
+using Bountous_X_Accolite_Job_Portal.Services.Abstract;
+using Bountous_X_Accolite_Job_Portal.Services;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Bountous_X_Accolite_Job_Portal
 {
@@ -15,8 +19,13 @@ namespace Bountous_X_Accolite_Job_Portal
             // Add services to the container.
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
-                        builder.Configuration.GetConnectionString("DefaultConnection")
+                        builder.Configuration.GetConnectionString("LocalConnection")
                     ));
+
+            //builder.Services.AddDbContext<ApplicationDbContext>(options =>
+            //    options.UseSqlServer(
+            //            builder.Configuration.GetConnectionString("LocalConnection")
+            //        ));
 
             builder.Services.Configure<IdentityOptions>(options =>
             {
@@ -27,9 +36,13 @@ namespace Bountous_X_Accolite_Job_Portal
                 options.Password.RequireNonAlphanumeric = false;
             });
 
-            builder.Services.AddIdentity<User, IdentityRole>()
+            builder.Services.AddIdentity<User, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
+
+            //builder.Services.AddIdentityCore<Employee>()
+            //   .AddEntityFrameworkStores<ApplicationDbContext>()
+            //  .AddDefaultTokenProviders();
 
             // CORS
             builder.Services.AddCors(options => options.AddPolicy(name: "FrontendUI",
@@ -43,6 +56,15 @@ namespace Bountous_X_Accolite_Job_Portal
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            // adding for getting logged in user
+            builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+            // adding services
+            builder.Services.AddScoped<IAuthService, AuthService>();
+            builder.Services.AddScoped<IEmployeeAuthService, EmployeeAuthService>();
+            builder.Services.AddScoped<IDesignationService, DesignationService>();
+
 
             var app = builder.Build();
 

@@ -1,14 +1,7 @@
 {
   "ExpandedNodes": [
-    "",
-    "\\.github",
     "\\Bountous X Accolite Job Portal",
-    "\\Bountous X Accolite Job Portal\\bin",
-    "\\Bountous X Accolite Job Portal\\bin\\Debug",
-    "\\Bountous X Accolite Job Portal\\bin\\Release",
-    "\\Bountous X Accolite Job Portal\\Data",
     "\\Bountous X Accolite Job Portal\\Models"
   ],
-  "SelectedNode": "\\JobPortal_WebAPI.sln",
   "PreviewInSolutionExplorer": false
 }
