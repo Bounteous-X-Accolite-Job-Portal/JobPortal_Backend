@@ -28,7 +28,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             MultipleEducationResponseViewModel response;
 
             var user = await _userManager.GetUserAsync(User);
-            if (user != null && user.CandidateId != null && user.CandidateId != CandidateId)
+            if (user == null || (user.CandidateId != null && user.CandidateId != CandidateId))
             {
                 response = new MultipleEducationResponseViewModel();
                 response.Status = 401;
@@ -52,7 +52,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
 
             var user = await _userManager.GetUserAsync(User);
             // checking logged in Candidate and created by Candidate are same person
-            if (user != null && user.CandidateId != null && response.CandidateEducation.CandidateId != null && user.CandidateId != response.CandidateEducation.CandidateId)
+            if (user == null || (user.CandidateId != null && response.CandidateEducation.CandidateId != null && user.CandidateId != response.CandidateEducation.CandidateId))
             {
                 CandidateEducationResponseViewModel res = new CandidateEducationResponseViewModel();
                 res.Status = 401;
@@ -78,7 +78,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             }
 
             var user = await _userManager.GetUserAsync(User);
-            if (user != null && user.EmpId != null)
+            if (user == null || user.EmpId != null)
             {
                 response = new CandidateEducationResponseViewModel();
                 response.Status = 401;
@@ -90,7 +90,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             return response;
         }
 
-        [HttpPost]
+        [HttpPut]
         [Route("updateEducation")]
         public async Task<CandidateEducationResponseViewModel> UpdateEducation(UpdateCandidateEducationViewModel updateEducation)
         {
@@ -105,7 +105,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             }
 
             var user = await _userManager.GetUserAsync(User);
-            if (user != null && user.EmpId != null)
+            if (user == null || user.EmpId != null)
             {
                 response = new CandidateEducationResponseViewModel();
                 response.Status = 401;
@@ -119,7 +119,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return education;
             }
 
-            if (user != null && education.CandidateEducation.CandidateId != null && user.CandidateId != education.CandidateEducation.CandidateId)
+            if (education.CandidateEducation.CandidateId == null || user.CandidateId != education.CandidateEducation.CandidateId)
             {
                 response = new CandidateEducationResponseViewModel();
                 response.Status = 401;
@@ -131,14 +131,14 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             return response;
         }
 
-        [HttpPost]
+        [HttpDelete]
         [Route("removeEducation/{Id}")]
         public async Task<CandidateEducationResponseViewModel> RemoveEducation(Guid Id)
         {
             CandidateEducationResponseViewModel response;
 
             var user = await _userManager.GetUserAsync(User);
-            if (user != null && user.EmpId != null)
+            if (user == null || user.EmpId != null)
             {
                 response = new CandidateEducationResponseViewModel();
                 response.Status = 401;
@@ -152,7 +152,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return education;
             }
 
-            if (user != null && education.CandidateEducation.CandidateId != null && user.CandidateId != education.CandidateEducation.CandidateId)
+            if (education.CandidateEducation.CandidateId == null || user.CandidateId != education.CandidateEducation.CandidateId)
             {
                 response = new CandidateEducationResponseViewModel();
                 response.Status = 401;
