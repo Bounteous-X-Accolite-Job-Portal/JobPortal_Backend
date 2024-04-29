@@ -1,8 +1,8 @@
 ﻿using Bountous_X_Accolite_Job_Portal.Models;
 using Bountous_X_Accolite_Job_Portal.Models.AuthenticationViewModel;
-using Bountous_X_Accolite_Job_Portal.Services;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Bountous_X_Accolite_Job_Portal.Controllers
@@ -12,45 +12,46 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
     public class AccountController : ControllerBase
     {
         private readonly IAuthService _authService;
-        public AccountController(IAuthService authService)
+        private readonly UserManager<User> _userManager;
+        public AccountController(IAuthService authService, UserManager<User> userManager)
         {
             _authService = authService;
-        }
-
-        [HttpPost]
-        [Route("register")]
-        public async Task<IActionResult> Register(RegisterViewModel registerUser)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest("Please fill all the details.");
-            }
-
-            var isRegistered = await _authService.Register(registerUser);
-            if (isRegistered)
-            {
-                return Ok("User successfully registered.");
-            }
-
-            return BadRequest("Unable to register user.");
+            _userManager = userManager;
         }
 
         [HttpPost]
         [Route("login")]
-        public async Task<IActionResult> Login(UserLoginViewModel loginUser)
+        public async Task<ResponseViewModel> Login(LoginViewModel loginUser)
         {
+            ResponseViewModel response;
+
             if(!ModelState.IsValid)
             {
-                return BadRequest("Please fill all the details.");
+                response = new ResponseViewModel();
+                response.Status = 404;
+                response.Message = "Please fill all the details.";
+                return response;
             }
 
-            bool isLoggedIn = await _authService.Login(loginUser);  
-            if(isLoggedIn)
+            var user = _userManager.GetUserAsync(User);
+            if(user != null)
             {
-                return Ok("User logged in successfully.");
+                response = new ResponseViewModel();
+                response.Status = 403;
+                response.Message = "Please logout to login again.";
+                return response;
             }
 
-            return BadRequest("Please enter correct email and password");
+            response = await _authService.Login(loginUser);
+            return response;
+        }
+
+        [HttpPost]
+        [Route("logout")]
+        public async Task<ResponseViewModel> Logout()
+        {
+            ResponseViewModel response = await _authService.Logout();
+            return response;
         }
     }
 }
