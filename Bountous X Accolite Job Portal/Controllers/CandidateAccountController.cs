@@ -1,6 +1,5 @@
 ﻿using Bountous_X_Accolite_Job_Portal.Models;
-using Bountous_X_Accolite_Job_Portal.Models.AuthenticationViewModel;
-using Bountous_X_Accolite_Job_Portal.Models.AuthenticationViewModel.EmployeeViewModel;
+using Bountous_X_Accolite_Job_Portal.Models.AuthenticationViewModel.CandidateViewModel;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -10,40 +9,40 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class EmployeeAccountController : ControllerBase
+    public class CandidateAccountController : ControllerBase
     {
-        private readonly IEmployeeAccountService _employeeAuthService;
         private readonly UserManager<User> _userManager;
-        public EmployeeAccountController(IEmployeeAccountService employeeAuthService, UserManager<User> userManager)
+        private readonly ICandidateAccountService _candidateAccountService;
+        public CandidateAccountController(ICandidateAccountService candidateAccountService, UserManager<User> userManager)
         {
-            _employeeAuthService = employeeAuthService;
+            _candidateAccountService = candidateAccountService; 
             _userManager = userManager;
         }
 
         [HttpPost]
         [Route("register")]
-        public async Task<EmployeeResponseViewModel> Register(EmployeeRegisterViewModel employee)
+        public async Task<CandidateResponseViewModel> Register(CandidateRegisterViewModel candidate)
         {
-            EmployeeResponseViewModel response;
+            CandidateResponseViewModel response;
 
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                response = new EmployeeResponseViewModel();
+                response = new CandidateResponseViewModel();
                 response.Status = 404;
                 response.Message = "Please fill all the details.";
                 return response;
             }
 
             var user = await _userManager.GetUserAsync(User);
-            if(user != null)
+            if (user != null)
             {
-                response = new EmployeeResponseViewModel();
+                response = new CandidateResponseViewModel();
                 response.Status = 403;
                 response.Message = "Please first logout to login.";
                 return response;
             }
 
-            response = await _employeeAuthService.Register(employee);
+            response = await _candidateAccountService.Register(candidate);
             return response;
         }
 

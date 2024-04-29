@@ -1,6 +1,6 @@
-﻿namespace Bountous_X_Accolite_Job_Portal.Models.AuthenticationViewModel
+﻿namespace Bountous_X_Accolite_Job_Portal.Models.AuthenticationViewModel.CandidateViewModel
 {
-    public class RegisterViewModel
+    public class CandidateRegisterViewModel
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
