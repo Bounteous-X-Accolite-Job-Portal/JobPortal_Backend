@@ -11,7 +11,5 @@ namespace Bountous_X_Accolite_Job_Portal.Models
 
         public Guid? CandidateId { get; set; }
         public virtual Candidate? Candidate { get; set; }
-
-        
     }
 }
