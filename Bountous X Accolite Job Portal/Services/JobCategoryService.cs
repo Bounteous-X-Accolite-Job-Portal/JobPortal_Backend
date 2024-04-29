@@ -89,7 +89,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             else
             {
                 response.Status = 500;
-                response.Message = "Unable to Found Category !";
+                response.Message = "Unable to Find Category !";
             }
             return response;
         }
