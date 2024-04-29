@@ -15,6 +15,6 @@
         public string PositionCode { get; set; }
         public string PositionName { get; set; }
         public string Description { get; set; }
-        public Guid CategoryId { get; set; }
+        public Guid? CategoryId { get; set; }
     }
 }

@@ -1,5 +1,4 @@
-﻿using Bountous_X_Accolite_Job_Portal.Migrations;
-using Bountous_X_Accolite_Job_Portal.Models;
+﻿using Bountous_X_Accolite_Job_Portal.Models;
 using Bountous_X_Accolite_Job_Portal.Models.JobLocationViewModel;
 using Bountous_X_Accolite_Job_Portal.Models.JobLocationViewModel.JobLocationResponseViewModel;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;

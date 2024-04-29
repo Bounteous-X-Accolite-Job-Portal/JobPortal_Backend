@@ -19,16 +19,8 @@ namespace Bountous_X_Accolite_Job_Portal
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
-            builder.Services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(
-                        builder.Configuration.GetConnectionString("LocalConnection")
-                    ));
+             builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("LocalConnection")));
 
-            //builder.Services.AddDbContext<ApplicationDbContext>(options =>
-            //    options.UseSqlServer(
-            //            builder.Configuration.GetConnectionString("LocalConnection")
-            //        ));
 
             builder.Services.Configure<IdentityOptions>(options =>
             {
@@ -43,11 +35,6 @@ namespace Bountous_X_Accolite_Job_Portal
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-            //builder.Services.AddIdentityCore<Employee>()
-            //   .AddEntityFrameworkStores<ApplicationDbContext>()
-            //  .AddDefaultTokenProviders();
-
-            // CORS
             builder.Services.AddCors(options => options.AddPolicy(name: "FrontendUI",
                 policy =>
                 {
@@ -89,6 +76,10 @@ namespace Bountous_X_Accolite_Job_Portal
             builder.Services.AddScoped<ICompanyService, CompanyService>();
             builder.Services.AddScoped<ICandidateExperienceService, CandidateExperienceService>();
             builder.Services.AddScoped<IResumeService, ResumeService>();
+            builder.Services.AddScoped<IJobCategory,JobCategoryService>();
+            builder.Services.AddScoped<IJobPosition,JobPositionService>();
+            builder.Services.AddScoped<IJobLocation,JobLocationService>();
+            builder.Services.AddScoped<IJob,JobService>();
 
 
             var app = builder.Build();

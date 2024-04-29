@@ -1,6 +1,5 @@
 ﻿using System.Reflection.Emit;
 using Bountous_X_Accolite_Job_Portal.Data;
-using Bountous_X_Accolite_Job_Portal.Migrations;
 using Bountous_X_Accolite_Job_Portal.Models;
 using Bountous_X_Accolite_Job_Portal.Models.JobViewModels;
 using Bountous_X_Accolite_Job_Portal.Models.JobViewModels.JobResponseViewModel;
