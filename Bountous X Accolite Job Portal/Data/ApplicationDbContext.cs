@@ -7,7 +7,9 @@ namespace Bountous_X_Accolite_Job_Portal.Data
 {
     public class ApplicationDbContext : IdentityDbContext<User>
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
+        public ApplicationDbContext(DbContextOptions options) : base(options)
+        {
+        }
 
         public DbSet<User> Users { get; set; }
         public DbSet<Candidate> Candidates { get; set; }
@@ -25,5 +27,7 @@ namespace Bountous_X_Accolite_Job_Portal.Data
         public DbSet<Resume> Resumes { get; set; }
         public DbSet<Interview> Interviews { get; set; }
         public DbSet<InterviewFeedback> InterviewFeedbacks { get; set; }
+        public DbSet<Application> Applications { get; set; }
+
     }
 }
