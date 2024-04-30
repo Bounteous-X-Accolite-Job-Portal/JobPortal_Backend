@@ -8,58 +8,60 @@ namespace Bountous_X_Accolite_Job_Portal.Services
 {
     public class AuthService : IAuthService
     {
-        private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
         private readonly ApplicationDbContext _dbContext;
 
-        public AuthService(UserManager<User> userManager, SignInManager<User> signInManager, ApplicationDbContext applicationDbContext)
+        public AuthService(SignInManager<User> signInManager, ApplicationDbContext applicationDbContext)
         {
-            _userManager = userManager;
             _signInManager = signInManager;
             _dbContext = applicationDbContext;
         }
 
-        public async Task<bool> Register(RegisterViewModel registerUser)
+        public async Task<ResponseViewModel> Login(LoginViewModel loginUser)
         {
-            var candidate = new Candidate();
-            candidate.FirstName = registerUser.FirstName;
-            candidate.LastName = registerUser.LastName;
-            candidate.Email = registerUser.Email;
+            ResponseViewModel response;
 
-            await _dbContext.Candidates.AddAsync(candidate);
-
-            var user = new User();
-            user.UserName = candidate.Email;
-            user.Email = candidate.Email;
-            user.CandidateId = candidate.CandidateId;   
-
-            var result = await _userManager.CreateAsync(user, registerUser.Password);
-            if (!result.Succeeded)
+            if (loginUser.Email == null || loginUser.Password == null)
             {
-                _dbContext.Candidates.Remove(candidate);    
-                user = null;
+                response = new ResponseViewModel();
+                response.Status = 404;
+                response.Message = "Please fill al the details.";
+                return response;
             }
 
-            if (user == null)
+            var checkUserWhetherExist = _dbContext.Users.Where(item => item.Email == loginUser.Email).ToList();
+            if (checkUserWhetherExist.Count == 0)
             {
-                return false;
-            }
-
-            await _dbContext.SaveChangesAsync();
-            // TODO: return status codes for further error handling
-            return true;
-        }
-
-        public async Task<bool> Login(UserLoginViewModel loginUser)
-        {
-            if(loginUser.Email == null || loginUser.Password == null)
-            {
-                return false;
+                response = new ResponseViewModel();
+                response.Status = 409;
+                response.Message = "This email is not registered with us. Please Register.";
+                return response;
             }
 
             var result = await _signInManager.PasswordSignInAsync(loginUser.Email, loginUser.Password, loginUser.RememberMe, lockoutOnFailure: false);
+            if (!result.Succeeded)
+            {
+                response = new ResponseViewModel();
+                response.Status = 404;
+                response.Message = "Invalid Ceredentials !";
+                return response;
+            }
 
-            return result.Succeeded;
+            response = new ResponseViewModel();
+            response.Status = 200;
+            response.Message = "Successfully loggedIn.";
+            return response;
+        }
+
+        public async Task<ResponseViewModel> Logout()
+        {
+            ResponseViewModel response = new ResponseViewModel();
+
+            await _signInManager.SignOutAsync();
+
+            response.Status = 200;
+            response.Message = "Successfully loggedOut !";
+            return response;
         }
     }
 }

@@ -68,7 +68,8 @@ namespace Bountous_X_Accolite_Job_Portal
 
             // adding services
             builder.Services.AddScoped<IAuthService, AuthService>();
-            builder.Services.AddScoped<IEmployeeAuthService, EmployeeAuthService>();
+            builder.Services.AddScoped<ICandidateAccountService, CandidateAccountServices>();
+            builder.Services.AddScoped<IEmployeeAccountService, EmployeeAccountService>();
             builder.Services.AddScoped<IDesignationService, DesignationService>();
             builder.Services.AddScoped<IEducationInstitutionService, EducationInstitutionService>();
             builder.Services.AddScoped<IDegreeService, DegreeService>();
