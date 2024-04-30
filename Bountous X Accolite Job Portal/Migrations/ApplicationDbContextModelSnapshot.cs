@@ -329,6 +329,37 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                     b.ToTable("Resumes");
                 });
 
+            modelBuilder.Entity("Bountous_X_Accolite_Job_Portal.Models.SocialMedia", b =>
+                {
+                    b.Property<Guid>("SocialMediaId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CandidateId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Link1")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Link2")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Link3")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("SocialMediaId");
+
+                    b.HasIndex("CandidateId");
+
+                    b.ToTable("SocialMedia");
+                });
+
             modelBuilder.Entity("Bountous_X_Accolite_Job_Portal.Models.User", b =>
                 {
                     b.Property<string>("Id")
@@ -615,6 +646,15 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                 });
 
             modelBuilder.Entity("Bountous_X_Accolite_Job_Portal.Models.Resume", b =>
+                {
+                    b.HasOne("Bountous_X_Accolite_Job_Portal.Models.Candidate", "Candidate")
+                        .WithMany()
+                        .HasForeignKey("CandidateId");
+
+                    b.Navigation("Candidate");
+                });
+
+            modelBuilder.Entity("Bountous_X_Accolite_Job_Portal.Models.SocialMedia", b =>
                 {
                     b.HasOne("Bountous_X_Accolite_Job_Portal.Models.Candidate", "Candidate")
                         .WithMany()

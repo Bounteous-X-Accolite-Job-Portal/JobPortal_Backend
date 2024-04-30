@@ -77,7 +77,7 @@ namespace Bountous_X_Accolite_Job_Portal
             );
 
             // adding for getting logged in user
-            builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            //builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             // adding services
             builder.Services.AddScoped<IAuthService, AuthService>();
@@ -90,6 +90,7 @@ namespace Bountous_X_Accolite_Job_Portal
             builder.Services.AddScoped<ICompanyService, CompanyService>();
             builder.Services.AddScoped<ICandidateExperienceService, CandidateExperienceService>();
             builder.Services.AddScoped<IResumeService, ResumeService>();
+            builder.Services.AddScoped<ISocialMediaService, SocialMediaService>();
 
 
             var app = builder.Build();
