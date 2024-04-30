@@ -8,7 +8,7 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace Bountous_X_Accolite_Job_Portal.Services
 {
-    public class JobApplicationService : IApplicationService
+    public class JobApplicationService : IJobApplicationService
     {
         private readonly UserManager<User> _userManager;
         private readonly ApplicationDbContext _dbContext;

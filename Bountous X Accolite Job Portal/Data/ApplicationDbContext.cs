@@ -29,8 +29,18 @@ namespace Bountous_X_Accolite_Job_Portal.Data
         public DbSet<Interview> Interviews { get; set; }
         public DbSet<InterviewFeedback> InterviewFeedbacks { get; set; }
         public DbSet<JobApplication> JobApplications { get; set; }
-
         public DbSet<SocialMedia> SocialMedia { get; set; }
+        public DbSet<Skills> Skills { get; set; }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder); // Call base method to apply default behavior
+
+            modelBuilder.Entity<Employee>()
+                .HasOne(e => e.Designation)
+                .WithMany(e => e.Employees)
+                .HasForeignKey(e => e.DesignationId)
+                .IsRequired();
+        }
     }
 }
