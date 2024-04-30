@@ -18,10 +18,7 @@ namespace Bountous_X_Accolite_Job_Portal.Models
         public string? State { get; set; }
         public string? Country { get; set; }
         public string? ZipCode { get; set; }
-        public DateTime CreatedAt { get; set; }
-
-        public JobApplication JobApplication { get; set; }
-
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
     }
 
 }
