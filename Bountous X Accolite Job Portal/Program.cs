@@ -83,6 +83,7 @@ namespace Bountous_X_Accolite_Job_Portal
             builder.Services.AddScoped<IJobService,JobService>();
             builder.Services.AddScoped<IJobTypeService,JobTypeService>();
             builder.Services.AddScoped<I_InterviewService, InterviewService>();
+            builder.Services.AddScoped<I_InterviewFeedbackService, InterviewFeedbackService>();
 
             var app = builder.Build();
 
