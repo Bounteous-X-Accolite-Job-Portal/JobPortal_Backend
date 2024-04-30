@@ -4,6 +4,7 @@ using Bountous_X_Accolite_Job_Portal.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Bountous_X_Accolite_Job_Portal.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240430083356_Initial Migration2")]
+    partial class InitialMigration2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -274,10 +277,6 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int?>("DesignationId")
-                        .IsRequired()
-                        .HasColumnType("int");
-
-                    b.Property<int?>("DesignationId1")
                         .HasColumnType("int");
 
                     b.Property<string>("Email")
@@ -304,11 +303,9 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
 
                     b.HasKey("EmployeeId");
 
-                    b.HasIndex("DesignationId");
-
-                    b.HasIndex("DesignationId1")
+                    b.HasIndex("DesignationId")
                         .IsUnique()
-                        .HasFilter("[DesignationId1] IS NOT NULL");
+                        .HasFilter("[DesignationId] IS NOT NULL");
 
                     b.ToTable("Employees");
                 });
@@ -667,14 +664,8 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
             modelBuilder.Entity("Bountous_X_Accolite_Job_Portal.Models.Employee", b =>
                 {
                     b.HasOne("Bountous_X_Accolite_Job_Portal.Models.Designation", "Designation")
-                        .WithMany("Employees")
-                        .HasForeignKey("DesignationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Bountous_X_Accolite_Job_Portal.Models.Designation", null)
                         .WithOne("Employee")
-                        .HasForeignKey("Bountous_X_Accolite_Job_Portal.Models.Employee", "DesignationId1");
+                        .HasForeignKey("Bountous_X_Accolite_Job_Portal.Models.Employee", "DesignationId");
 
                     b.Navigation("Designation");
                 });
@@ -775,8 +766,6 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
             modelBuilder.Entity("Bountous_X_Accolite_Job_Portal.Models.Designation", b =>
                 {
                     b.Navigation("Employee");
-
-                    b.Navigation("Employees");
                 });
 #pragma warning restore 612, 618
         }

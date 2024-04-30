@@ -1,6 +1,7 @@
 ﻿using Bountous_X_Accolite_Job_Portal.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Metadata;
 
 namespace Bountous_X_Accolite_Job_Portal.Data
 {
@@ -19,6 +20,17 @@ namespace Bountous_X_Accolite_Job_Portal.Data
         public DbSet<CandidateExperience> CandidateExperience { get; set; }
         public DbSet<Resume> Resumes { get; set; }
         public DbSet<SocialMedia> SocialMedia { get; set; }
-        
+        public DbSet<Skills> Skills { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder); // Call base method to apply default behavior
+
+            modelBuilder.Entity<Employee>()
+                .HasOne(e => e.Designation)
+                .WithMany(e => e.Employees)
+                .HasForeignKey(e => e.DesignationId)
+                .IsRequired();
+        }
     }
 }
