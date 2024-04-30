@@ -39,7 +39,7 @@ public class ApplicationController : ControllerBase
             return BadRequest("Please Enter all feilds to Login.");
         }
 
-        var jobbapplication = await _applicationService.AddApplications(addjobapplication);
+        var jobbapplication = await _applicationService.AddApplications(addjobapplication, jobApplication);
         if(jobbapplication)
             {
             return Ok("Job Application Added");

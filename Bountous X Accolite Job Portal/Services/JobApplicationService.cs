@@ -21,7 +21,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
 
         public async Task<bool> AddApplications(JobApplicationViewModel application)
         {
-            if (application == null || application.ApplicationId == null)
+            if (application == null || application.CandidateId == null)
             {
                 return false;
             }

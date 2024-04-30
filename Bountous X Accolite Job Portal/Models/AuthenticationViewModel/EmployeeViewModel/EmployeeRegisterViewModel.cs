@@ -1,4 +1,4 @@
-﻿namespace Bountous_X_Accolite_Job_Portal.Models.AuthenticationViewModel
+﻿namespace Bountous_X_Accolite_Job_Portal.Models.AuthenticationViewModel.EmployeeViewModel
 {
     public class EmployeeRegisterViewModel
     {
