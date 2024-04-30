@@ -24,10 +24,11 @@ namespace Bountous_X_Accolite_Job_Portal.Data
         public DbSet<JobLocation> JobLocation { get; set; }
         public DbSet<JobPosition> JobPosition { get; set; }
         public DbSet<JobCategory> JobCategory { get; set; }
+        public DbSet<JobType> JobType { get; set; }
         public DbSet<Resume> Resumes { get; set; }
         public DbSet<Interview> Interviews { get; set; }
         public DbSet<InterviewFeedback> InterviewFeedbacks { get; set; }
-        public DbSet<Application> Applications { get; set; }
+        public DbSet<JobApplication> JobApplications { get; set; }
 
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Reflection.Emit;
 using Bountous_X_Accolite_Job_Portal.Data;
+
 using Bountous_X_Accolite_Job_Portal.Models;
 using Bountous_X_Accolite_Job_Portal.Models.JobViewModels;
 using Bountous_X_Accolite_Job_Portal.Models.JobViewModels.JobResponseViewModel;
@@ -7,7 +8,7 @@ using Bountous_X_Accolite_Job_Portal.Services.Abstract;
 
 namespace Bountous_X_Accolite_Job_Portal.Services
 {
-    public class JobService : IJob
+    public class JobService : IJobService
     {
         private readonly ApplicationDbContext _context;
 
@@ -28,7 +29,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             newJob.JobCode = job.JobCode;
             newJob.JobTitle = job.JobTitle;
             newJob.JobDescription = job.JobDescription;
-            newJob.JobType = job.JobType;
+            newJob.JobTypeId = job.JobType;
 
             newJob.LastDate = job.LastDate;
             newJob.Experience = job.Experience;
@@ -80,7 +81,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
                 dbjob.JobTitle = job.JobTitle;
                 dbjob.JobDescription = job.JobDescription;
                 dbjob.LastDate = job.LastDate;
-                dbjob.JobType = job.JobType;
+                dbjob.JobTypeId = job.JobType;
                 dbjob.LocationId = job.LocationId;
                 dbjob.DegreeId = job.DegreeId;
                 dbjob.Experience = job.Experience;

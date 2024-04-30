@@ -1,4 +1,5 @@
-﻿using Bountous_X_Accolite_Job_Portal.Models;
+﻿
+using Bountous_X_Accolite_Job_Portal.Models;
 using Bountous_X_Accolite_Job_Portal.Models.JobLocationViewModel;
 using Bountous_X_Accolite_Job_Portal.Models.JobLocationViewModel.JobLocationResponseViewModel;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
@@ -14,10 +15,10 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
     [Authorize]
     public class JobLocationController : ControllerBase
     {
-        private readonly IJobLocation _jobLocationService;
+        private readonly IJobLocationService _jobLocationService;
         private readonly UserManager<User> _userManager;
 
-        public JobLocationController(IJobLocation jobLocationService, UserManager<User> userManager)
+        public JobLocationController(IJobLocationService jobLocationService, UserManager<User> userManager)
         {
             _jobLocationService = jobLocationService;
             _userManager = userManager;

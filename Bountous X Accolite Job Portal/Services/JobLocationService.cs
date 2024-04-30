@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Bountous_X_Accolite_Job_Portal.Services
 {
-    public class JobLocationService : IJobLocation
+    public class JobLocationService : IJobLocationService
     {
         private readonly ApplicationDbContext _dbContext;
 
@@ -24,6 +24,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             newLocation.Country = location.Country;
             newLocation.State = location.State;
             newLocation.EmpId = EmpId;
+            newLocation.Address = location.Address;
 
             await _dbContext.JobLocation.AddAsync(newLocation);
             await _dbContext.SaveChangesAsync();
@@ -39,7 +40,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             {
                 response.Status = 200;
                 response.Message = "Successfully Added New Location !!";
-                response.jobLocation = new DisplayJobLocationViewModel(newLocation);
+                response.jobLocation = new JobLocationViewModel(newLocation);
                 return response;
             }
 
@@ -54,6 +55,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             {
                 _dbContext.JobLocation.Remove(loc);
                 await _dbContext.SaveChangesAsync();
+
                 response.Status = 200;
                 response.Message = "Location Successfully Deleted !";
             }
@@ -68,11 +70,13 @@ namespace Bountous_X_Accolite_Job_Portal.Services
         public AllJobLocationResponseViewModel GetAllJobLocations()
         {
             List<JobLocation> list = _dbContext.JobLocation.ToList();
-            List<DisplayJobLocationViewModel> Locationlist = new List<DisplayJobLocationViewModel>();
+
+            List<JobLocationViewModel> Locationlist = new List<JobLocationViewModel>();
             foreach (var location in list)
-                Locationlist.Add(new DisplayJobLocationViewModel(location));
+                Locationlist.Add(new JobLocationViewModel(location));
 
             AllJobLocationResponseViewModel response = new AllJobLocationResponseViewModel();
+
             response.Status = 200;
             response.Message = "Successfully reterived All Job Locations";
             response.allJobLocations = Locationlist;
@@ -87,7 +91,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             {
                 response.Status = 200;
                 response.Message = "Location Successfully reterived !!";
-                response.jobLocation = new DisplayJobLocationViewModel(loc);
+                response.jobLocation = new JobLocationViewModel(loc);
             }
             else
             {
@@ -106,6 +110,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
                 loc.State = location.State;
                 loc.City = location.City;
                 loc.Country = location.Country;
+                loc.Address = location.Address;
 
                 _dbContext.JobLocation.Update(loc);
                 await _dbContext.SaveChangesAsync();

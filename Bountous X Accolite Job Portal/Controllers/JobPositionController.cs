@@ -14,10 +14,10 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
     [Authorize]
     public class JobPositionController : ControllerBase
     {
-        private readonly IJobPosition _jobPosition;
+        private readonly IJobPositionService _jobPosition;
         private readonly UserManager<User> _userManager;
 
-        public JobPositionController(IJobPosition jobPosition, UserManager<User> userManager)
+        public JobPositionController(IJobPositionService jobPosition, UserManager<User> userManager)
         {
             _jobPosition = jobPosition;
             _userManager = userManager;

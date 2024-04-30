@@ -77,10 +77,10 @@ namespace Bountous_X_Accolite_Job_Portal
             builder.Services.AddScoped<ICompanyService, CompanyService>();
             builder.Services.AddScoped<ICandidateExperienceService, CandidateExperienceService>();
             builder.Services.AddScoped<IResumeService, ResumeService>();
-            builder.Services.AddScoped<IJobCategory,JobCategoryService>();
-            builder.Services.AddScoped<IJobPosition,JobPositionService>();
-            builder.Services.AddScoped<IJobLocation,JobLocationService>();
-            builder.Services.AddScoped<IJob,JobService>();
+            builder.Services.AddScoped<IJobCategoryService,JobCategoryService>();
+            builder.Services.AddScoped<IJobPositionService,JobPositionService>();
+            builder.Services.AddScoped<IJobLocationService,JobLocationService>();
+            builder.Services.AddScoped<IJobService,JobService>();
 
 
             var app = builder.Build();

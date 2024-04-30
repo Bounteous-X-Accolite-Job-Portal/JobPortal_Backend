@@ -3,7 +3,7 @@ using Bountous_X_Accolite_Job_Portal.Models.JobCategoryViewModel.JobCategoryResp
 
 namespace Bountous_X_Accolite_Job_Portal.Services.Abstract
 {
-    public interface IJobCategory
+    public interface IJobCategoryService
     {
         AllJobCategoryResponseViewModel GetAllJobCategory();
         JobCategoryResponseViewModel GetJobCategoryById(Guid id);

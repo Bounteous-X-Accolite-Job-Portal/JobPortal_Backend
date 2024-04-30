@@ -7,10 +7,10 @@
         public string JobDescription { get; set; }
         public DateTime LastDate { get; set; }
         public string Experience { get; set; }
-        public Guid DegreeId { get; set; }
-        public Guid CategoryId { get; set; }
-        public Guid PositionId { get; set; }
-        public Guid LocationId { get; set; }
-        public string JobType { get; set; }
+        public Guid? DegreeId { get; set; }
+        public Guid? CategoryId { get; set; }
+        public Guid? PositionId { get; set; }
+        public Guid? LocationId { get; set; }
+        public Guid? JobType { get; set; }
     }
 }

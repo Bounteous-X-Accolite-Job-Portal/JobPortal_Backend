@@ -18,7 +18,8 @@ namespace Bountous_X_Accolite_Job_Portal.Models
         public virtual JobCategory? jobCategory { get; set; }
         public Guid? PositionId { get; set; }
         public virtual JobPosition? jobPosition { get; set; }
-        public string JobType { get; set; }
+        public Guid? JobTypeId { get; set; }
+        public virtual JobType? jobType { get; set; }
         public Guid? LocationId { get; set; }
         public virtual JobLocation? jobLocation { get; set; }
         public Guid? EmployeeId { get; set; }

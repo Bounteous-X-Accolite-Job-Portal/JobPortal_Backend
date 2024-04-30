@@ -10,7 +10,7 @@
         public string Experience { get; set; }
         public Guid? CategoryId { get; set; }
         public Guid? PositionId { get; set; }
-        public string JobType { get; set; }
+        public Guid? JobType { get; set; }
         public Guid? LocationId { get; set; }
 
         public DisplayJobResponseViewModel()
@@ -23,7 +23,7 @@
             JobTitle = job.JobTitle;
             JobDescription = job.JobDescription;
             LastDate = job.LastDate;
-            JobType = job.JobType;
+            JobType = job.JobTypeId;
             LocationId = job.LocationId;
             DegreeId = job.DegreeId;
             Experience = job.Experience;
