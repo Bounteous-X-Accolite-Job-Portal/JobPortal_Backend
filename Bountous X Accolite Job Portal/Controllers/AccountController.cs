@@ -33,7 +33,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
 
-            var user = _userManager.GetUserAsync(User);
+            var user = await _userManager.GetUserAsync(User);
             if(user != null)
             {
                 response = new ResponseViewModel();
