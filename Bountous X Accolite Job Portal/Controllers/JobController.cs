@@ -1,4 +1,5 @@
-﻿using Bountous_X_Accolite_Job_Portal.Models;
+﻿using Azure;
+using Bountous_X_Accolite_Job_Portal.Models;
 using Bountous_X_Accolite_Job_Portal.Models.JobViewModels;
 using Bountous_X_Accolite_Job_Portal.Models.JobViewModels.JobResponseViewModel;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
@@ -28,6 +29,22 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
         public AllJobResponseViewModel GetAllJobs()
         {
             return _job.GetAllJobs();
+        }
+        
+        [HttpGet]
+        [Route("getAllJobsByEmployee/{Id}")]
+        public async Task<AllJobResponseViewModel> GetAllJobsByEmployeeId()
+        {
+            var emp = await _userManager.GetUserAsync(User);
+            if (emp == null || emp.EmpId == null)
+            {
+                AllJobResponseViewModel response = new AllJobResponseViewModel();
+                response.Status = 401;
+                response.Message = "Not Logged IN / Not Authorized to Get Jobs By Employee Id !";
+                return response;
+            }
+
+            return _job.GetAllJobsByEmployeeId((Guid)emp.EmpId);
         }
 
         [HttpGet]

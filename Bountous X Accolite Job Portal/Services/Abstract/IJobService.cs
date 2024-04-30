@@ -3,9 +3,10 @@ using Bountous_X_Accolite_Job_Portal.Models.JobViewModels.JobResponseViewModel;
 
 namespace Bountous_X_Accolite_Job_Portal.Services.Abstract
 {
-    public interface IJobService 
+    public interface IJobService
     {
         AllJobResponseViewModel GetAllJobs();
+        AllJobResponseViewModel GetAllJobsByEmployeeId(Guid Emp);
         JobResponseViewModel GetJobById(Guid id);
         Task<JobResponseViewModel> AddJob(CreateJobViewModel job, Guid EmpId);
         Task<JobResponseViewModel> EditJob(EditJobViewModel job);

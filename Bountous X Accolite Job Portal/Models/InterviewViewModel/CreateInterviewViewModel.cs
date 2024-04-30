@@ -2,7 +2,6 @@
 {
     public class CreateInterviewViewModel
     {
-        public CreateInterviewViewModel() {}
         public Guid? ApplicationId { get; set; }
         public DateOnly? InterviewDate { get; set; }
         public TimeOnly? InterviewTime { get; set; }

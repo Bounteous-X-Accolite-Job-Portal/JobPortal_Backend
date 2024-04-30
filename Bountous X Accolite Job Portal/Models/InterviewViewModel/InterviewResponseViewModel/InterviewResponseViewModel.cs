@@ -2,6 +2,6 @@
 {
     public class InterviewResponseViewModel : ResponseViewModel
     {
-        public DisplayInterviewResponseViewModel Interview {  get; set; }
+        public InterviewViewModel Interview {  get; set; }
     }
 }

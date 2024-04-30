@@ -6,7 +6,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services.Abstract
     public interface I_InterviewService
     {
         All_InterviewResponseViewModel GetAllInterviews();
-       // All_InterviewResponseViewModel GetInterviewsForCandidate(Guid Ca);
+        All_InterviewResponseViewModel GetAllInterviewsForInterviewer(Guid InterViewerId);
         InterviewResponseViewModel GetInterviewById(Guid Id);
         Task<InterviewResponseViewModel> DeleteInterview(Guid Id);
         Task<InterviewResponseViewModel> AddInterview(CreateInterviewViewModel interview , Guid EmpId);

@@ -47,7 +47,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             {
                 response.Status = 200;
                 response.Message = "Successfully Added New Job !!";
-                response.job = new DisplayJobResponseViewModel(newJob);
+                response.job = new JobViewModel(newJob);
             }
             return response;
         }
@@ -105,14 +105,36 @@ namespace Bountous_X_Accolite_Job_Portal.Services
         public AllJobResponseViewModel GetAllJobs()
         {
             List<Job> list = _context.Jobs.ToList();
-            List<DisplayJobResponseViewModel> jobList = new List<DisplayJobResponseViewModel>();
+            List<JobViewModel> jobList = new List<JobViewModel>();
             foreach (Job job in list) 
-                jobList.Add(new DisplayJobResponseViewModel(job));
+                jobList.Add(new JobViewModel(job));
 
             AllJobResponseViewModel response = new AllJobResponseViewModel();
             response.Status = 200;
-            response.Message = "Successfully reterived Jobs";
             response.allJobs = jobList;
+            if(jobList.Count>0)
+                response.Message = "Successfully reterived Jobs";
+            else
+                response.Message = "No Published Jobs Found";
+
+            return response;
+        }
+
+        public AllJobResponseViewModel GetAllJobsByEmployeeId(Guid EmpId)
+        {
+            List<Job> list = _context.Jobs.Where(e => e.EmployeeId==EmpId).ToList() ;
+            List<JobViewModel> jobList = new List<JobViewModel>();
+            foreach (Job job in list)
+                jobList.Add(new JobViewModel(job));
+
+            AllJobResponseViewModel response = new AllJobResponseViewModel();
+            response.Status = 200;
+            response.allJobs = jobList;
+            if(list.Count>0)
+                response.Message = "Successfully reterived Jobs for Given Employee !";
+            else
+                response.Message = "No Jobs Published By Employee !";
+
             return response;
         }
 
@@ -124,7 +146,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             {
                 response.Status = 200;
                 response.Message = "Job Successfully Found !";
-                response.job = new DisplayJobResponseViewModel(job);
+                response.job = new JobViewModel(job);
             }
             else
             {

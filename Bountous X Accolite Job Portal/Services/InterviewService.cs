@@ -32,7 +32,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             {
                 response.Status = 200;
                 response.Message = "Interview Scheduled Successfully !!";
-                response.Interview = new DisplayInterviewResponseViewModel(newInterview);
+                response.Interview = new InterviewViewModel(newInterview);
             }
             return response;
         }
@@ -73,7 +73,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
 
                 response.Status = 200;
                 response.Message = "Interview Successfully Updated !";
-                response.Interview = new DisplayInterviewResponseViewModel(dbinterview);
+                response.Interview = new InterviewViewModel(dbinterview);
             }
             else
             {
@@ -86,14 +86,32 @@ namespace Bountous_X_Accolite_Job_Portal.Services
         public All_InterviewResponseViewModel GetAllInterviews()
         {
             List<Interview> list = _context.Interviews.ToList();
-            List<DisplayInterviewResponseViewModel> interviewList = new List<DisplayInterviewResponseViewModel>();
+            List<InterviewViewModel> interviewList = new List<InterviewViewModel>();
             foreach (Interview interview in list)
-                interviewList.Add(new DisplayInterviewResponseViewModel(interview));
+                interviewList.Add(new InterviewViewModel(interview));
 
             All_InterviewResponseViewModel response = new All_InterviewResponseViewModel();
             response.Status = 200;
             response.Message = "Successfully Reterived Interviews";
             response.allInterviews = interviewList;
+
+            return response;
+        }
+        public All_InterviewResponseViewModel GetAllInterviewsForInterviewer(Guid InterViewerId)
+        {
+            List<Interview> list = _context.Interviews.Where( e => e.InterViewerId==InterViewerId).ToList();
+
+            List<InterviewViewModel> interviewList = new List<InterviewViewModel>();
+            foreach (Interview interview in list)
+                interviewList.Add(new InterviewViewModel(interview));
+
+            All_InterviewResponseViewModel response = new All_InterviewResponseViewModel();
+            response.Status = 200;
+            response.allInterviews = interviewList;
+            if(response.allInterviews.Count>0)
+                response.Message = "Successfully Reterived Interviews for Interviewer !";
+            else
+                response.Message = "No Scheduled Interviews Found for Interviewer !";
 
             return response;
         }
@@ -106,6 +124,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             {
                 response.Status = 200;
                 response.Message = "Successfully Found Interview";
+                response.Interview = new InterviewViewModel(dbinterview);
             }
             else
             {

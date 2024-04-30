@@ -2,6 +2,6 @@
 {
     public class All_InterviewResponseViewModel : ResponseViewModel
     {
-        public List<DisplayInterviewResponseViewModel> allInterviews {  get; set; }
+        public List<InterviewViewModel> allInterviews {  get; set; }
     }
 }
