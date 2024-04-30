@@ -32,7 +32,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             if (user == null || (user.CandidateId != null && user.CandidateId != CandidateId))
             {
                 response = new ResumeResponseViewModel();
-                response.Status = 401;
+                response.Status = 403;
                 response.Message = "You are either not loggedIn or not authorized to get Resume.";
                 return response;
             }
@@ -105,13 +105,13 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
 
-            ResumeResponseViewModel education = _resumeService.GetResumeById(Id);
-            if (education.Resume == null)
+            ResumeResponseViewModel resume = _resumeService.GetResumeById(Id);
+            if (resume.Resume == null)
             {
-                return education;
+                return resume;
             }
 
-            if (education.Resume.CandidateId == null || user.CandidateId != education.Resume.CandidateId)
+            if (resume.Resume.CandidateId == null || user.CandidateId != resume.Resume.CandidateId)
             {
                 response = new ResumeResponseViewModel();
                 response.Status = 401;

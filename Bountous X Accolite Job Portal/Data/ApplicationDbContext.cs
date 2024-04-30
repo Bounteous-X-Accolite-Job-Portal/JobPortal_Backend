@@ -30,5 +30,7 @@ namespace Bountous_X_Accolite_Job_Portal.Data
         public DbSet<InterviewFeedback> InterviewFeedbacks { get; set; }
         public DbSet<JobApplication> JobApplications { get; set; }
 
+        public DbSet<SocialMedia> SocialMedia { get; set; }
+
     }
 }

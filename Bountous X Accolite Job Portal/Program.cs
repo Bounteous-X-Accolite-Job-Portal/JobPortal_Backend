@@ -64,7 +64,7 @@ namespace Bountous_X_Accolite_Job_Portal
             );
 
             // adding for getting logged in user
-            builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            //builder.Services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             // adding services
             builder.Services.AddScoped<IAuthService, AuthService>();
