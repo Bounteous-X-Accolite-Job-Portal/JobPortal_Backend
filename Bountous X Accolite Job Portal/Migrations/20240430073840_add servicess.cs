@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Bountous_X_Accolite_Job_Portal.Migrations
 {
     /// <inheritdoc />
-    public partial class jobapp : Migration
+    public partial class addservicess : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -54,7 +54,7 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                     DesignationId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     DesignationName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     EmpId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
@@ -124,6 +124,44 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                         principalTable: "Designations",
                         principalColumn: "DesignationId",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUsers",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    EmpId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    EmployeeId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    CandidateId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AspNetUsers_Candidates_CandidateId",
+                        column: x => x.CandidateId,
+                        principalTable: "Candidates",
+                        principalColumn: "CandidateId");
+                    table.ForeignKey(
+                        name: "FK_AspNetUsers_Employees_EmployeeId",
+                        column: x => x.EmployeeId,
+                        principalTable: "Employees",
+                        principalColumn: "EmployeeId");
                 });
 
             migrationBuilder.CreateTable(
@@ -252,6 +290,91 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                         column: x => x.EmployeeId,
                         principalTable: "Employees",
                         principalColumn: "EmployeeId");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUserClaims",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUserClaims", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AspNetUserClaims_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUserLogins",
+                columns: table => new
+                {
+                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ProviderKey = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ProviderDisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUserLogins", x => new { x.LoginProvider, x.ProviderKey });
+                    table.ForeignKey(
+                        name: "FK_AspNetUserLogins_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUserRoles",
+                columns: table => new
+                {
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUserRoles", x => new { x.UserId, x.RoleId });
+                    table.ForeignKey(
+                        name: "FK_AspNetUserRoles_AspNetRoles_RoleId",
+                        column: x => x.RoleId,
+                        principalTable: "AspNetRoles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_AspNetUserRoles_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "AspNetUserTokens",
+                columns: table => new
+                {
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AspNetUserTokens", x => new { x.UserId, x.LoginProvider, x.Name });
+                    table.ForeignKey(
+                        name: "FK_AspNetUserTokens_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -405,7 +528,6 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                     CandidateId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     JobId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     AppliedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ApplicationStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     StatusId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -426,207 +548,6 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                         column: x => x.StatusId,
                         principalTable: "Status",
                         principalColumn: "StatusId");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AspNetUsers",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    EmpId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    EmployeeId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    CandidateId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    DesignationsDesignationId = table.Column<int>(type: "int", nullable: true),
-                    EmployeesEmployeeId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    EducationInstitutionsInstitutionId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    DegreesDegreeId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    CandidateEducationsEducationId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    CompanyId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    CandidateExperienceExperienceId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    JobsJobId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    JobLocationLocationId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    JobPositionPositionId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    JobCategoryCategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    ResumeId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    JobApplicationApplicationId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
-                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
-                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
-                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetUsers", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_AspNetUsers_CandidateEducations_CandidateEducationsEducationId",
-                        column: x => x.CandidateEducationsEducationId,
-                        principalTable: "CandidateEducations",
-                        principalColumn: "EducationId");
-                    table.ForeignKey(
-                        name: "FK_AspNetUsers_CandidateExperience_CandidateExperienceExperienceId",
-                        column: x => x.CandidateExperienceExperienceId,
-                        principalTable: "CandidateExperience",
-                        principalColumn: "ExperienceId");
-                    table.ForeignKey(
-                        name: "FK_AspNetUsers_Candidates_CandidateId",
-                        column: x => x.CandidateId,
-                        principalTable: "Candidates",
-                        principalColumn: "CandidateId");
-                    table.ForeignKey(
-                        name: "FK_AspNetUsers_Company_CompanyId",
-                        column: x => x.CompanyId,
-                        principalTable: "Company",
-                        principalColumn: "CompanyId");
-                    table.ForeignKey(
-                        name: "FK_AspNetUsers_Degrees_DegreesDegreeId",
-                        column: x => x.DegreesDegreeId,
-                        principalTable: "Degrees",
-                        principalColumn: "DegreeId");
-                    table.ForeignKey(
-                        name: "FK_AspNetUsers_Designations_DesignationsDesignationId",
-                        column: x => x.DesignationsDesignationId,
-                        principalTable: "Designations",
-                        principalColumn: "DesignationId");
-                    table.ForeignKey(
-                        name: "FK_AspNetUsers_EducationInstitutions_EducationInstitutionsInstitutionId",
-                        column: x => x.EducationInstitutionsInstitutionId,
-                        principalTable: "EducationInstitutions",
-                        principalColumn: "InstitutionId");
-                    table.ForeignKey(
-                        name: "FK_AspNetUsers_Employees_EmployeeId",
-                        column: x => x.EmployeeId,
-                        principalTable: "Employees",
-                        principalColumn: "EmployeeId");
-                    table.ForeignKey(
-                        name: "FK_AspNetUsers_Employees_EmployeesEmployeeId",
-                        column: x => x.EmployeesEmployeeId,
-                        principalTable: "Employees",
-                        principalColumn: "EmployeeId");
-                    table.ForeignKey(
-                        name: "FK_AspNetUsers_JobApplications_JobApplicationApplicationId",
-                        column: x => x.JobApplicationApplicationId,
-                        principalTable: "JobApplications",
-                        principalColumn: "ApplicationId");
-                    table.ForeignKey(
-                        name: "FK_AspNetUsers_JobCategory_JobCategoryCategoryId",
-                        column: x => x.JobCategoryCategoryId,
-                        principalTable: "JobCategory",
-                        principalColumn: "CategoryId");
-                    table.ForeignKey(
-                        name: "FK_AspNetUsers_JobLocation_JobLocationLocationId",
-                        column: x => x.JobLocationLocationId,
-                        principalTable: "JobLocation",
-                        principalColumn: "LocationId");
-                    table.ForeignKey(
-                        name: "FK_AspNetUsers_JobPosition_JobPositionPositionId",
-                        column: x => x.JobPositionPositionId,
-                        principalTable: "JobPosition",
-                        principalColumn: "PositionId");
-                    table.ForeignKey(
-                        name: "FK_AspNetUsers_Jobs_JobsJobId",
-                        column: x => x.JobsJobId,
-                        principalTable: "Jobs",
-                        principalColumn: "JobId");
-                    table.ForeignKey(
-                        name: "FK_AspNetUsers_Resumes_ResumeId",
-                        column: x => x.ResumeId,
-                        principalTable: "Resumes",
-                        principalColumn: "ResumeId");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AspNetUserClaims",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetUserClaims", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_AspNetUserClaims_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AspNetUserLogins",
-                columns: table => new
-                {
-                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ProviderKey = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ProviderDisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetUserLogins", x => new { x.LoginProvider, x.ProviderKey });
-                    table.ForeignKey(
-                        name: "FK_AspNetUserLogins_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AspNetUserRoles",
-                columns: table => new
-                {
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetUserRoles", x => new { x.UserId, x.RoleId });
-                    table.ForeignKey(
-                        name: "FK_AspNetUserRoles_AspNetRoles_RoleId",
-                        column: x => x.RoleId,
-                        principalTable: "AspNetRoles",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_AspNetUserRoles_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "AspNetUserTokens",
-                columns: table => new
-                {
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AspNetUserTokens", x => new { x.UserId, x.LoginProvider, x.Name });
-                    table.ForeignKey(
-                        name: "FK_AspNetUserTokens_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -662,79 +583,14 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                 column: "NormalizedEmail");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AspNetUsers_CandidateEducationsEducationId",
-                table: "AspNetUsers",
-                column: "CandidateEducationsEducationId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AspNetUsers_CandidateExperienceExperienceId",
-                table: "AspNetUsers",
-                column: "CandidateExperienceExperienceId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_AspNetUsers_CandidateId",
                 table: "AspNetUsers",
                 column: "CandidateId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AspNetUsers_CompanyId",
-                table: "AspNetUsers",
-                column: "CompanyId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AspNetUsers_DegreesDegreeId",
-                table: "AspNetUsers",
-                column: "DegreesDegreeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AspNetUsers_DesignationsDesignationId",
-                table: "AspNetUsers",
-                column: "DesignationsDesignationId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AspNetUsers_EducationInstitutionsInstitutionId",
-                table: "AspNetUsers",
-                column: "EducationInstitutionsInstitutionId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_AspNetUsers_EmployeeId",
                 table: "AspNetUsers",
                 column: "EmployeeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AspNetUsers_EmployeesEmployeeId",
-                table: "AspNetUsers",
-                column: "EmployeesEmployeeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AspNetUsers_JobApplicationApplicationId",
-                table: "AspNetUsers",
-                column: "JobApplicationApplicationId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AspNetUsers_JobCategoryCategoryId",
-                table: "AspNetUsers",
-                column: "JobCategoryCategoryId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AspNetUsers_JobLocationLocationId",
-                table: "AspNetUsers",
-                column: "JobLocationLocationId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AspNetUsers_JobPositionPositionId",
-                table: "AspNetUsers",
-                column: "JobPositionPositionId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AspNetUsers_JobsJobId",
-                table: "AspNetUsers",
-                column: "JobsJobId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AspNetUsers_ResumeId",
-                table: "AspNetUsers",
-                column: "ResumeId");
 
             migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
@@ -879,12 +735,6 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "AspNetRoles");
-
-            migrationBuilder.DropTable(
-                name: "AspNetUsers");
-
-            migrationBuilder.DropTable(
                 name: "CandidateEducations");
 
             migrationBuilder.DropTable(
@@ -895,6 +745,12 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
 
             migrationBuilder.DropTable(
                 name: "Resumes");
+
+            migrationBuilder.DropTable(
+                name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUsers");
 
             migrationBuilder.DropTable(
                 name: "EducationInstitutions");

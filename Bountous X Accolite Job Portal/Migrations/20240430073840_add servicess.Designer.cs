@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Bountous_X_Accolite_Job_Portal.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240430041819_auth")]
-    partial class auth
+    [Migration("20240430073840_add servicess")]
+    partial class addservicess
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -225,7 +225,7 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DesignationId"));
 
-                    b.Property<DateTime>("CreatedAt")
+                    b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("DesignationName")
@@ -385,10 +385,6 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                     b.Property<Guid>("ApplicationId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("ApplicationStatus")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("AppliedOn")
                         .HasColumnType("datetime2");
@@ -578,30 +574,12 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
-                    b.Property<Guid?>("CandidateEducationsEducationId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("CandidateExperienceExperienceId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid?>("CandidateId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("CompanyId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid?>("DegreesDegreeId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int?>("DesignationsDesignationId")
-                        .HasColumnType("int");
-
-                    b.Property<Guid?>("EducationInstitutionsInstitutionId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -614,24 +592,6 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("EmployeeId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("EmployeesEmployeeId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("JobApplicationApplicationId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("JobCategoryCategoryId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("JobLocationLocationId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("JobPositionPositionId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("JobsJobId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("LockoutEnabled")
@@ -657,9 +617,6 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<Guid?>("ResumeId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
@@ -672,33 +629,9 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CandidateEducationsEducationId");
-
-                    b.HasIndex("CandidateExperienceExperienceId");
-
                     b.HasIndex("CandidateId");
 
-                    b.HasIndex("CompanyId");
-
-                    b.HasIndex("DegreesDegreeId");
-
-                    b.HasIndex("DesignationsDesignationId");
-
-                    b.HasIndex("EducationInstitutionsInstitutionId");
-
                     b.HasIndex("EmployeeId");
-
-                    b.HasIndex("EmployeesEmployeeId");
-
-                    b.HasIndex("JobApplicationApplicationId");
-
-                    b.HasIndex("JobCategoryCategoryId");
-
-                    b.HasIndex("JobLocationLocationId");
-
-                    b.HasIndex("JobPositionPositionId");
-
-                    b.HasIndex("JobsJobId");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -707,8 +640,6 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                         .IsUnique()
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
-
-                    b.HasIndex("ResumeId");
 
                     b.ToTable("AspNetUsers", (string)null);
                 });
@@ -1027,95 +958,17 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
 
             modelBuilder.Entity("Bountous_X_Accolite_Job_Portal.Models.User", b =>
                 {
-                    b.HasOne("Bountous_X_Accolite_Job_Portal.Models.CandidateEducation", "CandidateEducations")
-                        .WithMany()
-                        .HasForeignKey("CandidateEducationsEducationId");
-
-                    b.HasOne("Bountous_X_Accolite_Job_Portal.Models.CandidateExperience", "CandidateExperience")
-                        .WithMany()
-                        .HasForeignKey("CandidateExperienceExperienceId");
-
                     b.HasOne("Bountous_X_Accolite_Job_Portal.Models.Candidate", "Candidate")
                         .WithMany()
                         .HasForeignKey("CandidateId");
-
-                    b.HasOne("Bountous_X_Accolite_Job_Portal.Models.Company", "Company")
-                        .WithMany()
-                        .HasForeignKey("CompanyId");
-
-                    b.HasOne("Bountous_X_Accolite_Job_Portal.Models.Degree", "Degrees")
-                        .WithMany()
-                        .HasForeignKey("DegreesDegreeId");
-
-                    b.HasOne("Bountous_X_Accolite_Job_Portal.Models.Designation", "Designations")
-                        .WithMany()
-                        .HasForeignKey("DesignationsDesignationId");
-
-                    b.HasOne("Bountous_X_Accolite_Job_Portal.Models.EducationInstitution", "EducationInstitutions")
-                        .WithMany()
-                        .HasForeignKey("EducationInstitutionsInstitutionId");
 
                     b.HasOne("Bountous_X_Accolite_Job_Portal.Models.Employee", "Employee")
                         .WithMany()
                         .HasForeignKey("EmployeeId");
 
-                    b.HasOne("Bountous_X_Accolite_Job_Portal.Models.Employee", "Employees")
-                        .WithMany()
-                        .HasForeignKey("EmployeesEmployeeId");
-
-                    b.HasOne("Bountous_X_Accolite_Job_Portal.Models.JobApplication", "JobApplication")
-                        .WithMany()
-                        .HasForeignKey("JobApplicationApplicationId");
-
-                    b.HasOne("Bountous_X_Accolite_Job_Portal.Models.JobCategory", "JobCategory")
-                        .WithMany()
-                        .HasForeignKey("JobCategoryCategoryId");
-
-                    b.HasOne("Bountous_X_Accolite_Job_Portal.Models.JobLocation", "JobLocation")
-                        .WithMany()
-                        .HasForeignKey("JobLocationLocationId");
-
-                    b.HasOne("Bountous_X_Accolite_Job_Portal.Models.JobPosition", "JobPosition")
-                        .WithMany()
-                        .HasForeignKey("JobPositionPositionId");
-
-                    b.HasOne("Bountous_X_Accolite_Job_Portal.Models.Job", "Jobs")
-                        .WithMany()
-                        .HasForeignKey("JobsJobId");
-
-                    b.HasOne("Bountous_X_Accolite_Job_Portal.Models.Resume", "Resume")
-                        .WithMany()
-                        .HasForeignKey("ResumeId");
-
                     b.Navigation("Candidate");
 
-                    b.Navigation("CandidateEducations");
-
-                    b.Navigation("CandidateExperience");
-
-                    b.Navigation("Company");
-
-                    b.Navigation("Degrees");
-
-                    b.Navigation("Designations");
-
-                    b.Navigation("EducationInstitutions");
-
                     b.Navigation("Employee");
-
-                    b.Navigation("Employees");
-
-                    b.Navigation("JobApplication");
-
-                    b.Navigation("JobCategory");
-
-                    b.Navigation("JobLocation");
-
-                    b.Navigation("JobPosition");
-
-                    b.Navigation("Jobs");
-
-                    b.Navigation("Resume");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

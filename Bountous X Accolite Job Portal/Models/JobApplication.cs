@@ -15,7 +15,6 @@ namespace Bountous_X_Accolite_Job_Portal.Models
 
         public DateTime AppliedOn { get; set; }
 
-        public string ApplicationStatus { get; set; }
         public int? StatusId { get; set; }
         public Status? Status { get; set; }
 

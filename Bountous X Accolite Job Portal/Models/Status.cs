@@ -4,7 +4,7 @@
     {
         public int StatusId { get; set; }
         public string StatusName { get; set; }
-        public DateTime CreatedAt { get; set; }
+        public DateTime? CreatedAt { get; set; }
 
         public Guid? EmpId { get; set; }
         public Employee? Employee { get; set; }  

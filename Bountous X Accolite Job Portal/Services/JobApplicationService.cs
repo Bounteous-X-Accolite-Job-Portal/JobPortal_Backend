@@ -2,46 +2,69 @@
 using Bountous_X_Accolite_Job_Portal.Models.JobApplicationViewModel;
 using Bountous_X_Accolite_Job_Portal.Models;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
-using Bountous_X_Accolite_Job_Portal.Models.DesignationViewModel;
 using Microsoft.AspNetCore.Identity;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace Bountous_X_Accolite_Job_Portal.Services
 {
-    public class JobApplicationService : IApplicationService
+    public class JobApplicationService : IJobApplicationService
     {
-        private readonly UserManager<User> _userManager;
         private readonly ApplicationDbContext _dbContext;
-
-        public JobApplicationService(UserManager<User> userManager, ApplicationDbContext applicationDbContext)
+        private readonly IJobStatusService _jobStatusService;
+        public JobApplicationService(ApplicationDbContext applicationDbContext, IJobStatusService jobStatusService)
         {
-            _userManager = userManager;
             _dbContext = applicationDbContext;
+            _jobStatusService = jobStatusService;
         }
 
-        public async Task<bool> AddApplications(JobApplicationViewModel application)
+        public async Task<JobApplicationResponseViewModel> Apply(AddJobApplication application, Guid CandidateId)
         {
-            if (application == null || application.CandidateId == null)
+            JobApplicationResponseViewModel response;
+
+            var candidate = _dbContext.Candidates.Find(CandidateId);
+            if(candidate == null)
             {
-                return false;
+                response = new JobApplicationResponseViewModel();
+                response.Status = 404;
+                response.Message = "Candidate with this Id does not exist.";
+                return response;
+            }
+           
+            var job = _dbContext.Jobs.Find(application.JobId);
+            if(job == null)
+            {
+                response = new JobApplicationResponseViewModel();
+                response.Status = 404;
+                response.Message = "Job with this id doesn't exist";
+                return response;
             }
 
-            JobApplication jobApplication=new JobApplication();
-            jobApplication.ApplicationId = application.ApplicationId;
-            jobApplication.CandidateId = application.CandidateId;
-            jobApplication.StatusId = application.StatusId;
-            jobApplication.AppliedOn = application.AppliedOn;
-            jobApplication.ApplicationStatus= application.ApplicationStatus;
-            jobApplication.JobId= application.JobId;
+            JobApplication jobApplication = new JobApplication();
+            {
+                jobApplication.JobId = application.JobId;
+                jobApplication.CandidateId = CandidateId;
+                jobApplication.StatusId = _jobStatusService.GetInitialStatus();
+            };
 
             await _dbContext.JobApplications.AddAsync(jobApplication);
             await _dbContext.SaveChangesAsync();
 
-            return true;
+            if(jobApplication == null)
+            {
+                response = new JobApplicationResponseViewModel();
+                response.Status = 500;
+                response.Message = "Unable to apply to this job, please try again.";
+                return response;
+            }
 
-
-
+            response = new JobApplicationResponseViewModel();
+            response.Status = 200;
+            response.Message = "Successfully applied too the job.";
+            response.Application = new JobApplicationViewModel(jobApplication);
+            return response;
         }
-    }
+       
 
+
+    }
 }
+
