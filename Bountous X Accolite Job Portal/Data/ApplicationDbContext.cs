@@ -7,7 +7,9 @@ namespace Bountous_X_Accolite_Job_Portal.Data
 {
     public class ApplicationDbContext : IdentityDbContext<User>
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
+        public ApplicationDbContext(DbContextOptions options) : base(options)
+        {
+        }
 
         public DbSet<User> Users { get; set; }
         public DbSet<Candidate> Candidates { get; set; }
@@ -22,12 +24,24 @@ namespace Bountous_X_Accolite_Job_Portal.Data
         public DbSet<JobLocation> JobLocation { get; set; }
         public DbSet<JobPosition> JobPosition { get; set; }
         public DbSet<JobCategory> JobCategory { get; set; }
-
+        public DbSet<JobType> JobType { get; set; }
         public DbSet<Resume> Resumes { get; set; }
-
+        public DbSet<Interview> Interviews { get; set; }
+        public DbSet<InterviewFeedback> InterviewFeedbacks { get; set; }
         public DbSet<JobApplication> JobApplications { get; set; }
+        public DbSet<SocialMedia> SocialMedia { get; set; }
+        public DbSet<Skills> Skills { get; set; }
+        public DbSet<Status> Status { get; set; }
 
-        
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder); // Call base method to apply default behavior
 
+            modelBuilder.Entity<Employee>()
+                .HasOne(e => e.Designation)
+                .WithMany(e => e.Employees)
+                .HasForeignKey(e => e.DesignationId)
+                .IsRequired();
+        }
     }
 }

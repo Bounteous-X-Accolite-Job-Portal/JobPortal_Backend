@@ -22,13 +22,13 @@ namespace Bountous_X_Accolite_Job_Portal.Services
         {
             EmployeeResponseViewModel response = new EmployeeResponseViewModel();
 
-            var checkUserWhetherExist = _dbContext.Users.Where(item => item.Email == RegisterEmployee.Email).ToList();
-            if (checkUserWhetherExist.Count != 0)
-            {
-                response.Status = 409;
-                response.Message = "This email is already registered with us. Please Login.";
-                return response;
-            }
+            //var checkUserWhetherExist = _dbContext.Users.Where(item => item.Email == RegisterEmployee.Email).ToList();
+            //if (checkUserWhetherExist.Count != 0)
+            //{
+            //    response.Status = 409;
+            //    response.Message = "This email is already registered with us. Please Login.";
+            //    return response;
+            //}
 
             var employee = new Employee();
             employee.EmpId = RegisterEmployee.EmpId;  // company employee id

@@ -2,6 +2,6 @@
 {
     public class AllJobResponseViewModel : ResponseViewModel
     {
-        public List<DisplayJobResponseViewModel> allJobs {  get; set; }
+        public List<JobViewModel> allJobs {  get; set; }
     }
 }

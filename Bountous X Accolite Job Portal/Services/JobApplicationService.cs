@@ -61,6 +61,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             response.Message = "Successfully applied too the job.";
             response.Application = new JobApplicationViewModel(jobApplication);
             return response;
+            
         }
        
 

@@ -1,8 +1,6 @@
 ﻿using Bountous_X_Accolite_Job_Portal.Models;
 using Bountous_X_Accolite_Job_Portal.Models.JobCategoryViewModel;
 using Bountous_X_Accolite_Job_Portal.Models.JobCategoryViewModel.JobCategoryResponseViewModel;
-using Bountous_X_Accolite_Job_Portal.Models.JobLocationViewModel.JobLocationResponseViewModel;
-using Bountous_X_Accolite_Job_Portal.Services;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -16,10 +14,10 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
     [Authorize]
     public class JobCategoryController : ControllerBase
     {
-        private readonly IJobCategory _jobCategory;
+        private readonly IJobCategoryService _jobCategory;
         private readonly UserManager<User> _userManager;
 
-        public JobCategoryController(IJobCategory jobCategory, UserManager<User> userManager)
+        public JobCategoryController(IJobCategoryService jobCategory, UserManager<User> userManager)
         {
             _jobCategory = jobCategory;
             _userManager = userManager;
@@ -52,9 +50,9 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             }
 
             var emp = await _userManager.GetUserAsync(User);
-            if (emp==null || emp.EmpId==null)
+            if (emp == null || emp.EmpId == null)
             {
-                response.Status = 401;
+                response.Status = 403;
                 response.Message = "Not Logged IN / Not Authorized to Add Category";
                 return response;
             }

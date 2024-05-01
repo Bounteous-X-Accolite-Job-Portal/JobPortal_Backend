@@ -1,6 +1,6 @@
 ﻿namespace Bountous_X_Accolite_Job_Portal.Models.JobViewModels.JobResponseViewModel
 {
-    public class DisplayJobResponseViewModel
+    public class JobViewModel
     {
         public string JobCode { get; set; }
         public string JobTitle { get; set; }
@@ -10,20 +10,16 @@
         public string Experience { get; set; }
         public Guid? CategoryId { get; set; }
         public Guid? PositionId { get; set; }
-        public string JobType { get; set; }
+        public Guid? JobType { get; set; }
         public Guid? LocationId { get; set; }
-
-        public DisplayJobResponseViewModel()
-        {
-        }
         
-        public DisplayJobResponseViewModel(Job job)
+        public JobViewModel(Job job)
         {
             JobCode = job.JobCode;
             JobTitle = job.JobTitle;
             JobDescription = job.JobDescription;
             LastDate = job.LastDate;
-            JobType = job.JobType;
+            JobType = job.JobTypeId;
             LocationId = job.LocationId;
             DegreeId = job.DegreeId;
             Experience = job.Experience;

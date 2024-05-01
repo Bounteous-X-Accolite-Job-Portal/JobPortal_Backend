@@ -1,13 +1,12 @@
 ﻿using Bountous_X_Accolite_Job_Portal.Data;
 using Bountous_X_Accolite_Job_Portal.Models;
-using Bountous_X_Accolite_Job_Portal.Models.JobCategoryViewModel.JobCategoryResponseViewModel;
 using Bountous_X_Accolite_Job_Portal.Models.JobPositionViewModel;
 using Bountous_X_Accolite_Job_Portal.Models.JobPositionViewModel.JobPositionResponseViewModel;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
 
 namespace Bountous_X_Accolite_Job_Portal.Services
 {
-    public class JobPositionService : IJobPosition
+    public class JobPositionService : IJobPositionService
     {
         private readonly ApplicationDbContext _context;
 
@@ -38,7 +37,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             {
                 response.Status = 200;
                 response.Message = "Successfully Added New Category !!";
-                response.jobPosition = new DisplayJobPositionViewModel(newPosition);
+                response.jobPosition = new JobPositionViewModel(newPosition);
             }
             
             return response;
@@ -47,6 +46,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
         public async Task<JobPositionResponseViewModel> DeleteJobPosition(Guid PositionId)
         {
             JobPositionResponseViewModel response = new JobPositionResponseViewModel();
+
             var position = _context.JobPosition.Find(PositionId);
             if(position!=null)
             {
@@ -66,9 +66,10 @@ namespace Bountous_X_Accolite_Job_Portal.Services
         public AllJobPositionResponseViewModel GetAllJobPositions()
         {
             List<JobPosition> list = _context.JobPosition.ToList();
-            List<DisplayJobPositionViewModel> jobPositions = new List<DisplayJobPositionViewModel>();
+
+            List<JobPositionViewModel> jobPositions = new List<JobPositionViewModel>();
             foreach (JobPosition jobPosition in list)
-                jobPositions.Add(new DisplayJobPositionViewModel(jobPosition));
+                jobPositions.Add(new JobPositionViewModel(jobPosition));
 
             AllJobPositionResponseViewModel response = new AllJobPositionResponseViewModel();
             response.allJobPositions = jobPositions;
@@ -85,11 +86,11 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             {
                 response.Status = 200;
                 response.Message = "Position Successfully Reterived";
-                response.jobPosition = new DisplayJobPositionViewModel(position);
+                response.jobPosition = new JobPositionViewModel(position);
             }
             else
             {
-                response.Status = 500;
+                response.Status = 404;
                 response.Message = "Unable to Find Position";
             }
             return response;
@@ -98,6 +99,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
         public async Task<JobPositionResponseViewModel> UpdateJobPosition(EditJobPositionViewModel jobPosition)
         {
             JobPositionResponseViewModel response = new JobPositionResponseViewModel();
+
             var dbposition = _context.JobPosition.Find(jobPosition.PositionId);
             if(dbposition!=null)
             {
@@ -111,7 +113,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
 
                 response.Status = 200;
                 response.Message = "Position Successfully Updated";
-                response.jobPosition = new DisplayJobPositionViewModel(dbposition);
+                response.jobPosition = new JobPositionViewModel(dbposition);
             }
             else
             {

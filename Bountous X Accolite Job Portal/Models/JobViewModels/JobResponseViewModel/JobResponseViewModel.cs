@@ -2,6 +2,6 @@
 {
     public class JobResponseViewModel : ResponseViewModel
     {
-        public DisplayJobResponseViewModel job { get; set; }
+        public JobViewModel job { get; set; }
     }
 }
