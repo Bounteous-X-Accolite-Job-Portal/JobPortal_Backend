@@ -6,8 +6,8 @@ namespace Bountous_X_Accolite_Job_Portal.Models
     public class Employee
     {
         [Key]
-        public Guid EmployeeId { get; set; }
-        public string EmpId { get; set; }
+        public Guid EmployeeId { get; set; }    // System Generated Employee Id
+        public string EmpId { get; set; } // Comapny's EmployeeId of the Employee
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }

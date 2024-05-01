@@ -22,16 +22,8 @@ namespace Bountous_X_Accolite_Job_Portal
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
-            builder.Services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(
-                        builder.Configuration.GetConnectionString("LocalConnection")
-                    ));
+             builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("LocalConnection")));
 
-            //builder.Services.AddDbContext<ApplicationDbContext>(options =>
-            //    options.UseSqlServer(
-            //            builder.Configuration.GetConnectionString("LocalConnection")
-            //        ));
 
             builder.Services.Configure<IdentityOptions>(options =>
             {
@@ -46,11 +38,6 @@ namespace Bountous_X_Accolite_Job_Portal
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-            //builder.Services.AddIdentityCore<Employee>()
-            //   .AddEntityFrameworkStores<ApplicationDbContext>()
-            //  .AddDefaultTokenProviders();
-
-            // CORS
             builder.Services.AddCors(options => options.AddPolicy(name: "FrontendUI",
                 policy =>
                 {
@@ -114,8 +101,16 @@ namespace Bountous_X_Accolite_Job_Portal
             builder.Services.AddScoped<ICompanyService, CompanyService>();
             builder.Services.AddScoped<ICandidateExperienceService, CandidateExperienceService>();
             builder.Services.AddScoped<IResumeService, ResumeService>();
+            builder.Services.AddScoped<IJobCategoryService,JobCategoryService>();
+            builder.Services.AddScoped<IJobPositionService,JobPositionService>();
+            builder.Services.AddScoped<IJobLocationService,JobLocationService>();
+            builder.Services.AddScoped<IJobService,JobService>();
+            builder.Services.AddScoped<IJobTypeService,JobTypeService>();
+            builder.Services.AddScoped<I_InterviewService, InterviewService>();
+            builder.Services.AddScoped<I_InterviewFeedbackService, InterviewFeedbackService>();
             builder.Services.AddScoped<ISocialMediaService, SocialMediaService>();
             builder.Services.AddScoped<ISkillsService, SkillsService>();
+            builder.Services.AddScoped<IJobApplicationService, JobApplicationService>();
 
 
             var app = builder.Build();
