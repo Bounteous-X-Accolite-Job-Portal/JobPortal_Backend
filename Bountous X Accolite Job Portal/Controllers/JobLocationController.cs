@@ -12,7 +12,6 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class JobLocationController : ControllerBase
     {
         private readonly IJobLocationService _jobLocationService;
@@ -33,6 +32,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
 
         [HttpGet]
         [Route("getJobLocation/{Id}")]
+        [Authorize]
         public JobLocationResponseViewModel getJobLocation(Guid Id)
         {
             return _jobLocationService.GetLocationById(Id);
@@ -40,6 +40,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
 
         [HttpPost]
         [Route("AddJobLocation")]
+        [Authorize]
         public async Task<JobLocationResponseViewModel> AddJobLocation(CreateJobLocationViewModel location)
         {
             JobLocationResponseViewModel response;
@@ -65,6 +66,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
 
         [HttpDelete]
         [Route("DeleteLocation/{Id}")]
+        [Authorize]
         public async Task<JobLocationResponseViewModel> DeleteLocation(Guid locationId)
         {
             JobLocationResponseViewModel response;
@@ -83,6 +85,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
         }
 
         [HttpPut]
+        [Authorize]
         [Route("UpdateJobLocation")]
         public async Task<JobLocationResponseViewModel> UpdateLocation(EditJobLocationViewModel location)
         {

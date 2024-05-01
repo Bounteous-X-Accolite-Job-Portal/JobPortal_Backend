@@ -1,5 +1,6 @@
 ﻿using Bountous_X_Accolite_Job_Portal.Models;
 using Bountous_X_Accolite_Job_Portal.Models.DesignationViewModel;
+using Bountous_X_Accolite_Job_Portal.Models.DesignationViewModel.ResponseViewModels;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -23,26 +24,29 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
 
         [HttpPost]
         [Route("addDesignation")]
-        public async Task<IActionResult> AddDesignation(AddDesignationViewModel addDesignation)
+        public async Task<DesignationResponseViewModel> AddDesignation(AddDesignationViewModel addDesignation)
         {
+            DesignationResponseViewModel response;
+
             if (!ModelState.IsValid)
             {
-                return BadRequest("Please Enter all details.");
+                response = new DesignationResponseViewModel();
+                response.Status = 404;
+                response.Message = "Please Enter all details.";
+                return response;
             }
 
             var user = await _userManager.GetUserAsync(User);
             if(user == null || user.EmpId == null)
             {
-                return BadRequest("You are not authorized to add Designation.");  
+                response = new DesignationResponseViewModel();
+                response.Status = 403;
+                response.Message = "You are not authorized to add Designation.";
+                return response;  
             }
 
-            var isAdded = await _designationService.AddDesignation(addDesignation, (Guid)user.EmpId);
-            if (isAdded)
-            {
-                return Ok("Designation successfully added.");
-            }
-
-            return BadRequest("Could not register designation.");
+            response = await _designationService.AddDesignation(addDesignation, (Guid)user.EmpId);
+            return response;
         }
     }
 }

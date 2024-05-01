@@ -1,6 +1,7 @@
 ﻿using Bountous_X_Accolite_Job_Portal.Data;
 using Bountous_X_Accolite_Job_Portal.Models;
 using Bountous_X_Accolite_Job_Portal.Models.DesignationViewModel;
+using Bountous_X_Accolite_Job_Portal.Models.DesignationViewModel.ResponseViewModels;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
 using Microsoft.AspNetCore.Identity;
 
@@ -17,22 +18,27 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             _dbContext = applicationDbContext;
         }
 
-        public async Task<bool> AddDesignation(AddDesignationViewModel designation, Guid empId)
+        public async Task<DesignationResponseViewModel> AddDesignation(AddDesignationViewModel designation, Guid empId)
         {
-            if(designation == null || designation.DesignationName == null)
-            {
-                return false;
-            }
+            DesignationResponseViewModel response = new DesignationResponseViewModel();
 
             Designation addDesignation = new Designation();
             addDesignation.DesignationName = designation.DesignationName;
-            addDesignation.CreatedAt = DateTime.Now;
             addDesignation.EmpId = empId;
 
             await _dbContext.Designations.AddAsync(addDesignation);    
             await _dbContext.SaveChangesAsync();
 
-            return true;
+            if(addDesignation == null)
+            {
+                response.Status = 500;
+                response.Message = "Something went wrong, plaese try again.";
+                return response;
+            }
+
+            response.Status = 200;
+            response.Message = "Successfully add designation.";
+            return response;
         }
     }
 }

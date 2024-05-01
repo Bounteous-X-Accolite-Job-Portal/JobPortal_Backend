@@ -12,7 +12,6 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class JobTypeController : ControllerBase
     {
         private readonly IJobTypeService _jobTypeService;
@@ -33,6 +32,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
         
         [HttpGet]
         [Route("getJobType/{Id}")]
+        [Authorize]
         public JobTypeResponseViewModel GetJobTypeById(Guid Id)
         {
             return _jobTypeService.GetJobTypeById(Id);
@@ -40,6 +40,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
 
         [HttpPost]
         [Route("AddJobType")]
+        [Authorize]
         public async Task<JobTypeResponseViewModel> AddJobType(CreateJobTypeViewModel jobType)
         {
             JobTypeResponseViewModel response;
@@ -65,6 +66,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
 
         [HttpDelete]
         [Route("DeleteJobType")]
+        [Authorize]
         public async Task<JobTypeResponseViewModel> DeleteJobType(Guid Id)
         {
             JobTypeResponseViewModel response;
@@ -83,6 +85,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
 
         [HttpPut]
         [Route("UpdateJobType")]
+        [Authorize]
         public async Task<JobTypeResponseViewModel> UpdateJobType(EditJobTypeViewModel jobType)
         {
             JobTypeResponseViewModel response;

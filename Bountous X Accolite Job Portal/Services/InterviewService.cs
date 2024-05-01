@@ -16,13 +16,30 @@ namespace Bountous_X_Accolite_Job_Portal.Services
 
         public async Task<InterviewResponseViewModel> AddInterview(CreateInterviewViewModel interview , Guid EmpId)
         {
+            InterviewResponseViewModel response = new InterviewResponseViewModel();
+
+            var application = _context.JobApplications.Find(interview.ApplicationId);
+            if(application == null)
+            {
+                response.Status = 404;
+                response.Message = "The application does not exist.";
+                return response;
+            }
+
+            var interviewer = _context.Employees.Find(interview.InterViewerId);
+            if (interviewer == null)
+            {
+                response.Status = 404;
+                response.Message = "The application does not exist.";
+                return response;
+            }
+
             Interview newInterview = new Interview(interview);
             newInterview.EmpId = EmpId;
 
             await _context.Interviews.AddAsync(newInterview);
             await _context.SaveChangesAsync();
 
-            InterviewResponseViewModel response = new InterviewResponseViewModel();
             if(newInterview==null)
             {
                 response.Status = 500;
@@ -40,6 +57,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
         public async Task<InterviewResponseViewModel> DeleteInterview(Guid Id)
         {
             InterviewResponseViewModel response = new InterviewResponseViewModel();
+
             var interview = _context.Interviews.Find(Id);
             if(interview != null)
             {
@@ -60,6 +78,23 @@ namespace Bountous_X_Accolite_Job_Portal.Services
         public async Task<InterviewResponseViewModel> EditInterview(EditInterviewViewModel interview)
         {
             InterviewResponseViewModel response = new InterviewResponseViewModel();
+
+            var application = _context.JobApplications.Find(interview.ApplicationId);
+            if (application == null)
+            {
+                response.Status = 404;
+                response.Message = "The application does not exist.";
+                return response;
+            }
+
+            var interviewer = _context.Employees.Find(interview.InterViewerId);
+            if (interviewer == null)
+            {
+                response.Status = 404;
+                response.Message = "The application does not exist.";
+                return response;
+            }
+
             var dbinterview = _context.Interviews.Find(interview.InterviewId);
             if(dbinterview != null)
             {
@@ -86,6 +121,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
         public All_InterviewResponseViewModel GetAllInterviews()
         {
             List<Interview> list = _context.Interviews.ToList();
+
             List<InterviewViewModel> interviewList = new List<InterviewViewModel>();
             foreach (Interview interview in list)
                 interviewList.Add(new InterviewViewModel(interview));
