@@ -10,6 +10,9 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Bountous_X_Accolite_Job_Portal.Helpers;
 using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace Bountous_X_Accolite_Job_Portal
 {
@@ -40,6 +43,27 @@ namespace Bountous_X_Accolite_Job_Portal
                 {
                     policy.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowAnyMethod();
                 }));
+
+            // Adding JWT Authentication
+            var jwtSettings = builder.Configuration.GetSection("JwtSettings");
+
+            builder.Services.AddAuthentication(opt =>
+            {
+                opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = jwtSettings["validIssuer"],
+                    ValidAudience = jwtSettings["validAudience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.GetSection("securityKey").Value))
+                };
+            });
 
 
             builder.Services.AddControllers();
@@ -104,6 +128,8 @@ namespace Bountous_X_Accolite_Job_Portal
             app.UseCors("FrontendUI");
 
             app.UseHttpsRedirection();
+
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllers();

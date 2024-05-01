@@ -18,7 +18,6 @@ namespace Bountous_X_Accolite_Job_Portal.Models
         public Guid? EmpId { get; set; }
         public virtual Employee? Employee { get; set; }
 
-        public Interview() { }
         public Interview(CreateInterviewViewModel interview) 
         {
             ApplicationId = interview.ApplicationId;

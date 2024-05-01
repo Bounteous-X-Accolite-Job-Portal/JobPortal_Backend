@@ -8,17 +8,11 @@ namespace Bountous_X_Accolite_Job_Portal.Models
         [Key]
         public Guid ApplicationId { get; set; }
         public Guid? CandidateId { get; set; }
-        public Candidate? Candidate { get; set; }   
-
+        public Candidate? Candidate { get; set; }
         public Guid? JobId { get; set; }
-        public Job? Job { get; set; }    
-
-        public DateTime AppliedOn { get; set; } = DateTime.Now;
-        public string ApplicationStatus { get; set; }
+        public Job? Job { get; set; }
+        public DateTime AppliedOn { get; set; }
         public int? StatusId { get; set; }
         public Status? Status { get; set; }
-
-
-
     }
 }

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Bountous_X_Accolite_Job_Portal.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240430182433_initial")]
-    partial class initial
+    [Migration("20240501050603_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

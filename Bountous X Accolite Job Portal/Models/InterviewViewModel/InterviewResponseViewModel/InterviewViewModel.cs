@@ -7,8 +7,8 @@
         public TimeOnly? InterviewTime { get; set; }
         public Guid? InterViewerId { get; set; }
         public string? Link { get; set; }
+        public Guid? EmpId { get; set; }
 
-        public InterviewViewModel(){}
         public InterviewViewModel(Interview interview)
         {
             ApplicationId = interview.ApplicationId;
@@ -16,6 +16,7 @@
             InterviewTime = interview.InterviewTime;
             InterViewerId = interview.InterViewerId;
             Link = interview.Link;
+            EmpId = interview.EmpId;
         }
     }
 }
