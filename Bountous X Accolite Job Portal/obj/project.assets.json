@@ -4417,19 +4417,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\vishal.s_INT1587\\.nuget\\packages\\": {}
+    "C:\\Users\\shagun.p_int1590\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\vishal.s_INT1587\\Desktop\\JobPortal_WebAPI\\Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj",
+      "projectUniqueName": "C:\\Users\\shagun.p_int1590\\Desktop\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj",
       "projectName": "Bountous X Accolite Job Portal",
-      "projectPath": "C:\\Users\\vishal.s_INT1587\\Desktop\\JobPortal_WebAPI\\Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj",
-      "packagesPath": "C:\\Users\\vishal.s_INT1587\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\vishal.s_INT1587\\Desktop\\JobPortal_WebAPI\\Bountous X Accolite Job Portal\\obj\\",
+      "projectPath": "C:\\Users\\shagun.p_int1590\\Desktop\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj",
+      "packagesPath": "C:\\Users\\shagun.p_int1590\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\shagun.p_int1590\\Desktop\\JobPortal_Backend\\Bountous X Accolite Job Portal\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\vishal.s_INT1587\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\shagun.p_int1590\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -4509,5 +4509,13 @@
         "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.202/PortableRuntimeIdentifierGraph.json"
       }
     }
-  }
+  },
+  "logs": [
+    {
+      "code": "Undefined",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Problem reading the cache file C:\\Users\\shagun.p_int1590\\Desktop\\JobPortal_Backend\\Bountous X Accolite Job Portal\\obj\\project.nuget.cache : Invalid property identifier character: <. Path 'version', line 3, position 0."
+    }
+  ]
 }
