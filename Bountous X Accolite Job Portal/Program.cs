@@ -1,4 +1,3 @@
-
 using Bountous_X_Accolite_Job_Portal.Data;
 using Bountous_X_Accolite_Job_Portal.Models;
 using Microsoft.EntityFrameworkCore;
@@ -37,6 +36,11 @@ namespace Bountous_X_Accolite_Job_Portal
             builder.Services.AddIdentity<User, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
+            //builder.Services.Configure<IdentityUserOptions>
+            //    (
+            //    options => options.SignIn.RequiredConfirmedEmail = true);
+
+            
 
             builder.Services.AddCors(options => options.AddPolicy(name: "FrontendUI",
                 policy =>
@@ -45,25 +49,25 @@ namespace Bountous_X_Accolite_Job_Portal
                 }));
 
             // Adding JWT Authentication
-            var jwtSettings = builder.Configuration.GetSection("JwtSettings");
+            //var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 
-            builder.Services.AddAuthentication(opt =>
-            {
-                opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer(options =>
-            {
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true,
-                    ValidIssuer = jwtSettings["validIssuer"],
-                    ValidAudience = jwtSettings["validAudience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.GetSection("securityKey").Value))
-                };
-            });
+            //builder.Services.AddAuthentication(opt =>
+            //{
+            //    opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            //    opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            //}).AddJwtBearer(options =>
+            //{
+            //    options.TokenValidationParameters = new TokenValidationParameters
+            //    {
+            //        ValidateIssuer = true,
+            //        ValidateAudience = true,
+            //        ValidateLifetime = true,
+            //        ValidateIssuerSigningKey = true,
+            //        ValidIssuer = jwtSettings["validIssuer"],
+            //        ValidAudience = jwtSettings["validAudience"],
+            //        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.GetSection("securityKey").Value))
+            //    };
+            //});
 
 
             builder.Services.AddControllers();
@@ -112,6 +116,10 @@ namespace Bountous_X_Accolite_Job_Portal
             builder.Services.AddScoped<ISkillsService, SkillsService>();
             builder.Services.AddScoped<IJobApplicationService, JobApplicationService>();
             builder.Services.AddScoped<IJobStatusService, JobStatusService>();
+            builder.Services.AddScoped<IEmailService, EmailService>();
+
+            
+
 
 
             var app = builder.Build();

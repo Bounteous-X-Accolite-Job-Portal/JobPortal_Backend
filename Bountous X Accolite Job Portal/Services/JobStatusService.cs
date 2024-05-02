@@ -36,7 +36,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
 
             await _dbContext.Status.AddAsync(addJobStatus);
             await _dbContext.SaveChangesAsync();
-
+ 
             return true;
 
 
