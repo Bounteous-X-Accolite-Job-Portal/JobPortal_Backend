@@ -34,7 +34,12 @@ namespace Bountous_X_Accolite_Job_Portal.Services
                 return response;
             }
 
-            Interview newInterview = new Interview(interview);
+            Interview newInterview = new Interview();
+            newInterview.ApplicationId = interview.ApplicationId;
+            newInterview.InterViewerId = interview.InterViewerId;
+            newInterview.InterviewDate = interview.InterviewDate;
+            newInterview.InterviewTime = interview.InterviewTime;
+            newInterview.Link = interview.Link;
             newInterview.EmpId = EmpId;
 
             await _context.Interviews.AddAsync(newInterview);

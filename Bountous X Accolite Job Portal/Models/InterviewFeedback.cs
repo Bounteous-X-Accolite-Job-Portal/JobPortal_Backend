@@ -13,6 +13,10 @@ namespace Bountous_X_Accolite_Job_Portal.Models
         public string Feedback {  get; set; }
         public string? AdditionalLink { get; set; }
 
+        public InterviewFeedback()
+        {
+            
+        }
         public InterviewFeedback(CreateInterviewFeedbackViewModel feedback)
         {
             InterviewId = feedback.InterviewId;
