@@ -13,6 +13,7 @@ using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Bountous_X_Accolite_Job_Portal.JwtFeatures;
 
 namespace Bountous_X_Accolite_Job_Portal
 {
@@ -53,6 +54,9 @@ namespace Bountous_X_Accolite_Job_Portal
                 opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             }).AddJwtBearer(options =>
             {
+                options.RequireHttpsMetadata = false;
+                options.SaveToken = true;
+
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = true,
@@ -61,7 +65,8 @@ namespace Bountous_X_Accolite_Job_Portal
                     ValidateIssuerSigningKey = true,
                     ValidIssuer = jwtSettings["validIssuer"],
                     ValidAudience = jwtSettings["validAudience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.GetSection("securityKey").Value))
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.GetSection("securityKey").Value)),
+                    ClockSkew = TimeSpan.Zero
                 };
             });
 
@@ -110,8 +115,10 @@ namespace Bountous_X_Accolite_Job_Portal
             builder.Services.AddScoped<I_InterviewFeedbackService, InterviewFeedbackService>();
             builder.Services.AddScoped<ISocialMediaService, SocialMediaService>();
             builder.Services.AddScoped<ISkillsService, SkillsService>();
-            builder.Services.AddScoped<IJobApplicationService, JobApplicationService>();
 
+
+            // Addding JWT as a service
+            builder.Services.AddScoped<JwtHandler>();
 
             var app = builder.Build();
 

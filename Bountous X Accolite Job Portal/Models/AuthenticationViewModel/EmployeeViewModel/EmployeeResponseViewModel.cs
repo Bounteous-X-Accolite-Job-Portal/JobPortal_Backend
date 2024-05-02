@@ -2,6 +2,6 @@
 {
     public class EmployeeResponseViewModel : ResponseViewModel
     {
-        public EmployeeViewModel Employee { get; set; }
+        public EmployeeViewModels Employee { get; set; }
     }
 }

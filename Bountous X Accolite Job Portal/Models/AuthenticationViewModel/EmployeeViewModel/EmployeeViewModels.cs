@@ -1,6 +1,6 @@
 ﻿namespace Bountous_X_Accolite_Job_Portal.Models.AuthenticationViewModel.EmployeeViewModel
 {
-    public class EmployeeViewModel
+    public class EmployeeViewModels
     {
         public string EmpId { get; set; }
         public string FirstName { get; set; }
@@ -9,7 +9,7 @@
         public string? Phone { get; set; }
         public int? DesignationId { get; set; }
 
-        public EmployeeViewModel(Employee employee)
+        public EmployeeViewModels(Employee employee)
         {
             EmpId = employee.EmpId;
             FirstName = employee.FirstName;

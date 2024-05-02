@@ -65,7 +65,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
 
             response.Status = 200;
             response.Message = "Successfully created employee.";
-            response.Employee = new EmployeeViewModel(employee);
+            response.Employee = new EmployeeViewModels(employee);
             return response;
         }
     }

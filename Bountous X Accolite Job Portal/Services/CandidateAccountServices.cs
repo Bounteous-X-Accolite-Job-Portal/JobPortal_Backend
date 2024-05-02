@@ -1,5 +1,5 @@
 ﻿using Bountous_X_Accolite_Job_Portal.Data;
-using Bountous_X_Accolite_Job_Portal.Models.AuthenticationViewModel.CandidateViewModel;
+using Bountous_X_Accolite_Job_Portal.Models.AuthenticationViewModel.CandidateViewModels;
 using Bountous_X_Accolite_Job_Portal.Models;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
 using Microsoft.AspNetCore.Identity;
