@@ -1,11 +1,10 @@
-﻿using Bountous_X_Accolite_Job_Portal.Models;
-using Bountous_X_Accolite_Job_Portal.Models.CandidateExperienceViewModel.ResponseViewModels;
+﻿using Bountous_X_Accolite_Job_Portal.Models.CandidateExperienceViewModel.ResponseViewModels;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Bountous_X_Accolite_Job_Portal.Models.CandidateExperienceViewModel;
+using Bountous_X_Accolite_Job_Portal.Helpers;
+using System.Security.Claims;
 
 namespace Bountous_X_Accolite_Job_Portal.Controllers
 {
@@ -15,11 +14,9 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
     public class CandidateExperienceController : ControllerBase
     {
         private readonly ICandidateExperienceService _candidateExperienceService;
-        private readonly UserManager<User> _userManager;
-        public CandidateExperienceController(ICandidateExperienceService candidateExperienceService, UserManager<User> userManager)
+        public CandidateExperienceController(ICandidateExperienceService candidateExperienceService)
         {
             _candidateExperienceService = candidateExperienceService;
-            _userManager = userManager; 
         }
 
         [HttpGet]
@@ -28,8 +25,9 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
         {
             MultipleExperienceResponseViewModel response;
 
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null || (user.CandidateId != null && user.CandidateId != CandidateId))
+            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            Guid candidateId = GetGuidFromString.Get(User.FindFirstValue("CandidateId"));
+            if (!isEmployee && candidateId != CandidateId)
             {
                 response = new MultipleExperienceResponseViewModel();
                 response.Status = 401;
@@ -51,9 +49,9 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
 
-            var user = await _userManager.GetUserAsync(User);
-            // checking logged in Candidate and created by Candidate are same person
-            if (user == null || (user.CandidateId != null && response.Experience.CandidateId != null && user.CandidateId != response.Experience.CandidateId))
+            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            Guid candidateId = GetGuidFromString.Get(User.FindFirstValue("CandidateId"));
+            if (!isEmployee && candidateId != response.Experience.CandidateId)
             {
                 CandidateExperienceResponseViewModel res = new CandidateExperienceResponseViewModel();
                 res.Status = 401;
@@ -78,8 +76,8 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
 
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null || user.EmpId != null)
+            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            if (isEmployee)
             {
                 response = new CandidateExperienceResponseViewModel();
                 response.Status = 401;
@@ -87,7 +85,8 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
 
-            response = await _candidateExperienceService.AddCandidateExperience(addExperience, (Guid)user.CandidateId);
+            Guid candidateId = GetGuidFromString.Get(User.FindFirstValue("CandidateId"));
+            response = await _candidateExperienceService.AddCandidateExperience(addExperience, candidateId);
             return response;
         }
 
@@ -105,8 +104,8 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
 
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null || user.EmpId != null)
+            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            if (isEmployee)
             {
                 response = new CandidateExperienceResponseViewModel();
                 response.Status = 401;
@@ -120,7 +119,8 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return experience;
             }
 
-            if (experience.Experience.CandidateId == null || user.CandidateId != experience.Experience.CandidateId)
+            Guid candidateId = GetGuidFromString.Get(User.FindFirstValue("CandidateId"));
+            if (experience.Experience.CandidateId == null || candidateId != experience.Experience.CandidateId)
             {
                 response = new CandidateExperienceResponseViewModel();
                 response.Status = 401;
@@ -138,8 +138,8 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
         {
             CandidateExperienceResponseViewModel response;
 
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null || user.EmpId != null)
+            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            if (isEmployee)
             {
                 response = new CandidateExperienceResponseViewModel();
                 response.Status = 401;
@@ -153,7 +153,8 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return experience;
             }
 
-            if (experience.Experience.CandidateId == null || user.CandidateId != experience.Experience.CandidateId)
+            Guid candidateId = GetGuidFromString.Get(User.FindFirstValue("CandidateId"));
+            if (experience.Experience.CandidateId == null || candidateId != experience.Experience.CandidateId)
             {
                 response = new CandidateExperienceResponseViewModel();
                 response.Status = 401;

@@ -1,11 +1,10 @@
-﻿using Bountous_X_Accolite_Job_Portal.Models;
+﻿using Bountous_X_Accolite_Job_Portal.Helpers;
 using Bountous_X_Accolite_Job_Portal.Models.ResumeViewModel;
 using Bountous_X_Accolite_Job_Portal.Models.ResumeViewModel.ResponseViewModels;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Bountous_X_Accolite_Job_Portal.Controllers
 {
@@ -15,11 +14,9 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
     public class ResumeController : ControllerBase
     {
         private readonly IResumeService _resumeService;
-        private readonly UserManager<User> _userManager;
-        public ResumeController(IResumeService resumeService, UserManager<User> userManager)
+        public ResumeController(IResumeService resumeService)
         {
             _resumeService = resumeService;
-            _userManager = userManager;
         }
 
         [HttpGet]
@@ -28,8 +25,9 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
         {
             ResumeResponseViewModel response;
 
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null || (user.CandidateId != null && user.CandidateId != CandidateId))
+            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            Guid candidateId = GetGuidFromString.Get(User.FindFirstValue("CandidateId"));
+            if (!isEmployee && candidateId != CandidateId)
             {
                 response = new ResumeResponseViewModel();
                 response.Status = 403;
@@ -51,8 +49,9 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
 
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null || (user.CandidateId != null && response.Resume.CandidateId != null && user.CandidateId != response.Resume.CandidateId))
+            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            Guid candidateId = GetGuidFromString.Get(User.FindFirstValue("CandidateId"));
+            if (response.Resume.CandidateId == null || (!isEmployee && candidateId != response.Resume.CandidateId))
             {
                 ResumeResponseViewModel res = new ResumeResponseViewModel();
                 res.Status = 401;
@@ -77,8 +76,9 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
 
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null || user.EmpId != null)
+            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            Guid candidateId = GetGuidFromString.Get(User.FindFirstValue("CandidateId"));
+            if (isEmployee || candidateId == Guid.Empty)
             {
                 response = new ResumeResponseViewModel();
                 response.Status = 401;
@@ -86,7 +86,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
 
-            response = await _resumeService.AddResume(addResume, (Guid)user.CandidateId);
+            response = await _resumeService.AddResume(addResume, candidateId);
             return response;
         }
 
@@ -96,8 +96,9 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
         {
             ResumeResponseViewModel response;
 
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null || user.EmpId != null)
+            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            Guid candidateId = GetGuidFromString.Get(User.FindFirstValue("CandidateId"));
+            if (isEmployee)
             {
                 response = new ResumeResponseViewModel();
                 response.Status = 401;
@@ -111,7 +112,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return resume;
             }
 
-            if (resume.Resume.CandidateId == null || user.CandidateId != resume.Resume.CandidateId)
+            if (resume.Resume.CandidateId == null || candidateId != resume.Resume.CandidateId)
             {
                 response = new ResumeResponseViewModel();
                 response.Status = 401;

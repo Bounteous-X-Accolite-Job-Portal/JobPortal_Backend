@@ -1,26 +1,22 @@
-﻿using Bountous_X_Accolite_Job_Portal.Models;
+﻿using Bountous_X_Accolite_Job_Portal.Helpers;
 using Bountous_X_Accolite_Job_Portal.Models.JobCategoryViewModel;
 using Bountous_X_Accolite_Job_Portal.Models.JobCategoryViewModel.JobCategoryResponseViewModel;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Bountous_X_Accolite_Job_Portal.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class JobCategoryController : ControllerBase
     {
         private readonly IJobCategoryService _jobCategory;
-        private readonly UserManager<User> _userManager;
 
-        public JobCategoryController(IJobCategoryService jobCategory, UserManager<User> userManager)
+        public JobCategoryController(IJobCategoryService jobCategory)
         {
             _jobCategory = jobCategory;
-            _userManager = userManager;
         }
 
         [HttpGet]
@@ -32,13 +28,14 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
 
         [HttpGet]
         [Route("getJobCategory/{Id}")]
-        public JobCategoryResponseViewModel GetJobCategoryById(Guid categoryId)
+        public JobCategoryResponseViewModel GetJobCategoryById(Guid Id)
         {
-            return _jobCategory.GetJobCategoryById(categoryId); 
+            return _jobCategory.GetJobCategoryById(Id); 
         }
 
         [HttpPost]
         [Route("AddJobCategory")]
+        [Authorize]
         public async Task<JobCategoryResponseViewModel> AddJobCategory(CreateJobCategoryViewModel category)
         {
             JobCategoryResponseViewModel response = new JobCategoryResponseViewModel();
@@ -49,20 +46,22 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
 
-            var emp = await _userManager.GetUserAsync(User);
-            if (emp == null || emp.EmpId == null)
+            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            Guid employeeId = GetGuidFromString.Get(User.FindFirstValue("EmployeeId"));
+            if (!isEmployee || employeeId == Guid.Empty)
             {
                 response.Status = 403;
                 response.Message = "Not Logged IN / Not Authorized to Add Category";
                 return response;
             }
             
-            response = await _jobCategory.AddJobCategory(category,(Guid)emp.EmpId);
+            response = await _jobCategory.AddJobCategory(category, employeeId);
             return response;
         }
 
         [HttpPut]
         [Route("UpdateJobCategory")]
+        [Authorize]
         public async Task<JobCategoryResponseViewModel> UpdateJobCategory(EditJobCategoryViewModel category)
         {
             JobCategoryResponseViewModel response = new JobCategoryResponseViewModel();
@@ -73,8 +72,8 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
 
-            var emp = await _userManager.GetUserAsync(User);
-            if (emp == null || emp.EmpId == null)
+            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            if (!isEmployee)
             {
                 response.Status = 401;
                 response.Message = "Not Logged IN / Not Authorized to Edit Category";
@@ -87,19 +86,20 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
 
         [HttpDelete]
         [Route("DeleteJobCategory/{Id}")]
-        public async Task<JobCategoryResponseViewModel> DeleteJobCategory(Guid categoryId)
+        [Authorize]
+        public async Task<JobCategoryResponseViewModel> DeleteJobCategory(Guid Id)
         {
             JobCategoryResponseViewModel response = new JobCategoryResponseViewModel();
 
-            var emp = await _userManager.GetUserAsync(User);
-            if (emp == null || emp.EmpId == null)
+            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            if (!isEmployee)
             {
                 response.Status = 401;
                 response.Message = "Not Logged IN / Not Authorized to Delete Category";
                 return response;
             }
 
-            response = await _jobCategory.DeleteJobCategory(categoryId);
+            response = await _jobCategory.DeleteJobCategory(Id);
             return response;
         }
     }

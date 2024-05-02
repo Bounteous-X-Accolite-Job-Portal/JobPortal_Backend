@@ -2,10 +2,8 @@
 using Bountous_X_Accolite_Job_Portal.Models;
 using Bountous_X_Accolite_Job_Portal.Models.AuthenticationViewModel;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.IdentityModel.Tokens.Jwt;
 
 namespace Bountous_X_Accolite_Job_Portal.Controllers
 {
@@ -46,18 +44,12 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
 
-            var signingCredentials = _jwtHandler.GetSigningCredentials();
-            var claims = _jwtHandler.GetClaims(res.User);
-            var tokenOptions = _jwtHandler.GenerateTokenOptions(signingCredentials, claims);
-            var token = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
-            //res.User.Token = token;
-
             response = new LoginResponseViewModel();
             response.Status = res.Status;
             response.Message = res.Message;
             response.Candidate = res.Candidate;
             response.Employee = res.Employee;
-            response.Token = token;
+            response.Token = res.Token;
             return response;
         }
 

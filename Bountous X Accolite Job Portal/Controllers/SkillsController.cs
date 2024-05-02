@@ -1,11 +1,10 @@
-﻿using Bountous_X_Accolite_Job_Portal.Models;
+﻿using Bountous_X_Accolite_Job_Portal.Helpers;
 using Bountous_X_Accolite_Job_Portal.Models.SkillsViewModel;
 using Bountous_X_Accolite_Job_Portal.Models.SkillsViewModel.ResponseViewModels;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Bountous_X_Accolite_Job_Portal.Controllers
 {
@@ -14,12 +13,10 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
     [Authorize]
     public class SkillsController : ControllerBase
     {
-        private readonly UserManager<User> _userManager;
         private readonly ISkillsService _skillsService;
-        public SkillsController(UserManager<User> userManager, ISkillsService skillsService)
+        public SkillsController(ISkillsService skillsService)
         {
             _skillsService = skillsService;
-            _userManager = userManager;
         }
 
         [HttpGet]
@@ -28,8 +25,9 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
         {
             SkillsResponseViewModel response;
 
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null || (user.CandidateId != null && user.CandidateId != CandidateId))
+            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            Guid candidateId = GetGuidFromString.Get(User.FindFirstValue("CandidateId"));
+            if (!isEmployee && candidateId != CandidateId)
             {
                 response = new SkillsResponseViewModel();
                 response.Status = 403;
@@ -51,8 +49,9 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
 
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null || (user.CandidateId != null && response.Skills.CandidateId != null && user.CandidateId != response.Skills.CandidateId))
+            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            Guid candidateId = GetGuidFromString.Get(User.FindFirstValue("CandidateId"));
+            if (response.Skills.CandidateId == null || (!isEmployee && candidateId != response.Skills.CandidateId))
             {
                 SkillsResponseViewModel res = new SkillsResponseViewModel();
                 res.Status = 401;
@@ -77,8 +76,9 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
 
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null || user.EmpId != null)
+            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            Guid candidateId = GetGuidFromString.Get(User.FindFirstValue("CandidateId"));
+            if (isEmployee || candidateId == Guid.Empty)
             {
                 response = new SkillsResponseViewModel();
                 response.Status = 401;
@@ -86,7 +86,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
 
-            response = await _skillsService.AddSkills(addSkills, (Guid)user.CandidateId);
+            response = await _skillsService.AddSkills(addSkills, candidateId);
             return response;
         }
 
@@ -104,8 +104,9 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
 
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null || user.EmpId != null)
+            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            Guid candidateId = GetGuidFromString.Get(User.FindFirstValue("CandidateId"));
+            if (isEmployee)
             {
                 response = new SkillsResponseViewModel();
                 response.Status = 401;
@@ -119,7 +120,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return skills;
             }
 
-            if (skills.Skills.CandidateId == null || user.CandidateId != skills.Skills.CandidateId)
+            if (skills.Skills.CandidateId == null || candidateId != skills.Skills.CandidateId)
             {
                 response = new SkillsResponseViewModel();
                 response.Status = 401;
@@ -137,8 +138,9 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
         {
             SkillsResponseViewModel response;
 
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null || user.EmpId != null)
+            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            Guid candidateId = GetGuidFromString.Get(User.FindFirstValue("CandidateId"));
+            if (isEmployee)
             {
                 response = new SkillsResponseViewModel();
                 response.Status = 401;
@@ -152,7 +154,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return skills;
             }
 
-            if (skills.Skills.CandidateId == null || user.CandidateId != skills.Skills.CandidateId)
+            if (skills.Skills.CandidateId == null || candidateId != skills.Skills.CandidateId)
             {
                 response = new SkillsResponseViewModel();
                 response.Status = 401;
