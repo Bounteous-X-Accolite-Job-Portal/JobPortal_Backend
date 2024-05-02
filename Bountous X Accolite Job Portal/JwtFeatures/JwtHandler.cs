@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Bountous_X_Accolite_Job_Portal.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -21,12 +22,18 @@ namespace Bountous_X_Accolite_Job_Portal.JwtFeatures
             var secret = new SymmetricSecurityKey(key);
             return new SigningCredentials(secret, SecurityAlgorithms.HmacSha256);
         }
-        public List<Claim> GetClaims(IdentityUser user)
+        public List<Claim> GetClaims(User user)
         {
+
             var claims = new List<Claim>
         {
-            new Claim(ClaimTypes.Name, user.Email)
+            new Claim(ClaimTypes.Name, user.Email),
         };
+
+            claims.Add(new Claim(type: "IsEmployee", value: user.IsEmployee.ToString(), ClaimValueTypes.Boolean));
+            claims.Add(new Claim(type: "CandidateId", value: user.CandidateId.ToString()));
+            claims.Add(new Claim(type: "EmployeeId", value: user.EmpId.ToString()));
+            
             return claims;
         }
         public JwtSecurityToken GenerateTokenOptions(SigningCredentials signingCredentials, List<Claim> claims)

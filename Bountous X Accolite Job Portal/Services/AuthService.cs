@@ -1,10 +1,12 @@
 ﻿using Bountous_X_Accolite_Job_Portal.Data;
+using Bountous_X_Accolite_Job_Portal.JwtFeatures;
 using Bountous_X_Accolite_Job_Portal.Models;
 using Bountous_X_Accolite_Job_Portal.Models.AuthenticationViewModel;
 using Bountous_X_Accolite_Job_Portal.Models.AuthenticationViewModel.CandidateViewModels;
 using Bountous_X_Accolite_Job_Portal.Models.AuthenticationViewModel.EmployeeViewModel;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
 using Microsoft.AspNetCore.Identity;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace Bountous_X_Accolite_Job_Portal.Services
 {
@@ -12,11 +14,12 @@ namespace Bountous_X_Accolite_Job_Portal.Services
     {
         private readonly SignInManager<User> _signInManager;
         private readonly ApplicationDbContext _dbContext;
-
-        public AuthService(SignInManager<User> signInManager, ApplicationDbContext applicationDbContext)
+        private readonly JwtHandler _jwtHandler;
+        public AuthService(SignInManager<User> signInManager, ApplicationDbContext applicationDbContext, JwtHandler jwtHandler)
         {
             _signInManager = signInManager;
             _dbContext = applicationDbContext;
+            _jwtHandler = jwtHandler;
         }
 
         public async Task<LoginServiceResponseViewModel> Login(LoginViewModel loginUser)
@@ -53,16 +56,28 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             response.Status = 200;
             response.Message = "Successfully loggedIn.";
 
+            var user = checkUserWhetherExist[0];
+
+            var signingCredentials = _jwtHandler.GetSigningCredentials();
+            var claims = _jwtHandler.GetClaims(user);
+            var tokenOptions = _jwtHandler.GenerateTokenOptions(signingCredentials, claims);
+            var token = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
+            user.Token = token;
+
+            _dbContext.Users.Update(user);
+            await _dbContext.SaveChangesAsync();
+
             if (checkUserWhetherExist[0].EmpId == null)
             {
-                var candidate = _dbContext.Candidates.Find(checkUserWhetherExist[0].CandidateId);
+                var candidate = _dbContext.Candidates.Find(user.CandidateId);
                 response.Candidate = new CandidateViewModel(candidate);
             }
             else
             {
-                var employee = _dbContext.Employees.Find(checkUserWhetherExist[0].EmpId);
+                var employee = _dbContext.Employees.Find(user.EmpId);
                 response.Employee = new EmployeeViewModels(employee);
             }
+            response.Token = user.Token;
             response.User = checkUserWhetherExist[0];
             return response;
         }

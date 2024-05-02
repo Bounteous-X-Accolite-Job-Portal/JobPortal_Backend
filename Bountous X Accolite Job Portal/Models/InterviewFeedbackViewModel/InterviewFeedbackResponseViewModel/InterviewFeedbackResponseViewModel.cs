@@ -2,6 +2,6 @@
 {
     public class InterviewFeedbackResponseViewModel : ResponseViewModel
     {
-        public InterviewFeedbackViewModel interviewFeedback { get; set; }  
+        public InterviewFeedbackViewModel? interviewFeedback { get; set; }  
     }
 }

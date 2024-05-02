@@ -1,11 +1,9 @@
-﻿using Azure;
-using Bountous_X_Accolite_Job_Portal.Models;
-using Bountous_X_Accolite_Job_Portal.Models.DesignationViewModel;
-using Bountous_X_Accolite_Job_Portal.Models.JobApplicationViewModel;
+﻿using Bountous_X_Accolite_Job_Portal.Helpers;
 using Bountous_X_Accolite_Job_Portal.Models.JobStatusViewModel;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Bountous_X_Accolite_Job_Portal.Controllers
 {
@@ -13,16 +11,15 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
     [Route("api/[controller]")]
     public class JobStatusController : Controller
     {
-        private readonly UserManager<User> _userManager;
         private readonly IJobStatusService _jobStatusService;
-        public JobStatusController(UserManager<User> userManager, IJobStatusService jobStatusService)
+        public JobStatusController(IJobStatusService jobStatusService)
         {
-            _userManager = userManager;
             _jobStatusService = jobStatusService;
         }
 
         [HttpPost]
         [Route("addJobStatus")]
+        [Authorize]
         public async Task<IActionResult> AddStatus(AddJobStatusViewModel addJobStatus)
         {
             if (!ModelState.IsValid)
@@ -30,13 +27,14 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return BadRequest("Please Enter all details.");
             }
 
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null || user.EmpId == null)
+            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            Guid employeeId = GetGuidFromString.Get(User.FindFirstValue("EmployeeId"));
+            if (!isEmployee || employeeId == Guid.Empty)
             {
-                return BadRequest("You are not authorized to add Status.");
+                return BadRequest(new { Message = "You are not authorized to add Status." });
             }
 
-            var isAdded = await _jobStatusService.AddStatus(addJobStatus, (Guid)user.EmpId);
+            var isAdded = await _jobStatusService.AddStatus(addJobStatus, employeeId);
             if (isAdded)
             {
                 return Ok("Status successfully added.");

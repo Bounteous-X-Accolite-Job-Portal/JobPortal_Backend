@@ -12,6 +12,7 @@
         public Guid? PositionId { get; set; }
         public Guid? JobType { get; set; }
         public Guid? LocationId { get; set; }
+        public Guid? EmployeeId { get; set; }
         
         public JobViewModel(Job job)
         {
@@ -25,6 +26,7 @@
             Experience = job.Experience;
             CategoryId = job.CategoryId;
             PositionId = job.PositionId;
+            EmployeeId = job.EmployeeId;
         }
     }
 }

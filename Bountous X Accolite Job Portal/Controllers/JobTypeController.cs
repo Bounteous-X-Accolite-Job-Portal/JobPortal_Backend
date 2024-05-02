@@ -1,12 +1,10 @@
-﻿using Bountous_X_Accolite_Job_Portal.Models;
-using Bountous_X_Accolite_Job_Portal.Models.JobLocationViewModel.JobLocationResponseViewModel;
+﻿using Bountous_X_Accolite_Job_Portal.Helpers;
 using Bountous_X_Accolite_Job_Portal.Models.JobTypeViewModel;
 using Bountous_X_Accolite_Job_Portal.Models.JobTypeViewModel.JobTypeResponseViewModel;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Bountous_X_Accolite_Job_Portal.Controllers
 {
@@ -15,12 +13,10 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
     public class JobTypeController : ControllerBase
     {
         private readonly IJobTypeService _jobTypeService;
-        private readonly UserManager<User> _userManager;
 
-        public JobTypeController(IJobTypeService jobTypeService, UserManager<User> userManager)
+        public JobTypeController(IJobTypeService jobTypeService)
         {
             _jobTypeService = jobTypeService;
-            _userManager = userManager;
         }
 
         [HttpGet]
@@ -51,8 +47,10 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 response.Message = "Please Enter All Details";
                 return response;
             }
-            var emp = await _userManager.GetUserAsync(User);
-            if (emp == null || emp.EmpId == null)
+
+            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            Guid employeeId = GetGuidFromString.Get(User.FindFirstValue("EmployeeId"));
+            if (!isEmployee || employeeId == Guid.Empty)
             {
                 response = new JobTypeResponseViewModel();
                 response.Status = 401;
@@ -60,7 +58,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
 
-            response = await _jobTypeService.AddJobType(jobType,(Guid)emp.EmpId);
+            response = await _jobTypeService.AddJobType(jobType, employeeId);
             return response;
         }
 
@@ -70,8 +68,9 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
         public async Task<JobTypeResponseViewModel> DeleteJobType(Guid Id)
         {
             JobTypeResponseViewModel response;
-            var emp = await _userManager.GetUserAsync(User);
-            if (emp == null || emp.EmpId == null)
+
+            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            if (!isEmployee)
             {
                 response = new JobTypeResponseViewModel();
                 response.Status = 401;
@@ -96,8 +95,9 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 response.Message = "Please Enter All Details";
                 return response;
             }
-            var emp = await _userManager.GetUserAsync(User);
-            if (emp == null || emp.EmpId == null)
+
+            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            if (!isEmployee)
             {
                 response = new JobTypeResponseViewModel();
                 response.Status = 401;

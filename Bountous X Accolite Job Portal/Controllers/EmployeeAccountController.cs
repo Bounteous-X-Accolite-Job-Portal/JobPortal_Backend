@@ -1,10 +1,7 @@
-﻿using Bountous_X_Accolite_Job_Portal.Models;
-using Bountous_X_Accolite_Job_Portal.Models.AuthenticationViewModel;
-using Bountous_X_Accolite_Job_Portal.Models.AuthenticationViewModel.EmployeeViewModel;
+﻿using Bountous_X_Accolite_Job_Portal.Models.AuthenticationViewModel.EmployeeViewModel;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Bountous_X_Accolite_Job_Portal.Controllers
 {
@@ -13,11 +10,9 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
     public class EmployeeAccountController : ControllerBase
     {
         private readonly IEmployeeAccountService _employeeAuthService;
-        private readonly UserManager<User> _userManager;
-        public EmployeeAccountController(IEmployeeAccountService employeeAuthService, UserManager<User> userManager)
+        public EmployeeAccountController(IEmployeeAccountService employeeAuthService)
         {
             _employeeAuthService = employeeAuthService;
-            _userManager = userManager;
         }
 
         [HttpPost]
@@ -34,8 +29,8 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
 
-            var user = await _userManager.GetUserAsync(User);
-            if(user != null)
+            var email = User.FindFirstValue(ClaimTypes.Name);
+            if (email != null)
             {
                 response = new EmployeeResponseViewModel();
                 response.Status = 403;
