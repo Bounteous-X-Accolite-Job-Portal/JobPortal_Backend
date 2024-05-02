@@ -115,7 +115,8 @@ namespace Bountous_X_Accolite_Job_Portal
             builder.Services.AddScoped<I_InterviewFeedbackService, InterviewFeedbackService>();
             builder.Services.AddScoped<ISocialMediaService, SocialMediaService>();
             builder.Services.AddScoped<ISkillsService, SkillsService>();
-
+            builder.Services.AddScoped<IJobApplicationService, JobApplicationService>();
+            builder.Services.AddScoped<IJobStatusService, JobStatusService>();
 
             // Addding JWT as a service
             builder.Services.AddScoped<JwtHandler>();
