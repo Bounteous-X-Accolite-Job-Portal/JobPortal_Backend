@@ -51,6 +51,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             user.UserName = employee.Email;
             user.Email = employee.Email;
             user.EmpId = employee.EmployeeId;
+            user.IsEmployee = true;
 
             var result = await _userManager.CreateAsync(user, RegisterEmployee.Password);
             if (!result.Succeeded)
