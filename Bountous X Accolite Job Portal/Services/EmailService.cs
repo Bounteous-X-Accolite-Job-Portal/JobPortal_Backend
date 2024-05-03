@@ -19,16 +19,39 @@ namespace Bountous_X_Accolite_Job_Portal.Services
         public void SendEmail(EmailData request)
         {
             var email = new MimeMessage();
-            email.From.Add(MailboxAddress.Parse(_config.GetSection("EmailUsername").Value));
-            email.To.Add(MailboxAddress.Parse(request.To));
+            var from = _config["EmailSettings:From"];
+            email.From.Add(new MailboxAddress("Job Portal",from));
+            email.To.Add(new MailboxAddress(request.To,request.To));
             email.Subject = request.Subject;
-            email.Body = new TextPart(TextFormat.Html) { Text = request.Body };
+            email.Body = new TextPart(TextFormat.Html)
+            { Text = string.Format(request.Body) };
 
             using var smtp = new SmtpClient();
-            smtp.Connect(_config.GetSection("EmailHost").Value, 587, SecureSocketOptions.StartTls);
-            smtp.Authenticate(_config.GetSection("EmailUsername").Value, _config.GetSection("EmailPassword").Value);
-            smtp.Send(email);
-            smtp.Disconnect(true);
+            {
+                try
+                {
+                    smtp.Connect(_config["EmailSettings:SmtpServer"], 465, true);
+                    var temp = _config.GetSection("EmailSettings:From").Value;
+                    var temp2 = _config.GetSection("EmailSettings:EmailPassword").Value;
+                    
+                    smtp.Authenticate(_config.GetSection("EmailSettings:From").Value, _config.GetSection("EmailSettings:EmailPassword").Value);
+                    smtp.Send(email);
+                }
+                catch (Exception ex)
+                {
+                    throw;
+
+                }
+                finally
+                {
+                    smtp.Disconnect(true);
+                    smtp.Dispose(); 
+                }
+            }
+            //smtp.Connect(_config.GetSection("EmailHost").Value, 587, SecureSocketOptions.StartTls);
+            //smtp.Authenticate(_config.GetSection("EmailUsername").Value, _config.GetSection("EmailPassword").Value);
+            //smtp.Send(email);
+            //smtp.Disconnect(true);
         }
     
 }

@@ -6,8 +6,14 @@ using MailKit.Net.Smtp;
 using MailKit.Security;
 using Bountous_X_Accolite_Job_Portal.Models;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
-
-
+using Microsoft.AspNetCore.Http.HttpResults;
+using System.Security.Cryptography;
+using Bountous_X_Accolite_Job_Portal.Data;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using System.Diagnostics;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using System.Runtime.ConstrainedExecution;
 
 namespace Bountous_X_Accolite_Job_Portal.Controllers
 {
@@ -15,37 +21,94 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
     [ApiController]
     public class EmailController : ControllerBase
     {
+        private readonly ApplicationDbContext _authContext;
         private readonly IEmailService _emailService;
-
-        public EmailController(IEmailService emailService)
+        private readonly IConfiguration _config;
+        private readonly UserManager<User> _userManager;
+        public EmailController(IEmailService emailService,IConfiguration config,ApplicationDbContext applicationDbContext,UserManager<User> userManager)
         {
             _emailService = emailService;
+            _config = config;
+            _authContext = applicationDbContext;
+            _userManager = userManager;
+            
         }
 
-        [HttpPost]
-        public IActionResult SendEmail(EmailData request)
+        [HttpPost("Email/{email}")]
+        
+        public async Task<IActionResult> SendEmail(string email,IConfiguration _config)
         {
-            _emailService.SendEmail(request);
+            var user = await _userManager.FindByEmailAsync(email);
+
+            if (user == null)
+            {
+                return NotFound(new
+                {
+                    StatusCode = 404,
+                    Message = "User Not Found"
+                });
+            }
+            var tokenBytes = RandomNumberGenerator.GetBytes(64);
+            var emailToken = Convert.ToBase64String(tokenBytes);
+            user.ResetPasswordToken = emailToken;
+            user.ResetPasswordExpiry = DateTime.Now.AddMinutes(5);
+
+            string from = _config["EmailSettings:From"];
+            var emailModel = new EmailData(email, "ResetPassword", EmailBody.EmailStringBody(email, emailToken));
+            Debug.WriteLine("INSIDE CONTROLLER", emailModel);
+
+            _emailService.SendEmail(emailModel);
+
+            _authContext.Entry(user).State = EntityState.Modified;
+            await _authContext.SaveChangesAsync();
             return Ok();
+            
         }
+        [HttpPost("reset-Password")]
+        public async Task<IActionResult> ResetPassword(ResetPasswordDTO resetPassword)
+        {
+            var newToken = resetPassword.EmailToken.Replace(" ", "+");
+
+            var user = await _userManager.FindByEmailAsync(resetPassword.Email);
+            if (user == null) { return NotFound(); }
+
+            var TokenCode = user.ResetPasswordToken;
+            DateTime emailTokenExpiry= (DateTime)user.ResetPasswordExpiry;
+            if(TokenCode!=resetPassword.EmailToken || emailTokenExpiry<DateTime.Now)
+            {
+                return BadRequest(
+                    new
+                    {
+                        StatusCode = 400,
+                        Message = "NO"
+                    });
+            }
+
+            String hashedNewPassword = _userManager.PasswordHasher.HashPassword(user, resetPassword.NewPassword);
+
+            user.PasswordHash = hashedNewPassword;
+            _authContext.Update(user);
+            await _authContext.SaveChangesAsync();
+            return Ok();
+
+            }
     }
-    //    [HttpPost]
-    //    [Route("EMail")]
-    //    public IActionResult SendEmail(string body)
-    //    {
-    //        var email = new MimeMessage();
-    //        email.From.Add(MailboxAddress.Parse("euna.beatty55@ethereal.email"));
-    //        email.To.Add(MailboxAddress.Parse("shagunpsit@gmail.com"));
-    //        email.Subject = "HELLL";
-    //        email.Body = new TextPart(MimeKit.Text.TextFormat.Html) { Text = body };
+    }
+    
+   
+         //var email = new MimeMessage();
+        //email.From.Add(MailboxAddress.Parse("euna.beatty55@ethereal.email"));
+        //email.To.Add(MailboxAddress.Parse("shagunpsit@gmail.com"));
+        //email.Subject = "HELLL";
+        //email.Body = new TextPart(MimeKit.Text.TextFormat.Html) { Text = body };
 
-    //        using var smtp=new SmtpClient();
-    //        smtp.Connect("smtp.ethereal.email",587,SecureSocketOptions.StartTls);
-    //        smtp.Authenticate("euna.beatty55@ethereal.email", "Wz1BrHgkvF1fwxqJ35");
-    //        smtp.Send(email);
-    //        smtp.Disconnect(true);
+        //using var smtp = new SmtpClient();
+        //smtp.Connect("smtp.ethereal.email", 587, SecureSocketOptions.StartTls);
+        //smtp.Authenticate("euna.beatty55@ethereal.email", "Wz1BrHgkvF1fwxqJ35");
+        //smtp.Send(email);
+        //smtp.Disconnect(true);
 
-    //        return Ok();
-    //    }
-    //}
-}
+        //return Ok();
+    
+
+
