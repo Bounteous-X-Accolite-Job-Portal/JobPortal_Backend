@@ -366,6 +366,9 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                     b.Property<string>("AdditionalLink")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid?>("EmployeeId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Feedback")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -377,6 +380,8 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("FeedbackId");
+
+                    b.HasIndex("EmployeeId");
 
                     b.HasIndex("InterviewId");
 
@@ -1044,9 +1049,15 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
 
             modelBuilder.Entity("Bountous_X_Accolite_Job_Portal.Models.InterviewFeedback", b =>
                 {
+                    b.HasOne("Bountous_X_Accolite_Job_Portal.Models.Employee", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId");
+
                     b.HasOne("Bountous_X_Accolite_Job_Portal.Models.Interview", "Interview")
                         .WithMany()
                         .HasForeignKey("InterviewId");
+
+                    b.Navigation("Employee");
 
                     b.Navigation("Interview");
                 });

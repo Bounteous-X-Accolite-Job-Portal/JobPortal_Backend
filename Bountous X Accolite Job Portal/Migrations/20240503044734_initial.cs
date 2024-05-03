@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Bountous_X_Accolite_Job_Portal.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial1 : Migration
+    public partial class initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -177,6 +177,7 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    IsEmployee = table.Column<bool>(type: "bit", nullable: false),
                     Token = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     EmpId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     EmployeeId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
@@ -666,11 +667,17 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                     InterviewId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     Rating = table.Column<int>(type: "int", nullable: false),
                     Feedback = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AdditionalLink = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    AdditionalLink = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    EmployeeId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_InterviewFeedbacks", x => x.FeedbackId);
+                    table.ForeignKey(
+                        name: "FK_InterviewFeedbacks_Employees_EmployeeId",
+                        column: x => x.EmployeeId,
+                        principalTable: "Employees",
+                        principalColumn: "EmployeeId");
                     table.ForeignKey(
                         name: "FK_InterviewFeedbacks_Interviews_InterviewId",
                         column: x => x.InterviewId,
@@ -778,6 +785,11 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                 column: "DesignationId1",
                 unique: true,
                 filter: "[DesignationId1] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_InterviewFeedbacks_EmployeeId",
+                table: "InterviewFeedbacks",
+                column: "EmployeeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_InterviewFeedbacks_InterviewId",
