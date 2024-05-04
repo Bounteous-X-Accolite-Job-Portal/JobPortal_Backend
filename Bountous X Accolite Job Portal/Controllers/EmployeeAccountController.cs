@@ -1,9 +1,8 @@
 ﻿using Bountous_X_Accolite_Job_Portal.Helpers;
-using Bountous_X_Accolite_Job_Portal.Models;
 using Bountous_X_Accolite_Job_Portal.Models.AuthenticationViewModel.EmployeeViewModel;
 using Bountous_X_Accolite_Job_Portal.Models.DesignationViewModel.ResponseViewModels;
-using Bountous_X_Accolite_Job_Portal.Services;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -75,5 +74,34 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             return response;
         }
 
+        [HttpPut]
+        [Route("disableAccount/{Id}")]
+        [Authorize]
+        public async Task<EmployeeResponseViewModel> DisableEmployeeAccount(Guid Id)
+        {
+            EmployeeResponseViewModel response;
+
+            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            var role = User.FindFirstValue("Role");
+            if (!isEmployee || role == null || !_designationService.HasPrivilege(role))
+            {
+                response = new EmployeeResponseViewModel();
+                response.Status = 401;
+                response.Message = "You are not loggedIn or not authorised to disable other employees.";
+                return response;
+            }
+
+            Guid employeeId = GetGuidFromString.Get(User.FindFirstValue("Id"));
+            if(employeeId == Id)
+            {
+                response = new EmployeeResponseViewModel();
+                response.Status = 401;
+                response.Message = "You cannot diable your own account.";
+                return response;
+            }
+
+            response = await _employeeAuthService.DisableEmployeeAccount(Id, _designationService.HasSpecialPrivilege(role));
+            return response;
+        }
     }
 }

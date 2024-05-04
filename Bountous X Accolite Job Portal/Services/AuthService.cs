@@ -26,20 +26,21 @@ namespace Bountous_X_Accolite_Job_Portal.Services
         {
             LoginServiceResponseViewModel response;
 
-            if (loginUser.Email == null || loginUser.Password == null)
-            {
-                response = new LoginServiceResponseViewModel();
-                response.Status = 404;
-                response.Message = "Please fill al the details.";
-                return response;
-            }
-
             var checkUserWhetherExist = _dbContext.Users.Where(item => item.Email == loginUser.Email).ToList();
             if (checkUserWhetherExist.Count == 0)
             {
                 response = new LoginServiceResponseViewModel();
                 response.Status = 409;
                 response.Message = "This email is not registered with us. Please Register.";
+                return response;
+            }
+
+            var loginEmployee = _dbContext.Employees.Find(checkUserWhetherExist[0].EmpId);
+            if (loginEmployee == null || loginEmployee.Inactive)
+            {
+                response = new LoginServiceResponseViewModel();
+                response.Status = 401;
+                response.Message = "Your account has been disabled, please contact administrator.";
                 return response;
             }
 

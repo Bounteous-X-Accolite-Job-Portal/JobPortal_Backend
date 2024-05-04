@@ -17,7 +17,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
 
         public bool HasSpecialPrivilege(string role)
         {
-            if (String.Equals(role, "admin"))
+            if (String.Equals(role.ToLower(), "admin"))
             {
                 return true;
             }

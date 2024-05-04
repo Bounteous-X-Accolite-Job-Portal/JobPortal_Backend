@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Bountous_X_Accolite_Job_Portal.Models
 {
@@ -15,5 +14,6 @@ namespace Bountous_X_Accolite_Job_Portal.Models
         public DateTime JoinedOn { get; set; } = DateTime.Now;
         public int? DesignationId { get; set; }
         public virtual Designation? Designation { get; set; }
+        public bool Inactive { get; set; }
     }
 }
