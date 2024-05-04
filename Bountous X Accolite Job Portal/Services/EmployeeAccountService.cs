@@ -3,7 +3,6 @@ using Bountous_X_Accolite_Job_Portal.Models;
 using Bountous_X_Accolite_Job_Portal.Models.AuthenticationViewModel.EmployeeViewModel;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 
 namespace Bountous_X_Accolite_Job_Portal.Services
 {
@@ -11,11 +10,52 @@ namespace Bountous_X_Accolite_Job_Portal.Services
     {
         private readonly UserManager<User> _userManager;
         private readonly ApplicationDbContext _dbContext;
+        private readonly IDesignationService _designationService;
 
-        public EmployeeAccountService(UserManager<User> userManager, ApplicationDbContext applicationDbContext)
+        public EmployeeAccountService(UserManager<User> userManager, ApplicationDbContext applicationDbContext, IDesignationService designationService)
         {
             _userManager = userManager;
             _dbContext = applicationDbContext;
+            _designationService = designationService;
+        }
+
+        public async Task<EmployeeResponseViewModel> DisableEmployeeAccount(Guid EmployeeId, bool HasSpecialPrivilege)
+        {
+            EmployeeResponseViewModel response = new EmployeeResponseViewModel();
+
+            var employee = _dbContext.Employees.Find(EmployeeId);
+            if (employee == null)
+            {
+                response.Status = 404;
+                response.Message = "Employee with this Id does not exist.";
+                return response;
+            }
+
+            var designation = _dbContext.Designations.Find(employee.DesignationId);
+            if (designation == null)
+            {
+                response.Status = 404;
+                response.Message = "Designation with this Id does not exist.";
+                return response;
+            }
+
+            var checkSpecialPriviledge = _designationService.HasSpecialPrivilege(designation.DesignationName);
+            if(checkSpecialPriviledge && !HasSpecialPrivilege)
+            {
+                response.Status = 401;
+                response.Message = "You are not authorised to diable this account.";
+                return response;
+            }
+
+            employee.Inactive = true;
+
+            _dbContext.Employees.Update(employee);
+            await _dbContext.SaveChangesAsync();
+
+            response.Status = 200;
+            response.Message = "Successfully diabled the account.";
+            response.Employee = new EmployeeViewModels(employee);
+            return response;
         }
 
         public async Task<EmployeeResponseViewModel> Register(EmployeeRegisterViewModel RegisterEmployee)
@@ -36,6 +76,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             employee.LastName = RegisterEmployee.LastName;
             employee.Email = RegisterEmployee.Email;
             employee.DesignationId = RegisterEmployee.DesignationId;
+            employee.Inactive = false;
 
             await _dbContext.Employees.AddAsync(employee);
             await _dbContext.SaveChangesAsync();
