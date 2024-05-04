@@ -26,7 +26,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             SkillsResponseViewModel response;
 
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
-            Guid candidateId = GetGuidFromString.Get(User.FindFirstValue("CandidateId"));
+            Guid candidateId = GetGuidFromString.Get(User.FindFirstValue("Id"));
             if (!isEmployee && candidateId != CandidateId)
             {
                 response = new SkillsResponseViewModel();
@@ -50,7 +50,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             }
 
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
-            Guid candidateId = GetGuidFromString.Get(User.FindFirstValue("CandidateId"));
+            Guid candidateId = GetGuidFromString.Get(User.FindFirstValue("Id"));
             if (response.Skills.CandidateId == null || (!isEmployee && candidateId != response.Skills.CandidateId))
             {
                 SkillsResponseViewModel res = new SkillsResponseViewModel();
@@ -77,7 +77,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             }
 
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
-            Guid candidateId = GetGuidFromString.Get(User.FindFirstValue("CandidateId"));
+            Guid candidateId = GetGuidFromString.Get(User.FindFirstValue("Id"));
             if (isEmployee || candidateId == Guid.Empty)
             {
                 response = new SkillsResponseViewModel();
@@ -105,7 +105,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             }
 
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
-            Guid candidateId = GetGuidFromString.Get(User.FindFirstValue("CandidateId"));
+            Guid candidateId = GetGuidFromString.Get(User.FindFirstValue("Id"));
             if (isEmployee)
             {
                 response = new SkillsResponseViewModel();
@@ -139,7 +139,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             SkillsResponseViewModel response;
 
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
-            Guid candidateId = GetGuidFromString.Get(User.FindFirstValue("CandidateId"));
+            Guid candidateId = GetGuidFromString.Get(User.FindFirstValue("Id"));
             if (isEmployee)
             {
                 response = new SkillsResponseViewModel();

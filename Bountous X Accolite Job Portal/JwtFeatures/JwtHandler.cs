@@ -1,5 +1,5 @@
-﻿using Bountous_X_Accolite_Job_Portal.Models;
-using Microsoft.AspNetCore.Identity;
+﻿using Bountous_X_Accolite_Job_Portal.Data;
+using Bountous_X_Accolite_Job_Portal.Models;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -11,10 +11,12 @@ namespace Bountous_X_Accolite_Job_Portal.JwtFeatures
     {
         private readonly IConfiguration _configuration;
         private readonly IConfigurationSection _jwtSettings;
-        public JwtHandler(IConfiguration configuration)
+        private readonly ApplicationDbContext _dbContext;
+        public JwtHandler(IConfiguration configuration, ApplicationDbContext dbContext)
         {
             _configuration = configuration;
             _jwtSettings = _configuration.GetSection("JwtSettings");
+            _dbContext = dbContext;
         }
         public SigningCredentials GetSigningCredentials()
         {
@@ -30,10 +32,18 @@ namespace Bountous_X_Accolite_Job_Portal.JwtFeatures
             new Claim(ClaimTypes.Name, user.Email),
         };
 
-            claims.Add(new Claim(type: "IsEmployee", value: user.IsEmployee.ToString(), ClaimValueTypes.Boolean));
-            claims.Add(new Claim(type: "CandidateId", value: user.CandidateId.ToString()));
-            claims.Add(new Claim(type: "EmployeeId", value: user.EmpId.ToString()));
-            
+            claims.Add(new Claim(type: "IsEmployee", value: (user.EmpId == null ? false : true).ToString(), ClaimValueTypes.Boolean));
+            claims.Add(new Claim(type: "Id", value: (user.EmpId != null ? user.EmpId : user.CandidateId).ToString()));
+
+            var role = "user";
+            if (user.EmpId != null)
+            {
+                var designationId = _dbContext.Employees.Find(user.EmpId).DesignationId;
+                role = _dbContext.Designations.Find(designationId).DesignationName.ToLower();
+            }
+
+            claims.Add(new Claim(type: "Role", value: role));
+
             return claims;
         }
         public JwtSecurityToken GenerateTokenOptions(SigningCredentials signingCredentials, List<Claim> claims)

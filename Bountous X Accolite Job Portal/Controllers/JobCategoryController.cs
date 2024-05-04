@@ -13,10 +13,11 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
     public class JobCategoryController : ControllerBase
     {
         private readonly IJobCategoryService _jobCategory;
-
-        public JobCategoryController(IJobCategoryService jobCategory)
+        private readonly IDesignationService _designationService;
+        public JobCategoryController(IJobCategoryService jobCategory, IDesignationService designationService)
         {
             _jobCategory = jobCategory;
+            _designationService = designationService;
         }
 
         [HttpGet]
@@ -47,8 +48,9 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             }
 
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
-            Guid employeeId = GetGuidFromString.Get(User.FindFirstValue("EmployeeId"));
-            if (!isEmployee || employeeId == Guid.Empty)
+            Guid employeeId = GetGuidFromString.Get(User.FindFirstValue("Id"));
+            var role = User.FindFirstValue("Role");
+            if (!isEmployee || role == null || !_designationService.HasPrivilege(role) || employeeId == Guid.Empty)
             {
                 response.Status = 403;
                 response.Message = "Not Logged IN / Not Authorized to Add Category";
@@ -73,7 +75,8 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             }
 
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
-            if (!isEmployee)
+            var role = User.FindFirstValue("Role");
+            if (!isEmployee || role == null || !_designationService.HasPrivilege(role))
             {
                 response.Status = 401;
                 response.Message = "Not Logged IN / Not Authorized to Edit Category";
@@ -92,7 +95,8 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             JobCategoryResponseViewModel response = new JobCategoryResponseViewModel();
 
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
-            if (!isEmployee)
+            var role = User.FindFirstValue("Role");
+            if (!isEmployee || role == null || !_designationService.HasPrivilege(role))
             {
                 response.Status = 401;
                 response.Message = "Not Logged IN / Not Authorized to Delete Category";

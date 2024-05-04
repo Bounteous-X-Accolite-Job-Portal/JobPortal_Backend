@@ -6,8 +6,6 @@ namespace Bountous_X_Accolite_Job_Portal.Models
 {
     public class User : IdentityUser
     {
-        public bool IsEmployee { get; set; }
-        public string? Token { get; set; }
         public Guid? EmpId { get; set; }
         public virtual Employee? Employee { get; set; }
 

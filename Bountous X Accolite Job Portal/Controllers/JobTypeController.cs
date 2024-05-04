@@ -1,6 +1,7 @@
 ﻿using Bountous_X_Accolite_Job_Portal.Helpers;
 using Bountous_X_Accolite_Job_Portal.Models.JobTypeViewModel;
 using Bountous_X_Accolite_Job_Portal.Models.JobTypeViewModel.JobTypeResponseViewModel;
+using Bountous_X_Accolite_Job_Portal.Services;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,10 +14,11 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
     public class JobTypeController : ControllerBase
     {
         private readonly IJobTypeService _jobTypeService;
-
-        public JobTypeController(IJobTypeService jobTypeService)
+        private readonly IDesignationService _designationService;
+        public JobTypeController(IJobTypeService jobTypeService, IDesignationService designationService)
         {
             _jobTypeService = jobTypeService;
+            _designationService = designationService;
         }
 
         [HttpGet]
@@ -49,8 +51,9 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             }
 
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
-            Guid employeeId = GetGuidFromString.Get(User.FindFirstValue("EmployeeId"));
-            if (!isEmployee || employeeId == Guid.Empty)
+            Guid employeeId = GetGuidFromString.Get(User.FindFirstValue("Id"));
+            var role = User.FindFirstValue("Role");
+            if (!isEmployee || role == null || !_designationService.HasPrivilege(role) || employeeId == Guid.Empty)
             {
                 response = new JobTypeResponseViewModel();
                 response.Status = 401;
@@ -70,7 +73,8 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             JobTypeResponseViewModel response;
 
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
-            if (!isEmployee)
+            var role = User.FindFirstValue("Role");
+            if (!isEmployee || role == null || !_designationService.HasPrivilege(role))
             {
                 response = new JobTypeResponseViewModel();
                 response.Status = 401;
@@ -97,7 +101,8 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             }
 
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
-            if (!isEmployee)
+            var role = User.FindFirstValue("Role");
+            if (!isEmployee || role == null || !_designationService.HasPrivilege(role))
             {
                 response = new JobTypeResponseViewModel();
                 response.Status = 401;

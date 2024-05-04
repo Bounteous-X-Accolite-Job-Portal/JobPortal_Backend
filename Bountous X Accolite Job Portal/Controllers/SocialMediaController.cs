@@ -26,7 +26,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             SocialMediaResponseViewModel response;
 
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
-            Guid candidateId = GetGuidFromString.Get(User.FindFirstValue("CandidateId"));
+            Guid candidateId = GetGuidFromString.Get(User.FindFirstValue("Id"));
             if (!isEmployee && candidateId != CandidateId)
             {
                 response = new SocialMediaResponseViewModel();
@@ -50,7 +50,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             }
 
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
-            Guid candidateId = GetGuidFromString.Get(User.FindFirstValue("CandidateId"));
+            Guid candidateId = GetGuidFromString.Get(User.FindFirstValue("Id"));
             if (response.SocialMedia.CandidateId == null || (!isEmployee && candidateId != response.SocialMedia.CandidateId))
             {
                 SocialMediaResponseViewModel res = new SocialMediaResponseViewModel();
@@ -77,7 +77,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             }
 
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
-            Guid candidateId = GetGuidFromString.Get(User.FindFirstValue("CandidateId"));
+            Guid candidateId = GetGuidFromString.Get(User.FindFirstValue("Id"));
             if (isEmployee || candidateId == Guid.Empty)
             {
                 response = new SocialMediaResponseViewModel();
@@ -105,7 +105,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             }
 
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
-            Guid candidateId = GetGuidFromString.Get(User.FindFirstValue("CandidateId"));
+            Guid candidateId = GetGuidFromString.Get(User.FindFirstValue("Id"));
             if (isEmployee)
             {
                 response = new SocialMediaResponseViewModel();
@@ -139,7 +139,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             SocialMediaResponseViewModel response;
 
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
-            Guid candidateId = GetGuidFromString.Get(User.FindFirstValue("CandidateId"));
+            Guid candidateId = GetGuidFromString.Get(User.FindFirstValue("Id"));
             if (isEmployee)
             {
                 response = new SocialMediaResponseViewModel();

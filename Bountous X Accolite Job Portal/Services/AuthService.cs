@@ -62,7 +62,6 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             var claims = _jwtHandler.GetClaims(user);
             var tokenOptions = _jwtHandler.GenerateTokenOptions(signingCredentials, claims);
             var token = new JwtSecurityTokenHandler().WriteToken(tokenOptions);
-            user.Token = token;
 
             _dbContext.Users.Update(user);
             await _dbContext.SaveChangesAsync();
@@ -77,7 +76,8 @@ namespace Bountous_X_Accolite_Job_Portal.Services
                 var employee = _dbContext.Employees.Find(user.EmpId);
                 response.Employee = new EmployeeViewModels(employee);
             }
-            response.Token = user.Token;
+
+            response.Token = token;
             response.User = checkUserWhetherExist[0];
             return response;
         }
