@@ -34,8 +34,9 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             }
 
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
-            Guid employeeId = GetGuidFromString.Get(User.FindFirstValue("EmployeeId"));
-            if (!isEmployee)
+            Guid employeeId = GetGuidFromString.Get(User.FindFirstValue("Id"));
+            var role = User.FindFirstValue("Role");
+            if (!isEmployee || role == null || !_designationService.HasPrivilege(role))
             {
                 response = new DesignationResponseViewModel();
                 response.Status = 403;

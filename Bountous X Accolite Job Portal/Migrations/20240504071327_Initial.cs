@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Bountous_X_Accolite_Job_Portal.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial1 : Migration
+    public partial class Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -177,7 +177,6 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Token = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     EmpId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     EmployeeId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     CandidateId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
@@ -249,6 +248,31 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                     table.PrimaryKey("PK_Degrees", x => x.DegreeId);
                     table.ForeignKey(
                         name: "FK_Degrees_Employees_EmployeeId",
+                        column: x => x.EmployeeId,
+                        principalTable: "Employees",
+                        principalColumn: "EmployeeId");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DesignationWhichHasPrivileges",
+                columns: table => new
+                {
+                    PrivilegeId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    DesignationId = table.Column<int>(type: "int", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    EmployeeId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DesignationWhichHasPrivileges", x => x.PrivilegeId);
+                    table.ForeignKey(
+                        name: "FK_DesignationWhichHasPrivileges_Designations_DesignationId",
+                        column: x => x.DesignationId,
+                        principalTable: "Designations",
+                        principalColumn: "DesignationId");
+                    table.ForeignKey(
+                        name: "FK_DesignationWhichHasPrivileges_Employees_EmployeeId",
                         column: x => x.EmployeeId,
                         principalTable: "Employees",
                         principalColumn: "EmployeeId");
@@ -666,11 +690,17 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                     InterviewId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     Rating = table.Column<int>(type: "int", nullable: false),
                     Feedback = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AdditionalLink = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    AdditionalLink = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    EmployeeId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_InterviewFeedbacks", x => x.FeedbackId);
+                    table.ForeignKey(
+                        name: "FK_InterviewFeedbacks_Employees_EmployeeId",
+                        column: x => x.EmployeeId,
+                        principalTable: "Employees",
+                        principalColumn: "EmployeeId");
                     table.ForeignKey(
                         name: "FK_InterviewFeedbacks_Interviews_InterviewId",
                         column: x => x.InterviewId,
@@ -763,6 +793,16 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                 column: "EmployeeId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_DesignationWhichHasPrivileges_DesignationId",
+                table: "DesignationWhichHasPrivileges",
+                column: "DesignationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DesignationWhichHasPrivileges_EmployeeId",
+                table: "DesignationWhichHasPrivileges",
+                column: "EmployeeId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_EducationInstitutions_EmployeeId",
                 table: "EducationInstitutions",
                 column: "EmployeeId");
@@ -778,6 +818,11 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                 column: "DesignationId1",
                 unique: true,
                 filter: "[DesignationId1] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_InterviewFeedbacks_EmployeeId",
+                table: "InterviewFeedbacks",
+                column: "EmployeeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_InterviewFeedbacks_InterviewId",
@@ -913,6 +958,9 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
 
             migrationBuilder.DropTable(
                 name: "CandidateExperience");
+
+            migrationBuilder.DropTable(
+                name: "DesignationWhichHasPrivileges");
 
             migrationBuilder.DropTable(
                 name: "InterviewFeedbacks");

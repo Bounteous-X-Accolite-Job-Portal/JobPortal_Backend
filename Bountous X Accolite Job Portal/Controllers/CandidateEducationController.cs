@@ -26,7 +26,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             MultipleEducationResponseViewModel response;
 
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
-            Guid candidateId = GetGuidFromString.Get(User.FindFirstValue("CandidateId"));
+            Guid candidateId = GetGuidFromString.Get(User.FindFirstValue("Id"));
             if (!isEmployee && candidateId != CandidateId)
             {
                 response = new MultipleEducationResponseViewModel();
@@ -50,7 +50,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             }
 
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
-            Guid candidateId = GetGuidFromString.Get(User.FindFirstValue("CandidateId"));
+            Guid candidateId = GetGuidFromString.Get(User.FindFirstValue("Id"));
             if (!isEmployee && candidateId != response.CandidateEducation.CandidateId)
             {
                 CandidateEducationResponseViewModel res = new CandidateEducationResponseViewModel();
@@ -85,7 +85,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
 
-            Guid candidateId = GetGuidFromString.Get(User.FindFirstValue("CandidateId"));
+            Guid candidateId = GetGuidFromString.Get(User.FindFirstValue("Id"));
             response = await _candidateEducationService.AddCandidateEducation(addEducation, candidateId);
             return response;
         }
@@ -119,7 +119,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return education;
             }
 
-            Guid candidateId = GetGuidFromString.Get(User.FindFirstValue("CandidateId"));
+            Guid candidateId = GetGuidFromString.Get(User.FindFirstValue("Id"));
             if (education.CandidateEducation.CandidateId == null || candidateId != education.CandidateEducation.CandidateId)
             {
                 response = new CandidateEducationResponseViewModel();
@@ -153,7 +153,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return education;
             }
 
-            Guid candidateId = GetGuidFromString.Get(User.FindFirstValue("CandidateId"));
+            Guid candidateId = GetGuidFromString.Get(User.FindFirstValue("Id"));
             if (education.CandidateEducation.CandidateId == null || candidateId != education.CandidateEducation.CandidateId)
             {
                 response = new CandidateEducationResponseViewModel();

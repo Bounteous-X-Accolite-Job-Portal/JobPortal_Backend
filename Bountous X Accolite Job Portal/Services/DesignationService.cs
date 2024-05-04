@@ -3,19 +3,61 @@ using Bountous_X_Accolite_Job_Portal.Models;
 using Bountous_X_Accolite_Job_Portal.Models.DesignationViewModel;
 using Bountous_X_Accolite_Job_Portal.Models.DesignationViewModel.ResponseViewModels;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
-using Microsoft.AspNetCore.Identity;
 
 namespace Bountous_X_Accolite_Job_Portal.Services
 {
     public class DesignationService : IDesignationService
     {
-        private readonly UserManager<User> _userManager;
         private readonly ApplicationDbContext _dbContext;
 
-        public DesignationService(UserManager<User> userManager, ApplicationDbContext applicationDbContext)
+        public DesignationService(ApplicationDbContext applicationDbContext)
         {
-            _userManager = userManager;
             _dbContext = applicationDbContext;
+        }
+
+        public bool HasSpecialPrivilege(string role)
+        {
+            if (String.Equals(role, "admin"))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public bool HasPrivilege(string role)
+        {
+            var designation = _dbContext.Designations.Where(item => String.Equals(item.DesignationName.ToLower(), role.ToLower())).FirstOrDefault();
+            if(designation == null)
+            {
+                return false;
+            }
+
+            var check = _dbContext.DesignationWhichHasPrivileges.Where(item => item.DesignationId == designation.DesignationId).FirstOrDefault();
+            if(check == null)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public async Task<DesignationResponseViewModel> GetDesignationById(int Id)
+        {
+            DesignationResponseViewModel response = new DesignationResponseViewModel();
+
+            var designation = _dbContext.Designations.Find(Id);
+            if(designation == null)
+            {
+                response.Status = 404;
+                response.Message = "Desigation with this Id does not exist.";
+                return response;
+            }
+
+            response.Status = 200;
+            response.Message = "Successfully retrieved the designation with given Id";
+            response.Designation = new DesignationViewModel(designation);
+            return response;
         }
 
         public async Task<DesignationResponseViewModel> AddDesignation(AddDesignationViewModel designation, Guid empId)

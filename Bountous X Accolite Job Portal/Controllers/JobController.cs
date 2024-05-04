@@ -1,6 +1,7 @@
 ﻿using Bountous_X_Accolite_Job_Portal.Helpers;
 using Bountous_X_Accolite_Job_Portal.Models.JobViewModels;
 using Bountous_X_Accolite_Job_Portal.Models.JobViewModels.JobResponseViewModel;
+using Bountous_X_Accolite_Job_Portal.Services;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,10 +14,11 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
     public class JobController : ControllerBase
     {
         private readonly IJobService _job;
-
-        public JobController(IJobService job)
+        private readonly IDesignationService _designationService;
+        public JobController(IJobService job, IDesignationService designationService)
         {
             _job = job;
+            _designationService = designationService;
         }
 
         [HttpGet]
@@ -64,8 +66,9 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             }
 
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
-            Guid employeeId = GetGuidFromString.Get(User.FindFirstValue("EmployeeId"));
-            if (!isEmployee || employeeId == Guid.Empty)
+            Guid employeeId = GetGuidFromString.Get(User.FindFirstValue("Id"));
+            var role = User.FindFirstValue("Role");
+            if (!isEmployee || role == null || !_designationService.HasPrivilege(role) || employeeId == Guid.Empty)
             {
                 response.Status = 401;
                 response.Message = "Not Logged IN / Not Authorized to Add Job";
@@ -90,7 +93,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             }
 
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
-            Guid employeeId = GetGuidFromString.Get(User.FindFirstValue("EmployeeId"));
+            Guid employeeId = GetGuidFromString.Get(User.FindFirstValue("Id"));
             if (!isEmployee || employeeId == Guid.Empty)
             {
                 response.Status = 401;
@@ -118,7 +121,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             JobResponseViewModel response = new JobResponseViewModel();
 
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
-            Guid employeeId = GetGuidFromString.Get(User.FindFirstValue("EmployeeId"));
+            Guid employeeId = GetGuidFromString.Get(User.FindFirstValue("Id"));
             if (!isEmployee || employeeId == Guid.Empty)
             {
                 response.Status = 401;

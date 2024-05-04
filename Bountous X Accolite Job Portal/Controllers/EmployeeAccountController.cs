@@ -1,4 +1,8 @@
-﻿using Bountous_X_Accolite_Job_Portal.Models.AuthenticationViewModel.EmployeeViewModel;
+﻿using Bountous_X_Accolite_Job_Portal.Helpers;
+using Bountous_X_Accolite_Job_Portal.Models;
+using Bountous_X_Accolite_Job_Portal.Models.AuthenticationViewModel.EmployeeViewModel;
+using Bountous_X_Accolite_Job_Portal.Models.DesignationViewModel.ResponseViewModels;
+using Bountous_X_Accolite_Job_Portal.Services;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -10,9 +14,11 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
     public class EmployeeAccountController : ControllerBase
     {
         private readonly IEmployeeAccountService _employeeAuthService;
-        public EmployeeAccountController(IEmployeeAccountService employeeAuthService)
+        private readonly IDesignationService _designationService;
+        public EmployeeAccountController(IEmployeeAccountService employeeAuthService, IDesignationService designationService)
         {
             _employeeAuthService = employeeAuthService;
+            _designationService = designationService;   
         }
 
         [HttpPost]
@@ -30,11 +36,38 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             }
 
             var email = User.FindFirstValue(ClaimTypes.Name);
-            if (email != null)
+            if (email == null)
             {
                 response = new EmployeeResponseViewModel();
-                response.Status = 403;
-                response.Message = "Please first logout to login.";
+                response.Status = 401;
+                response.Message = "You are not loggedIn or not authorised to do add other employees.";
+                return response;
+            }
+
+            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            var role = User.FindFirstValue("Role");
+            if (!isEmployee || role == null || !_designationService.HasPrivilege(role))
+            {
+                response = new EmployeeResponseViewModel();
+                response.Status = 401;
+                response.Message = "You are not loggedIn or not authorised to do add other employees.";
+                return response;
+            }
+
+            DesignationResponseViewModel designation = await _designationService.GetDesignationById(employee.DesignationId);
+            if(designation.Designation == null)
+            {
+                response = new EmployeeResponseViewModel();
+                response.Status = designation.Status;
+                response.Message = designation.Message;
+                return response;
+            }
+             
+            if(String.Equals(designation.Designation.DesignationName.ToLower(), "admin") && !_designationService.HasSpecialPrivilege(role))
+            {
+                response = new EmployeeResponseViewModel();
+                response.Status = 401;
+                response.Message = "You are not loggedIn or not authorised to do add other employees with this designation.";
                 return response;
             }
 
