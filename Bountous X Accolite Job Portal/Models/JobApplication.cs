@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Bountous_X_Accolite_Job_Portal.Models
 {
@@ -17,8 +16,5 @@ namespace Bountous_X_Accolite_Job_Portal.Models
 
         public int? StatusId { get; set; }
         public virtual Status? Status { get; set; }
-
-
-
     }
 }

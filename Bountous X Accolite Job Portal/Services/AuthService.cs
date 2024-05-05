@@ -36,7 +36,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             }
 
             var loginEmployee = _dbContext.Employees.Find(checkUserWhetherExist[0].EmpId);
-            if (loginEmployee == null || loginEmployee.Inactive)
+            if (loginEmployee != null && loginEmployee.Inactive)
             {
                 response = new LoginServiceResponseViewModel();
                 response.Status = 401;
