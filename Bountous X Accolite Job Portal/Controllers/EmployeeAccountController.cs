@@ -20,6 +20,26 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             _designationService = designationService;   
         }
 
+        [HttpGet]
+        [Route("getAllEmployees")]
+        public AllEmployeesResponseViewModel GetAllEmployees()
+        {
+            AllEmployeesResponseViewModel response;
+
+            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            var role = User.FindFirstValue("Role");
+            if (!isEmployee || role == null || !_designationService.HasPrivilege(role))
+            {
+                response = new AllEmployeesResponseViewModel();
+                response.Status = 401;
+                response.Message = "You are not loggedIn or not authorised to do get all employees.";
+                return response;
+            }
+
+            response = _employeeAuthService.GetAllEmployees();
+            return response;
+        }
+
         [HttpPost]
         [Route("register")]
         public async Task<EmployeeResponseViewModel> Register(EmployeeRegisterViewModel employee)

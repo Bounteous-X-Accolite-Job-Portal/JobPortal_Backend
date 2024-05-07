@@ -19,6 +19,24 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             _designationService = designationService;
         }
 
+        public AllEmployeesResponseViewModel GetAllEmployees()
+        {
+            AllEmployeesResponseViewModel response = new AllEmployeesResponseViewModel();
+
+            List<Employee> listOfEmployee = _dbContext.Employees.ToList();
+
+            List<EmployeeViewModels> employees = new List<EmployeeViewModels>();
+            foreach(Employee employee in listOfEmployee) 
+            { 
+                employees.Add(new EmployeeViewModels(employee));
+            }
+
+            response.Status = 200;
+            response.Message = "Successfully retrieved all employees";
+            response.Employees = employees;
+            return response;
+        }
+
         public async Task<EmployeeResponseViewModel> DisableEmployeeAccount(Guid EmployeeId, bool HasSpecialPrivilege)
         {
             EmployeeResponseViewModel response = new EmployeeResponseViewModel();
