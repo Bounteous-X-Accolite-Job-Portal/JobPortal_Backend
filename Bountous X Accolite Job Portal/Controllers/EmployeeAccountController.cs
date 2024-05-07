@@ -34,7 +34,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
 
-            var email = User.FindFirstValue(ClaimTypes.Name);
+            var email = User.FindFirstValue("Name");
             if (email == null)
             {
                 response = new EmployeeResponseViewModel();

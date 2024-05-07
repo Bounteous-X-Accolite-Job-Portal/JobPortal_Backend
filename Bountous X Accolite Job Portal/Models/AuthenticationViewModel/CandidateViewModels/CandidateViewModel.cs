@@ -2,6 +2,7 @@
 {
     public class CandidateViewModel
     {
+        public Guid CandidateId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }
@@ -14,6 +15,7 @@
 
         public CandidateViewModel(Candidate candidate)
         {
+            CandidateId = candidate.CandidateId;
             FirstName = candidate.FirstName;
             LastName = candidate.LastName;
             Email = candidate.Email;

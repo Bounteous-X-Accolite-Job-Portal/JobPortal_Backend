@@ -30,9 +30,9 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
 
         [HttpGet]
         [Route("getAllJobs")]
-        public AllJobResponseViewModel GetAllJobs()
+        public async Task<AllJobResponseViewModel> GetAllJobs()
         {
-            return _job.GetAllJobs();
+            return await _job.GetAllJobs();
         }
         
         [HttpGet]

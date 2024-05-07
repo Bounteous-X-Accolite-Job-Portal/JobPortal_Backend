@@ -84,6 +84,24 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
         }
 
         [HttpGet]
+        [Route("jobApplication/closedJob/{Id}")]
+        public AllJobApplicationResponseViewModel GetJobApplicationByClosedJobId(Guid Id)
+        {
+            AllJobApplicationResponseViewModel response;
+
+            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            if (!isEmployee)
+            {
+                response = new AllJobApplicationResponseViewModel();
+                response.Status = 401;
+                response.Message = "You are either not loggedIn or not authorized to get application by jobId.";
+                return response;
+            }
+
+            return _jobApplicationService.GetJobApplicationByClosedJobId(Id);
+        }
+
+        [HttpGet]
         [Route("closedJobApplication/candidate/{Id}")]
         public AllJobApplicationResponseViewModel GetClosedJobApplicationByCandidateId(Guid Id)
         {

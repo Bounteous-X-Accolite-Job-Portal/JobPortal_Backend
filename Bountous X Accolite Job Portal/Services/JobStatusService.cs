@@ -2,14 +2,32 @@
 using Bountous_X_Accolite_Job_Portal.Models;
 using Bountous_X_Accolite_Job_Portal.Models.JobStatusViewModel;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
-using Microsoft.AspNetCore.Identity;
 
 namespace Bountous_X_Accolite_Job_Portal.Services
 {
     public class JobStatusService : IJobStatusService
     {
-        private readonly UserManager<User> _userManager;
         private readonly ApplicationDbContext _dbContext;
+        public JobStatusService(ApplicationDbContext applicationDbContext)
+        {
+            _dbContext = applicationDbContext;
+        }
+
+        public int getInitialReferralStatus()
+        {
+            int statusId = -1;
+
+            List<Status> status = _dbContext.Status.ToList();
+            foreach(Status s in status)
+            {
+                if(String.Equals(s.StatusName.ToLower(), "referred"))
+                {
+                    statusId = s.StatusId;
+                }
+            }
+
+            return statusId;
+        }
 
         public int GetInitialStatus()
         {
@@ -32,11 +50,6 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             return false;
         }
 
-        public JobStatusService(UserManager<User> userManager, ApplicationDbContext applicationDbContext)
-        {
-            _userManager = userManager;
-            _dbContext = applicationDbContext;
-        }
         public async Task<bool> AddStatus(AddJobStatusViewModel jobstatus, Guid empId)
         {
             if (jobstatus == null || jobstatus.StatusName == null)
