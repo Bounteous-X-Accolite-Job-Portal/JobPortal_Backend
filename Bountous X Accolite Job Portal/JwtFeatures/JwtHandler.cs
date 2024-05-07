@@ -27,22 +27,28 @@ namespace Bountous_X_Accolite_Job_Portal.JwtFeatures
         public List<Claim> GetClaims(User user)
         {
 
-            var claims = new List<Claim>
-        {
-            new Claim(ClaimTypes.Name, user.Email),
-        };
+            var claims = new List<Claim>();
 
+            claims.Add(new Claim(type: "Email", value: user.Email));
             claims.Add(new Claim(type: "IsEmployee", value: (user.EmpId == null ? false : true).ToString(), ClaimValueTypes.Boolean));
             claims.Add(new Claim(type: "Id", value: (user.EmpId != null ? user.EmpId : user.CandidateId).ToString()));
 
             var role = "user";
+            string name = "";
             if (user.EmpId != null)
             {
-                var designationId = _dbContext.Employees.Find(user.EmpId).DesignationId;
-                role = _dbContext.Designations.Find(designationId).DesignationName.ToLower();
+                var employee = _dbContext.Employees.Find(user.EmpId);
+                name = employee.FirstName;
+                role = _dbContext.Designations.Find(employee.DesignationId).DesignationName.ToLower();
+            }
+            else
+            {
+                var candidate = _dbContext.Candidates.Find(user.CandidateId);
+                name = candidate.FirstName;
             }
 
             claims.Add(new Claim(type: "Role", value: role));
+            claims.Add(new Claim(type: "Name", value: name));
 
             return claims;
         }

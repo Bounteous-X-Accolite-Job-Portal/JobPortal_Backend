@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Bountous_X_Accolite_Job_Portal.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class migrate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -154,6 +154,7 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                     Phone = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     JoinedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DesignationId = table.Column<int>(type: "int", nullable: false),
+                    Inactive = table.Column<bool>(type: "bit", nullable: false),
                     DesignationId1 = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -562,6 +563,63 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ClosedJobs",
+                columns: table => new
+                {
+                    ClosedJobId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    JobId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    JobCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    JobTitle = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    JobDescription = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PostDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    LastDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DegreeId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    Experience = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    jobCategoryCategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    PositionId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    jobPositionPositionId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    JobTypeId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    LocationId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    jobLocationLocationId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    EmployeeId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ClosedJobs", x => x.ClosedJobId);
+                    table.ForeignKey(
+                        name: "FK_ClosedJobs_Degrees_DegreeId",
+                        column: x => x.DegreeId,
+                        principalTable: "Degrees",
+                        principalColumn: "DegreeId");
+                    table.ForeignKey(
+                        name: "FK_ClosedJobs_Employees_EmployeeId",
+                        column: x => x.EmployeeId,
+                        principalTable: "Employees",
+                        principalColumn: "EmployeeId");
+                    table.ForeignKey(
+                        name: "FK_ClosedJobs_JobCategory_jobCategoryCategoryId",
+                        column: x => x.jobCategoryCategoryId,
+                        principalTable: "JobCategory",
+                        principalColumn: "CategoryId");
+                    table.ForeignKey(
+                        name: "FK_ClosedJobs_JobLocation_jobLocationLocationId",
+                        column: x => x.jobLocationLocationId,
+                        principalTable: "JobLocation",
+                        principalColumn: "LocationId");
+                    table.ForeignKey(
+                        name: "FK_ClosedJobs_JobPosition_jobPositionPositionId",
+                        column: x => x.jobPositionPositionId,
+                        principalTable: "JobPosition",
+                        principalColumn: "PositionId");
+                    table.ForeignKey(
+                        name: "FK_ClosedJobs_JobType_JobTypeId",
+                        column: x => x.JobTypeId,
+                        principalTable: "JobType",
+                        principalColumn: "JobTypeId");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Jobs",
                 columns: table => new
                 {
@@ -618,12 +676,50 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ClosedJobApplications",
+                columns: table => new
+                {
+                    ClosedJobApplicationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    ApplicationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CandidateId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    JobId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    ClosedJobId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    AppliedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    StatusId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ClosedJobApplications", x => x.ClosedJobApplicationId);
+                    table.ForeignKey(
+                        name: "FK_ClosedJobApplications_Candidates_CandidateId",
+                        column: x => x.CandidateId,
+                        principalTable: "Candidates",
+                        principalColumn: "CandidateId");
+                    table.ForeignKey(
+                        name: "FK_ClosedJobApplications_ClosedJobs_ClosedJobId",
+                        column: x => x.ClosedJobId,
+                        principalTable: "ClosedJobs",
+                        principalColumn: "ClosedJobId");
+                    table.ForeignKey(
+                        name: "FK_ClosedJobApplications_Jobs_JobId",
+                        column: x => x.JobId,
+                        principalTable: "Jobs",
+                        principalColumn: "JobId");
+                    table.ForeignKey(
+                        name: "FK_ClosedJobApplications_Status_StatusId",
+                        column: x => x.StatusId,
+                        principalTable: "Status",
+                        principalColumn: "StatusId");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "JobApplications",
                 columns: table => new
                 {
                     ApplicationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CandidateId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     JobId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    ClosedJobId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     AppliedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     StatusId = table.Column<int>(type: "int", nullable: true)
                 },
@@ -635,6 +731,11 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                         column: x => x.CandidateId,
                         principalTable: "Candidates",
                         principalColumn: "CandidateId");
+                    table.ForeignKey(
+                        name: "FK_JobApplications_ClosedJobs_ClosedJobId",
+                        column: x => x.ClosedJobId,
+                        principalTable: "ClosedJobs",
+                        principalColumn: "ClosedJobId");
                     table.ForeignKey(
                         name: "FK_JobApplications_Jobs_JobId",
                         column: x => x.JobId,
@@ -654,6 +755,7 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                     InterviewId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     ApplicationId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     JobApplicationApplicationId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    ClosedJobApplicationId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     InterviewDate = table.Column<DateOnly>(type: "date", nullable: true),
                     InterviewTime = table.Column<TimeOnly>(type: "time", nullable: true),
                     InterViewerId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
@@ -665,6 +767,11 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Interviews", x => x.InterviewId);
+                    table.ForeignKey(
+                        name: "FK_Interviews_ClosedJobApplications_ClosedJobApplicationId",
+                        column: x => x.ClosedJobApplicationId,
+                        principalTable: "ClosedJobApplications",
+                        principalColumn: "ClosedJobApplicationId");
                     table.ForeignKey(
                         name: "FK_Interviews_Employees_EmployeeId",
                         column: x => x.EmployeeId,
@@ -783,6 +890,56 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                 column: "CompanyId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ClosedJobApplications_CandidateId",
+                table: "ClosedJobApplications",
+                column: "CandidateId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ClosedJobApplications_ClosedJobId",
+                table: "ClosedJobApplications",
+                column: "ClosedJobId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ClosedJobApplications_JobId",
+                table: "ClosedJobApplications",
+                column: "JobId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ClosedJobApplications_StatusId",
+                table: "ClosedJobApplications",
+                column: "StatusId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ClosedJobs_DegreeId",
+                table: "ClosedJobs",
+                column: "DegreeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ClosedJobs_EmployeeId",
+                table: "ClosedJobs",
+                column: "EmployeeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ClosedJobs_jobCategoryCategoryId",
+                table: "ClosedJobs",
+                column: "jobCategoryCategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ClosedJobs_jobLocationLocationId",
+                table: "ClosedJobs",
+                column: "jobLocationLocationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ClosedJobs_jobPositionPositionId",
+                table: "ClosedJobs",
+                column: "jobPositionPositionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ClosedJobs_JobTypeId",
+                table: "ClosedJobs",
+                column: "JobTypeId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Company_EmployeeId",
                 table: "Company",
                 column: "EmployeeId");
@@ -830,6 +987,11 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                 column: "InterviewId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Interviews_ClosedJobApplicationId",
+                table: "Interviews",
+                column: "ClosedJobApplicationId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Interviews_EmployeeId",
                 table: "Interviews",
                 column: "EmployeeId");
@@ -848,6 +1010,11 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                 name: "IX_JobApplications_CandidateId",
                 table: "JobApplications",
                 column: "CandidateId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_JobApplications_ClosedJobId",
+                table: "JobApplications",
+                column: "ClosedJobId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_JobApplications_JobId",
@@ -990,10 +1157,16 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                 name: "Interviews");
 
             migrationBuilder.DropTable(
+                name: "ClosedJobApplications");
+
+            migrationBuilder.DropTable(
                 name: "JobApplications");
 
             migrationBuilder.DropTable(
                 name: "Candidates");
+
+            migrationBuilder.DropTable(
+                name: "ClosedJobs");
 
             migrationBuilder.DropTable(
                 name: "Jobs");

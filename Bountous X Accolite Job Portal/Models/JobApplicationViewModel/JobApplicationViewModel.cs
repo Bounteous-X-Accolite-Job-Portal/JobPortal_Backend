@@ -11,6 +11,7 @@ namespace Bountous_X_Accolite_Job_Portal.Models.JobApplicationViewModel
   
         public int? StatusId { get;  set; }
         public Guid? JobId { get; set; }
+        public Guid? ClosedJobId { get; set; }
 
         public JobApplicationViewModel(JobApplication application)
         {
@@ -19,6 +20,7 @@ namespace Bountous_X_Accolite_Job_Portal.Models.JobApplicationViewModel
             AppliedOn = application.AppliedOn;
             StatusId = application.StatusId;
             JobId = application.JobId;
+            ClosedJobId = application.ClosedJobId;
         }
 
         public JobApplicationViewModel(ClosedJobApplication closedApplication)
@@ -28,6 +30,7 @@ namespace Bountous_X_Accolite_Job_Portal.Models.JobApplicationViewModel
             AppliedOn = closedApplication.AppliedOn;
             StatusId = closedApplication.StatusId;
             JobId = closedApplication.JobId;
+            ClosedJobId = closedApplication.ClosedJobId;
         }
     }
 }

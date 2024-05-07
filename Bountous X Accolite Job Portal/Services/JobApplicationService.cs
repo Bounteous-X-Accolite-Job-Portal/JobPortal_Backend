@@ -9,10 +9,12 @@ namespace Bountous_X_Accolite_Job_Portal.Services
     {
         private readonly ApplicationDbContext _dbContext;
         private readonly IJobStatusService _jobStatusService;
-        public JobApplicationService(ApplicationDbContext applicationDbContext, IJobStatusService jobStatusService)
+        private readonly I_InterviewService _interviewService;
+        public JobApplicationService(ApplicationDbContext applicationDbContext, IJobStatusService jobStatusService, I_InterviewService interviewService)
         {
             _dbContext = applicationDbContext;
             _jobStatusService = jobStatusService;
+            _interviewService = interviewService;
         }
 
         public JobApplicationResponseViewModel GetJobApplicaionById(Guid Id)
@@ -81,6 +83,32 @@ namespace Bountous_X_Accolite_Job_Portal.Services
 
             response.Status = 200;
             response.Message = "Successfully retrieved all job applications with this candidateId.";
+            response.AllJobApplications = returnApplications;
+            return response;
+        }
+
+        public AllJobApplicationResponseViewModel GetJobApplicationByClosedJobId(Guid ClosedJobId)
+        {
+            AllJobApplicationResponseViewModel response = new AllJobApplicationResponseViewModel();
+
+            var job = _dbContext.ClosedJobs.Find(ClosedJobId);
+            if (job == null)
+            {
+                response.Status = 404;
+                response.Message = "Job with this Id does not exist";
+                return response;
+            }
+
+            List<JobApplication> applications = _dbContext.JobApplications.Where(item => item.ClosedJobId == ClosedJobId).ToList();
+
+            List<JobApplicationViewModel> returnApplications = new List<JobApplicationViewModel>();
+            foreach (var application in applications)
+            {
+                returnApplications.Add(new JobApplicationViewModel(application));
+            }
+
+            response.Status = 200;
+            response.Message = "Successfully retrieved all applications for closed job with this candidateId.";
             response.AllJobApplications = returnApplications;
             return response;
         }
@@ -191,6 +219,9 @@ namespace Bountous_X_Accolite_Job_Portal.Services
                 closedApplication.StatusId = StatusId;
 
                 await _dbContext.ClosedJobApplications.AddAsync(closedApplication);
+
+                _interviewService.ChangeInterviewApplicationToClosedApplication(ApplicationId, closedApplication.ClosedJobApplicationId);
+
                 _dbContext.JobApplications.Remove(application);
 
                 if(closedApplication == null)

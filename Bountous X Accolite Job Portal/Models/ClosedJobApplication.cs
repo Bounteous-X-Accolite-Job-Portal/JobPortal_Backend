@@ -12,7 +12,8 @@ namespace Bountous_X_Accolite_Job_Portal.Models
 
         public Guid? JobId { get; set; }
         public virtual Job? Job { get; set; }
-
+        public Guid? ClosedJobId { get; set; }
+        public virtual ClosedJob? ClosedJob { get; set; }
         public DateTime AppliedOn { get; set; }
 
         public int? StatusId { get; set; }
@@ -30,6 +31,7 @@ namespace Bountous_X_Accolite_Job_Portal.Models
             JobId = application.JobId;
             AppliedOn = application.AppliedOn;
             StatusId = application.StatusId;
+            ClosedJobId = application.ClosedJobId;
         }
     }
 }
