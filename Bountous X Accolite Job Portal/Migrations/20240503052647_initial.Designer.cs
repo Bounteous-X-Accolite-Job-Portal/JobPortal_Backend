@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Bountous_X_Accolite_Job_Portal.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240503044734_initial")]
+    [Migration("20240503052647_initial")]
     partial class initial
     {
         /// <inheritdoc />

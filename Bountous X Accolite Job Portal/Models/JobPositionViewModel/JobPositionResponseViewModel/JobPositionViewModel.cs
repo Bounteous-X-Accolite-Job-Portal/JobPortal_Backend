@@ -2,6 +2,7 @@
 {
     public class JobPositionViewModel
     {
+        public Guid PositionId { get; set; }
         public string PositionCode { get; set; }
         public string PositionName { get; set; }
         public string Description { get; set; }
@@ -9,6 +10,7 @@
 
         public JobPositionViewModel(JobPosition position)
         {
+            PositionId = position.PositionId;
             PositionCode = position.PositionCode;
             PositionName = position.PositionName;
             Description = position.Description;

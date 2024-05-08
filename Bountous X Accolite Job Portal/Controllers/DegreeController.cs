@@ -33,7 +33,6 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
 
         [HttpGet]
         [Route("getDegree/{id}")]
-        [Authorize]
         public DegreeResponseViewModel GetDegree(Guid id)
         {
             DegreeResponseViewModel response = _degreeService.GetDegree(id);
