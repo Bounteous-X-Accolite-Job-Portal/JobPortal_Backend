@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Bountous_X_Accolite_Job_Portal.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240506051019_migrate")]
-    partial class migrate
+    [Migration("20240508174101_Initial Migration")]
+    partial class InitialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -780,6 +780,43 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                     b.ToTable("JobType");
                 });
 
+            modelBuilder.Entity("Bountous_X_Accolite_Job_Portal.Models.Referral", b =>
+                {
+                    b.Property<Guid>("ReferralId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CandidateId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("EmpId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("EmployeeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("JobId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("ReferredOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("StatusId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ReferralId");
+
+                    b.HasIndex("CandidateId");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.HasIndex("JobId");
+
+                    b.HasIndex("StatusId");
+
+                    b.ToTable("Referrals");
+                });
+
             modelBuilder.Entity("Bountous_X_Accolite_Job_Portal.Models.Resume", b =>
                 {
                     b.Property<Guid>("ResumeId")
@@ -1403,6 +1440,33 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                         .HasForeignKey("EmployeeId");
 
                     b.Navigation("Employee");
+                });
+
+            modelBuilder.Entity("Bountous_X_Accolite_Job_Portal.Models.Referral", b =>
+                {
+                    b.HasOne("Bountous_X_Accolite_Job_Portal.Models.Candidate", "Candidate")
+                        .WithMany()
+                        .HasForeignKey("CandidateId");
+
+                    b.HasOne("Bountous_X_Accolite_Job_Portal.Models.Employee", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId");
+
+                    b.HasOne("Bountous_X_Accolite_Job_Portal.Models.Job", "Job")
+                        .WithMany()
+                        .HasForeignKey("JobId");
+
+                    b.HasOne("Bountous_X_Accolite_Job_Portal.Models.Status", "Status")
+                        .WithMany()
+                        .HasForeignKey("StatusId");
+
+                    b.Navigation("Candidate");
+
+                    b.Navigation("Employee");
+
+                    b.Navigation("Job");
+
+                    b.Navigation("Status");
                 });
 
             modelBuilder.Entity("Bountous_X_Accolite_Job_Portal.Models.Resume", b =>
