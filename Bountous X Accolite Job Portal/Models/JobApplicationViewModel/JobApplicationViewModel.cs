@@ -1,4 +1,6 @@
-﻿namespace Bountous_X_Accolite_Job_Portal.Models.JobApplicationViewModel
+﻿using static System.Net.Mime.MediaTypeNames;
+
+namespace Bountous_X_Accolite_Job_Portal.Models.JobApplicationViewModel
 {
     public class JobApplicationViewModel
     {
@@ -9,6 +11,7 @@
   
         public int? StatusId { get;  set; }
         public Guid? JobId { get; set; }
+        public Guid? ClosedJobId { get; set; }
 
         public JobApplicationViewModel(JobApplication application)
         {
@@ -17,6 +20,17 @@
             AppliedOn = application.AppliedOn;
             StatusId = application.StatusId;
             JobId = application.JobId;
+            ClosedJobId = application.ClosedJobId;
+        }
+
+        public JobApplicationViewModel(ClosedJobApplication closedApplication)
+        {
+            ApplicationId = closedApplication.ApplicationId;
+            CandidateId = closedApplication.CandidateId;
+            AppliedOn = closedApplication.AppliedOn;
+            StatusId = closedApplication.StatusId;
+            JobId = closedApplication.JobId;
+            ClosedJobId = closedApplication.ClosedJobId;
         }
     }
 }

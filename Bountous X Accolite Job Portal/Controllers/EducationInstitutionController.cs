@@ -12,9 +12,11 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
     public class EducationInstitutionController : ControllerBase
     {
         private readonly IEducationInstitutionService _educationInstitutionService;
-        public EducationInstitutionController(IEducationInstitutionService educationInstitutionService)
+        private readonly IDesignationService _designationService;
+        public EducationInstitutionController(IEducationInstitutionService educationInstitutionService, IDesignationService designationService)
         {
-            _educationInstitutionService = educationInstitutionService; 
+            _educationInstitutionService = educationInstitutionService;
+            _designationService = designationService;
         }
 
         [HttpGet]
@@ -55,8 +57,9 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             }
 
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
-            Guid employeeId = GetGuidFromString.Get(User.FindFirstValue("EmployeeId"));
-            if (!isEmployee)
+            Guid employeeId = GetGuidFromString.Get(User.FindFirstValue("Id"));
+            var role = User.FindFirstValue("Role");
+            if (!isEmployee || role == null || !_designationService.HasPrivilege(role))
             {
                 response = new InstitutionResponseViewModel();
                 response.Status = 401;
@@ -84,7 +87,8 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             }
 
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
-            if (!isEmployee)
+            var role = User.FindFirstValue("Role");
+            if (!isEmployee || role == null || !_designationService.HasPrivilege(role))
             {
                 response = new InstitutionResponseViewModel();
                 response.Status = 401;
@@ -104,7 +108,8 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             InstitutionResponseViewModel response;
 
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
-            if (!isEmployee)
+            var role = User.FindFirstValue("Role");
+            if (!isEmployee || role == null || !_designationService.HasPrivilege(role))
             {
                 response = new InstitutionResponseViewModel();
                 response.Status = 401;

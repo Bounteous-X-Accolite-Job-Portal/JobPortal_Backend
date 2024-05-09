@@ -14,10 +14,11 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
     public class JobLocationController : ControllerBase
     {
         private readonly IJobLocationService _jobLocationService;
-
-        public JobLocationController(IJobLocationService jobLocationService)
+        private readonly IDesignationService _designationService;
+        public JobLocationController(IJobLocationService jobLocationService, IDesignationService designationService)
         {
             _jobLocationService = jobLocationService;
+            _designationService = designationService;
         }
 
         [HttpGet]
@@ -49,8 +50,9 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             }
 
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
-            Guid employeeId = GetGuidFromString.Get(User.FindFirstValue("EmployeeId"));
-            if (!isEmployee || employeeId == Guid.Empty)
+            Guid employeeId = GetGuidFromString.Get(User.FindFirstValue("Id"));
+            var role = User.FindFirstValue("Role");
+            if (!isEmployee || role == null || !_designationService.HasPrivilege(role) || employeeId == Guid.Empty)
             {
                 response = new JobLocationResponseViewModel();
                 response.Status = 401;
@@ -70,7 +72,8 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             JobLocationResponseViewModel response;
 
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
-            if (!isEmployee)
+            var role = User.FindFirstValue("Role");
+            if (!isEmployee || role == null || !_designationService.HasPrivilege(role))
             {
                 response = new JobLocationResponseViewModel();
                 response.Status = 401;
@@ -97,7 +100,8 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             }
 
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
-            if (!isEmployee)
+            var role = User.FindFirstValue("Role");
+            if (!isEmployee || role == null || !_designationService.HasPrivilege(role))
             {
                 response = new JobLocationResponseViewModel();
                 response.Status = 401;

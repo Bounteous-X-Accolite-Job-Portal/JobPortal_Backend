@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Bountous_X_Accolite_Job_Portal.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240503052647_initial")]
+    [Migration("20240508100604_initial")]
     partial class initial
     {
         /// <inheritdoc />
@@ -154,6 +154,118 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                     b.ToTable("CandidateExperience");
                 });
 
+            modelBuilder.Entity("Bountous_X_Accolite_Job_Portal.Models.ClosedJob", b =>
+                {
+                    b.Property<Guid>("ClosedJobId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CategoryId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("DegreeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("EmployeeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Experience")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("JobCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("JobDescription")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("JobId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("JobTitle")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("JobTypeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("LastDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("LocationId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("PositionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("PostDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("jobCategoryCategoryId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("jobLocationLocationId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("jobPositionPositionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("ClosedJobId");
+
+                    b.HasIndex("DegreeId");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.HasIndex("JobTypeId");
+
+                    b.HasIndex("jobCategoryCategoryId");
+
+                    b.HasIndex("jobLocationLocationId");
+
+                    b.HasIndex("jobPositionPositionId");
+
+                    b.ToTable("ClosedJobs");
+                });
+
+            modelBuilder.Entity("Bountous_X_Accolite_Job_Portal.Models.ClosedJobApplication", b =>
+                {
+                    b.Property<Guid>("ClosedJobApplicationId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("ApplicationId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("AppliedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("CandidateId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("ClosedJobId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("JobId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int?>("StatusId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ClosedJobApplicationId");
+
+                    b.HasIndex("CandidateId");
+
+                    b.HasIndex("ClosedJobId");
+
+                    b.HasIndex("JobId");
+
+                    b.HasIndex("StatusId");
+
+                    b.ToTable("ClosedJobApplications");
+                });
+
             modelBuilder.Entity("Bountous_X_Accolite_Job_Portal.Models.Company", b =>
                 {
                     b.Property<Guid>("CompanyId")
@@ -240,6 +352,32 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                     b.ToTable("Designations");
                 });
 
+            modelBuilder.Entity("Bountous_X_Accolite_Job_Portal.Models.DesignationWhichHasPrivilege", b =>
+                {
+                    b.Property<int>("PrivilegeId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PrivilegeId"));
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("DesignationId")
+                        .HasColumnType("int");
+
+                    b.Property<Guid?>("EmployeeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("PrivilegeId");
+
+                    b.HasIndex("DesignationId");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.ToTable("DesignationWhichHasPrivileges");
+                });
+
             modelBuilder.Entity("Bountous_X_Accolite_Job_Portal.Models.EducationInstitution", b =>
                 {
                     b.Property<Guid>("InstitutionId")
@@ -295,6 +433,9 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("Inactive")
+                        .HasColumnType("bit");
+
                     b.Property<DateTime>("JoinedOn")
                         .HasColumnType("datetime2");
 
@@ -325,6 +466,9 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                     b.Property<Guid?>("ApplicationId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("ClosedJobApplicationId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
@@ -350,6 +494,8 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("InterviewId");
+
+                    b.HasIndex("ClosedJobApplicationId");
 
                     b.HasIndex("EmployeeId");
 
@@ -475,6 +621,9 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                     b.Property<Guid?>("CandidateId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("ClosedJobId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid?>("JobId")
                         .HasColumnType("uniqueidentifier");
 
@@ -484,6 +633,8 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                     b.HasKey("ApplicationId");
 
                     b.HasIndex("CandidateId");
+
+                    b.HasIndex("ClosedJobId");
 
                     b.HasIndex("JobId");
 
@@ -629,6 +780,43 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                     b.ToTable("JobType");
                 });
 
+            modelBuilder.Entity("Bountous_X_Accolite_Job_Portal.Models.Referral", b =>
+                {
+                    b.Property<Guid>("ReferralId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CandidateId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("EmpId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("EmployeeId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("JobId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("ReferredOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("StatusId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ReferralId");
+
+                    b.HasIndex("CandidateId");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.HasIndex("JobId");
+
+                    b.HasIndex("StatusId");
+
+                    b.ToTable("Referrals");
+                });
+
             modelBuilder.Entity("Bountous_X_Accolite_Job_Portal.Models.Resume", b =>
                 {
                     b.Property<Guid>("ResumeId")
@@ -762,9 +950,6 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                     b.Property<Guid?>("EmployeeId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("IsEmployee")
-                        .HasColumnType("bit");
-
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
 
@@ -789,9 +974,6 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("SecurityStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Token")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("TwoFactorEnabled")
@@ -987,6 +1169,72 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                     b.Navigation("Company");
                 });
 
+            modelBuilder.Entity("Bountous_X_Accolite_Job_Portal.Models.ClosedJob", b =>
+                {
+                    b.HasOne("Bountous_X_Accolite_Job_Portal.Models.Degree", "Degree")
+                        .WithMany()
+                        .HasForeignKey("DegreeId");
+
+                    b.HasOne("Bountous_X_Accolite_Job_Portal.Models.Employee", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId");
+
+                    b.HasOne("Bountous_X_Accolite_Job_Portal.Models.JobType", "jobType")
+                        .WithMany()
+                        .HasForeignKey("JobTypeId");
+
+                    b.HasOne("Bountous_X_Accolite_Job_Portal.Models.JobCategory", "jobCategory")
+                        .WithMany()
+                        .HasForeignKey("jobCategoryCategoryId");
+
+                    b.HasOne("Bountous_X_Accolite_Job_Portal.Models.JobLocation", "jobLocation")
+                        .WithMany()
+                        .HasForeignKey("jobLocationLocationId");
+
+                    b.HasOne("Bountous_X_Accolite_Job_Portal.Models.JobPosition", "jobPosition")
+                        .WithMany()
+                        .HasForeignKey("jobPositionPositionId");
+
+                    b.Navigation("Degree");
+
+                    b.Navigation("Employee");
+
+                    b.Navigation("jobCategory");
+
+                    b.Navigation("jobLocation");
+
+                    b.Navigation("jobPosition");
+
+                    b.Navigation("jobType");
+                });
+
+            modelBuilder.Entity("Bountous_X_Accolite_Job_Portal.Models.ClosedJobApplication", b =>
+                {
+                    b.HasOne("Bountous_X_Accolite_Job_Portal.Models.Candidate", "Candidate")
+                        .WithMany()
+                        .HasForeignKey("CandidateId");
+
+                    b.HasOne("Bountous_X_Accolite_Job_Portal.Models.ClosedJob", "ClosedJob")
+                        .WithMany()
+                        .HasForeignKey("ClosedJobId");
+
+                    b.HasOne("Bountous_X_Accolite_Job_Portal.Models.Job", "Job")
+                        .WithMany()
+                        .HasForeignKey("JobId");
+
+                    b.HasOne("Bountous_X_Accolite_Job_Portal.Models.Status", "Status")
+                        .WithMany()
+                        .HasForeignKey("StatusId");
+
+                    b.Navigation("Candidate");
+
+                    b.Navigation("ClosedJob");
+
+                    b.Navigation("Job");
+
+                    b.Navigation("Status");
+                });
+
             modelBuilder.Entity("Bountous_X_Accolite_Job_Portal.Models.Company", b =>
                 {
                     b.HasOne("Bountous_X_Accolite_Job_Portal.Models.Employee", "Employee")
@@ -1001,6 +1249,21 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                     b.HasOne("Bountous_X_Accolite_Job_Portal.Models.Employee", "Employee")
                         .WithMany()
                         .HasForeignKey("EmployeeId");
+
+                    b.Navigation("Employee");
+                });
+
+            modelBuilder.Entity("Bountous_X_Accolite_Job_Portal.Models.DesignationWhichHasPrivilege", b =>
+                {
+                    b.HasOne("Bountous_X_Accolite_Job_Portal.Models.Designation", "Designation")
+                        .WithMany()
+                        .HasForeignKey("DesignationId");
+
+                    b.HasOne("Bountous_X_Accolite_Job_Portal.Models.Employee", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId");
+
+                    b.Navigation("Designation");
 
                     b.Navigation("Employee");
                 });
@@ -1031,6 +1294,10 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
 
             modelBuilder.Entity("Bountous_X_Accolite_Job_Portal.Models.Interview", b =>
                 {
+                    b.HasOne("Bountous_X_Accolite_Job_Portal.Models.ClosedJobApplication", "ClosedJobApplication")
+                        .WithMany()
+                        .HasForeignKey("ClosedJobApplicationId");
+
                     b.HasOne("Bountous_X_Accolite_Job_Portal.Models.Employee", "Employee")
                         .WithMany()
                         .HasForeignKey("EmployeeId");
@@ -1042,6 +1309,8 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                     b.HasOne("Bountous_X_Accolite_Job_Portal.Models.JobApplication", "JobApplication")
                         .WithMany()
                         .HasForeignKey("JobApplicationApplicationId");
+
+                    b.Navigation("ClosedJobApplication");
 
                     b.Navigation("Employee");
 
@@ -1110,6 +1379,10 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                         .WithMany()
                         .HasForeignKey("CandidateId");
 
+                    b.HasOne("Bountous_X_Accolite_Job_Portal.Models.ClosedJob", "ClosedJob")
+                        .WithMany()
+                        .HasForeignKey("ClosedJobId");
+
                     b.HasOne("Bountous_X_Accolite_Job_Portal.Models.Job", "Job")
                         .WithMany()
                         .HasForeignKey("JobId");
@@ -1119,6 +1392,8 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                         .HasForeignKey("StatusId");
 
                     b.Navigation("Candidate");
+
+                    b.Navigation("ClosedJob");
 
                     b.Navigation("Job");
 
@@ -1165,6 +1440,33 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                         .HasForeignKey("EmployeeId");
 
                     b.Navigation("Employee");
+                });
+
+            modelBuilder.Entity("Bountous_X_Accolite_Job_Portal.Models.Referral", b =>
+                {
+                    b.HasOne("Bountous_X_Accolite_Job_Portal.Models.Candidate", "Candidate")
+                        .WithMany()
+                        .HasForeignKey("CandidateId");
+
+                    b.HasOne("Bountous_X_Accolite_Job_Portal.Models.Employee", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId");
+
+                    b.HasOne("Bountous_X_Accolite_Job_Portal.Models.Job", "Job")
+                        .WithMany()
+                        .HasForeignKey("JobId");
+
+                    b.HasOne("Bountous_X_Accolite_Job_Portal.Models.Status", "Status")
+                        .WithMany()
+                        .HasForeignKey("StatusId");
+
+                    b.Navigation("Candidate");
+
+                    b.Navigation("Employee");
+
+                    b.Navigation("Job");
+
+                    b.Navigation("Status");
                 });
 
             modelBuilder.Entity("Bountous_X_Accolite_Job_Portal.Models.Resume", b =>
