@@ -119,40 +119,40 @@ namespace Bountous_X_Accolite_Job_Portal.Services
                 }
             }
 
-            //List<JobApplication> application = _context.JobApplications.Where(item => true).ToList();
+            List<JobApplication> application = _context.JobApplications.Where(item => true).ToList();
 
-            //List<JobApplication> validApplications = new List<JobApplication>();
-            //foreach (JobApplication app in application)
-            //{
-            //    if (dic.ContainsKey((Guid)app.JobId))
-            //    {
-            //        validApplications.Add(app);
-            //    }
-            //}
+            List<JobApplication> validApplications = new List<JobApplication>();
+            foreach (JobApplication app in application)
+            {
+                if (dic.ContainsKey((Guid)app.JobId))
+                {
+                    validApplications.Add(app);
+                }
+            }
 
-            //Dictionary<Guid, ClosedJob> closedDic = new Dictionary<Guid, ClosedJob>();
-            //foreach (KeyValuePair<Guid, Job> entry in dic)
-            //{
-            //    // do something with entry.Value or entry.Key
-            //    ClosedJob closedJob = new ClosedJob(entry.Value);
-            //    _context.ClosedJobs.Add(closedJob);
+            Dictionary<Guid, ClosedJob> closedDic = new Dictionary<Guid, ClosedJob>();
+            foreach (KeyValuePair<Guid, Job> entry in dic)
+            {
+                // do something with entry.Value or entry.Key
+                ClosedJob closedJob = new ClosedJob(entry.Value);
+                _context.ClosedJobs.Add(closedJob);
 
-            //    closedDic.Add(entry.Key, closedJob);
-            //}
+                closedDic.Add(entry.Key, closedJob);
+            }
 
-            //foreach(JobApplication app in validApplications)
-            //{
-            //    app.ClosedJobId = closedDic[(Guid)app.JobId].ClosedJobId;
-            //    app.JobId = null;
-            //    _context.JobApplications.Update(app);
-            //}
+            foreach(JobApplication app in validApplications)
+            {
+                app.ClosedJobId = closedDic[(Guid)app.JobId].ClosedJobId;
+                app.JobId = null;
+                _context.JobApplications.Update(app);
+            }
 
-            //foreach (KeyValuePair<Guid, Job> entry in dic)
-            //{
-            //    _context.Jobs.Remove(dic[(Guid)entry.Key]);
-            //}
+            foreach (KeyValuePair<Guid, Job> entry in dic)
+            {
+                _context.Jobs.Remove(dic[(Guid)entry.Key]);
+            }
 
-            //await _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
 
             AllJobResponseViewModel response = new AllJobResponseViewModel();
             response.Status = 200;

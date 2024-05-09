@@ -1,5 +1,6 @@
 ﻿using Bountous_X_Accolite_Job_Portal.Helpers;
 using Bountous_X_Accolite_Job_Portal.Models.JobApplicationViewModel;
+using Bountous_X_Accolite_Job_Portal.Models.JobApplicationViewModel.JobApplicationResponse;
 using Bountous_X_Accolite_Job_Portal.Models.JobViewModels.JobResponseViewModel;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
 using Microsoft.AspNetCore.Authorization;
@@ -10,7 +11,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+   // [Authorize]
     public class ApplicationController : ControllerBase
     {
 
@@ -53,17 +54,57 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
 
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
             Guid candidateId = GetGuidFromString.Get(User.FindFirstValue("Id"));
-            if (!isEmployee && candidateId != Id)
-            {
-                response = new AllJobApplicationResponseViewModel();
-                response.Status = 401;
-                response.Message = "You are either not loggedIn or not authorized to get applications by candidateId.";
-                return response;
-            }
+            //if (!isEmployee && candidateId != Id)
+            //{
+            //    response = new AllJobApplicationResponseViewModel();
+            //    response.Status = 401;
+            //    response.Message = "You are either not loggedIn or not authorized to get applications by candidateId.";
+            //    return response;
+            //}
 
             response = _jobApplicationService.GetJobApplicationByCandidateId(Id);
             return response;
         }
+
+        [HttpGet]
+        [Route("jobApplication/isCandidateApplicable/{JobId}")]
+        public ApplicationResponseViewModel IsCandidateApplicable(Guid JobId)
+        {
+            ApplicationResponseViewModel response = new ApplicationResponseViewModel();
+            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            if (isEmployee)
+            {
+                response.Status = 400;
+                response.Message = "Logged In as Employee!";
+                response.name = "Employee Logged In !!";
+                return response;
+            }
+            Guid candidateId = GetGuidFromString.Get(User.FindFirstValue("Id"));
+            if(candidateId == Guid.Empty)
+            {
+                response.Status = 401;
+                response.Message = "Candidate Not Logged In !";
+                response.name = "Not Logged In !!";
+                return response;
+            }
+
+            Boolean result = _jobApplicationService.IsCandidateApplicable(JobId, candidateId);
+            if(result)
+            {
+                response.Status = 200;
+                response.Message = "Candidate is Applicable to apply for this job !";
+                response.name = "Apply Now";
+            }
+            else
+            {
+                response.Status = 403;
+                response.Message = "Candidate has Already Applyed for this job !";
+                response.name = "Already Applied !";
+            }
+
+            return response;
+        }
+
 
         [HttpGet]
         [Route("jobApplication/job/{Id}")]
@@ -132,6 +173,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 response = new JobApplicationResponseViewModel();
                 response.Status = 400;
                 response.Message = "PLease fill all the details.";
+                return response;
             }
 
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
@@ -141,6 +183,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 response = new JobApplicationResponseViewModel();
                 response.Status = 403;
                 response.Message = "You are not loggedIn or you are not authorised to apply this job.";
+                return response;
             }
         
             response = await _jobApplicationService.Apply(addjobapplication, candidateId);
