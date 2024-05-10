@@ -107,6 +107,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
                 dbinterview.InterviewTime = interview.InterviewTime;
                 dbinterview.InterViewerId = interview.InterViewerId; 
                 dbinterview.Link = interview.Link;
+                dbinterview.FeedbackId = interview.FeedbackId;
 
                 _context.Interviews.Update(dbinterview);
                 await _context.SaveChangesAsync();
@@ -189,6 +190,19 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             return response;
         }
    
-        
+        public async Task<bool> UpdateFeedbackId(Guid InterviewId, Guid FeedbackId)
+        {
+            var interview = _context.Interviews.Find(InterviewId);
+            if(interview == null)
+            {
+                return false;
+            }
+
+            interview.FeedbackId = FeedbackId;
+            _context.Interviews.Update(interview);
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
     }
 }

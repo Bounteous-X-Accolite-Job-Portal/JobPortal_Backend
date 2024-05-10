@@ -2,7 +2,6 @@
 {
     public class InterviewFeedbackViewModel : ResponseViewModel
     {
-        public Guid? InterviewId { get; set; }
         public int Rating { get; set; }
         public string Feedback { get; set; }
         public string? AdditionalLink { get; set; }
@@ -10,7 +9,6 @@
 
         public InterviewFeedbackViewModel(InterviewFeedback feedback)
         {
-            InterviewId = feedback.InterviewId;
             Rating = feedback.Rating;
             Feedback = feedback.Feedback;
             AdditionalLink = feedback.AdditionalLink;

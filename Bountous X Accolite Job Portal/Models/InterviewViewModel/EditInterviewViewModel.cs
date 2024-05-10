@@ -3,5 +3,6 @@
     public class EditInterviewViewModel : CreateInterviewViewModel
     {
         public Guid InterviewId { get; set; }
+        public Guid? FeedbackId { get; set; }
     }
 }
