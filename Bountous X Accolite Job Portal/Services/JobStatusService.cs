@@ -31,7 +31,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
 
         public int GetInitialStatus()
         {
-            return 1;
+            return 5;
         }
 
         public bool IsRejectedStatus(int StatusId)
@@ -57,13 +57,13 @@ namespace Bountous_X_Accolite_Job_Portal.Services
                 return false;
             }
             Status addJobStatus = new Status();
-            addJobStatus.StatusName = addJobStatus.StatusName;
+            addJobStatus.StatusName = jobstatus.StatusName;
             addJobStatus.CreatedAt = DateTime.Now;
             addJobStatus.EmpId = empId;
 
             await _dbContext.Status.AddAsync(addJobStatus);
             await _dbContext.SaveChangesAsync();
-
+ 
             return true;
         }
 
