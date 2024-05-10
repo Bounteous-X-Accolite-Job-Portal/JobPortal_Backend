@@ -432,3 +432,4 @@ C:\Users\shagun.p_int1590\Desktop\JobPortal_Backend\Bountous X Accolite Job Port
 C:\Users\shagun.p_int1590\Desktop\JobPortal_Backend\Bountous X Accolite Job Portal\bin\Debug\net8.0\BouncyCastle.Cryptography.dll
 C:\Users\shagun.p_int1590\Desktop\JobPortal_Backend\Bountous X Accolite Job Portal\bin\Debug\net8.0\MailKit.dll
 C:\Users\shagun.p_int1590\Desktop\JobPortal_Backend\Bountous X Accolite Job Portal\bin\Debug\net8.0\MimeKit.dll
+C:\Users\shagun.p_int1590\Desktop\JobPortal_Backend\Bountous X Accolite Job Portal\bin\Debug\net8.0\NETCore.MailKit.dll

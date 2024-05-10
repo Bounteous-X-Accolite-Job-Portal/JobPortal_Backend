@@ -1,19 +1,13 @@
 ﻿
 using Microsoft.AspNetCore.Mvc;
-using MimeKit;
-
-using MailKit.Net.Smtp;
-using MailKit.Security;
 using Bountous_X_Accolite_Job_Portal.Models;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
-using Microsoft.AspNetCore.Http.HttpResults;
 using System.Security.Cryptography;
+using MailKit.Net.Smtp;
 using Bountous_X_Accolite_Job_Portal.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
-using System.Diagnostics;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using System.Runtime.ConstrainedExecution;
+using Bountous_X_Accolite_Job_Portal.Models.EMAIL;
 
 namespace Bountous_X_Accolite_Job_Portal.Controllers
 {
@@ -55,7 +49,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
 
             string from = _config["EmailSettings:From"];
             var emailModel = new EmailData(email, "ResetPassword", EmailBody.EmailStringBody(email, emailToken));
-            Debug.WriteLine("INSIDE CONTROLLER", emailModel);
+            //Debug.WriteLine("INSIDE CONTROLLER", emailModel);
 
             _emailService.SendEmail(emailModel);
 
@@ -67,14 +61,14 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
         [HttpPost("reset-Password")]
         public async Task<IActionResult> ResetPassword(ResetPasswordDTO resetPassword)
         {
-            var newToken = resetPassword.EmailToken.Replace(" ", "+");
+           
 
             var user = await _userManager.FindByEmailAsync(resetPassword.Email);
             if (user == null) { return NotFound(); }
 
-            var TokenCode = user.ResetPasswordToken;
+            var TokenCode = await _userManager.GeneratePasswordResetTokenAsync(user);
             DateTime emailTokenExpiry= (DateTime)user.ResetPasswordExpiry;
-            if(TokenCode!=resetPassword.EmailToken || emailTokenExpiry<DateTime.Now)
+            if(emailTokenExpiry<DateTime.Now)
             {
                 return BadRequest(
                     new
@@ -83,15 +77,20 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                         Message = "NO"
                     });
             }
+            var result = await _userManager.ResetPasswordAsync(user, TokenCode, resetPassword.NewPassword);
 
-            String hashedNewPassword = _userManager.PasswordHasher.HashPassword(user, resetPassword.NewPassword);
+            //String hashedNewPassword = _userManager.PasswordHasher.HashPassword(user, resetPassword.NewPassword);
 
-            user.PasswordHash = hashedNewPassword;
-            _authContext.Update(user);
+            //user.PasswordHash = hashedNewPassword;
+            _authContext.Entry(user).State=EntityState.Modified;
             await _authContext.SaveChangesAsync();
+            //_authContext.Update(user);
+            //await _authContext.SaveChangesAsync();
             return Ok();
 
             }
+
+        
     }
     }
     

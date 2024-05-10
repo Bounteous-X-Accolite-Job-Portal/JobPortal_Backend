@@ -1,9 +1,7 @@
-﻿using Bountous_X_Accolite_Job_Portal.Models;
-using MailKit.Security;
-using MimeKit.Text;
+﻿using MailKit.Net.Smtp;
 using MimeKit;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
-using MailKit.Net.Smtp;
+using Bountous_X_Accolite_Job_Portal.Models.EMAIL;
 
 namespace Bountous_X_Accolite_Job_Portal.Services
 {
@@ -23,7 +21,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             email.From.Add(new MailboxAddress("Job Portal",from));
             email.To.Add(new MailboxAddress(request.To,request.To));
             email.Subject = request.Subject;
-            email.Body = new TextPart(TextFormat.Html)
+            email.Body = new TextPart(MimeKit.Text.TextFormat.Html)
             { Text = string.Format(request.Body) };
 
             using var smtp = new SmtpClient();

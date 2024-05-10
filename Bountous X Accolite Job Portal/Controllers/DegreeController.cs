@@ -1,25 +1,21 @@
-﻿using Bountous_X_Accolite_Job_Portal.Models;
+﻿using Bountous_X_Accolite_Job_Portal.Helpers;
 using Bountous_X_Accolite_Job_Portal.Models.DegreeViewModel;
 using Bountous_X_Accolite_Job_Portal.Models.DegreeViewModel.DegreeResponseViewModel;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Bountous_X_Accolite_Job_Portal.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class DegreeController : ControllerBase
     {
         private readonly IDegreeService _degreeService;
-        private readonly UserManager<User> _userManager;
-        public DegreeController(IDegreeService degreeService, UserManager<User> userManager)
+        public DegreeController(IDegreeService degreeService)
         {
             _degreeService = degreeService;
-            _userManager = userManager;
         }
 
         [HttpGet]
@@ -37,6 +33,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
 
         [HttpGet]
         [Route("getDegree/{id}")]
+        [Authorize]
         public DegreeResponseViewModel GetDegree(Guid id)
         {
             DegreeResponseViewModel response = _degreeService.GetDegree(id);
@@ -45,6 +42,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
 
         [HttpPost]
         [Route("addDegree")]
+        [Authorize]
         public async Task<DegreeResponseViewModel> AddDegree(AddDegreeViewModel addDegree)
         {
             DegreeResponseViewModel response;
@@ -57,8 +55,9 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
 
-            var employee = await _userManager.GetUserAsync(User);
-            if (employee == null || employee.EmpId == null)
+            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            Guid employeeId = GetGuidFromString.Get(User.FindFirstValue("EmployeeId"));
+            if (!isEmployee)
             {
                 response = new DegreeResponseViewModel();
                 response.Status = 401;
@@ -66,12 +65,13 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
 
-            response = await _degreeService.AddDegree(addDegree, (Guid)employee.EmpId);    
+            response = await _degreeService.AddDegree(addDegree, employeeId);    
             return response;
         }
 
         [HttpPut]
         [Route("updateDegree")]
+        [Authorize]
         public async Task<DegreeResponseViewModel> UpdateDegree(UpdateDegreeViewModel updateDegree)
         {
             DegreeResponseViewModel response;
@@ -84,8 +84,8 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
 
-            var employee = await _userManager.GetUserAsync(User);
-            if (employee == null || employee.EmpId == null)
+            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            if (!isEmployee)
             {
                 response = new DegreeResponseViewModel();
                 response.Status = 401;
@@ -99,12 +99,13 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
 
         [HttpDelete]
         [Route("removeDegree/{id}")]
+        [Authorize]
         public async Task<DegreeResponseViewModel> RemoveDegree(Guid id)
         {
             DegreeResponseViewModel response;
 
-            var employee = await _userManager.GetUserAsync(User);
-            if (employee == null || employee.EmpId == null)
+            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            if (!isEmployee)
             {
                 response = new DegreeResponseViewModel();
                 response.Status = 401;

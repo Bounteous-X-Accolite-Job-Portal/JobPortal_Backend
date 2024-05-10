@@ -2,16 +2,15 @@ using Bountous_X_Accolite_Job_Portal.Data;
 using Bountous_X_Accolite_Job_Portal.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.DependencyInjection;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
 using Bountous_X_Accolite_Job_Portal.Services;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Bountous_X_Accolite_Job_Portal.Helpers;
 using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Bountous_X_Accolite_Job_Portal.JwtFeatures;
 
 namespace Bountous_X_Accolite_Job_Portal
 {
@@ -38,7 +37,7 @@ namespace Bountous_X_Accolite_Job_Portal
                 .AddDefaultTokenProviders();
             builder.Services.Configure<IdentityOptions>
                 (
-            options => options.SignIn.RequireConfirmedEmail = false);
+            options => options.SignIn.RequireConfirmedEmail = true);
 
 
 
@@ -49,25 +48,29 @@ namespace Bountous_X_Accolite_Job_Portal
                 }));
 
            // Adding JWT Authentication
-           //var jwtSettings = builder.Configuration.GetSection("JwtSettings");
+           var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 
-           // builder.Services.AddAuthentication(opt =>
-           // {
-           //     opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-           //     opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-           // }).AddJwtBearer(options =>
-           // {
-           //     options.TokenValidationParameters = new TokenValidationParameters
-           //     {
-           //         ValidateIssuer = true,
-           //         ValidateAudience = true,
-           //         ValidateLifetime = true,
-           //         ValidateIssuerSigningKey = true,
-           //         ValidIssuer = jwtSettings["validIssuer"],
-           //         ValidAudience = jwtSettings["validAudience"],
-           //         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.GetSection("securityKey").Value))
-           //     };
-           // });
+            builder.Services.AddAuthentication(opt =>
+            {
+                opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                options.RequireHttpsMetadata = false;
+                options.SaveToken = true;
+
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = jwtSettings["validIssuer"],
+                    ValidAudience = jwtSettings["validAudience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.GetSection("securityKey").Value)),
+                    ClockSkew = TimeSpan.Zero
+                };
+            });
 
 
             builder.Services.AddControllers();
@@ -121,6 +124,8 @@ namespace Bountous_X_Accolite_Job_Portal
             
 
 
+            // Addding JWT as a service
+            builder.Services.AddScoped<JwtHandler>();
 
             var app = builder.Build();
 

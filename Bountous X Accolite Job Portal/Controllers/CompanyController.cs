@@ -1,25 +1,21 @@
-﻿using Bountous_X_Accolite_Job_Portal.Models;
+﻿using Bountous_X_Accolite_Job_Portal.Helpers;
 using Bountous_X_Accolite_Job_Portal.Models.CompanyViewModel;
 using Bountous_X_Accolite_Job_Portal.Models.CompanyViewModel.CompanyResponseViewModel;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Bountous_X_Accolite_Job_Portal.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class CompanyController : ControllerBase
     {
         private readonly ICompanyService _companyService;
-        private readonly UserManager<User> _userManager;
-        public CompanyController(ICompanyService companyService, UserManager<User> userManager)
+        public CompanyController(ICompanyService companyService)
         {
             _companyService = companyService;
-            _userManager = userManager;
         }
 
         [HttpGet]
@@ -32,6 +28,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
 
         [HttpGet]
         [Route("getCompany/{Id}")]
+        [Authorize]
         public CompanyResponseViewModel GetCompanyById(Guid Id)
         {
             CompanyResponseViewModel response = _companyService.GetCompanyById(Id); 
@@ -40,6 +37,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
 
         [HttpPost]
         [Route("addCompany")]
+        [Authorize]
         public async Task<CompanyResponseViewModel> AddCompany(AddCompanyViewModel addCompany)
         {
             CompanyResponseViewModel response;
@@ -52,8 +50,9 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
 
-            var employee = await _userManager.GetUserAsync(User);
-            if (employee == null || employee.EmpId == null)
+            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            Guid employeeId = GetGuidFromString.Get(User.FindFirstValue("EmployeeId"));
+            if (!isEmployee)
             {
                 response = new CompanyResponseViewModel();
                 response.Status = 401;
@@ -61,12 +60,13 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
 
-            response = await _companyService.AddCompany(addCompany, (Guid)employee.EmpId);
+            response = await _companyService.AddCompany(addCompany, employeeId);
             return response;
         }
 
         [HttpPut]
         [Route("updateCompany")]
+        [Authorize]
         public async Task<CompanyResponseViewModel> UpdateCompany(UpdateCompanyViewModel updateCompany)
         {
             CompanyResponseViewModel response;
@@ -79,8 +79,8 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
 
-            var employee = await _userManager.GetUserAsync(User);
-            if (employee == null || employee.EmpId == null)
+            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            if (!isEmployee)
             {
                 response = new CompanyResponseViewModel();
                 response.Status = 401;
@@ -94,12 +94,13 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
 
         [HttpDelete]
         [Route("removeCompany/{id}")]
+        [Authorize]
         public async Task<CompanyResponseViewModel> RemoveCompany(Guid id)
         {
             CompanyResponseViewModel response;
 
-            var employee = await _userManager.GetUserAsync(User);
-            if (employee == null || employee.EmpId == null)
+            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            if (!isEmployee)
             {
                 response = new CompanyResponseViewModel();
                 response.Status = 401;

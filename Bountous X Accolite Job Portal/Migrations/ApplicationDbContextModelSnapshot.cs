@@ -70,9 +70,6 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                     b.Property<string>("ZipCode")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("password")
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("CandidateId");
 
                     b.ToTable("Candidates");
@@ -375,6 +372,9 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                     b.Property<string>("AdditionalLink")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid?>("EmployeeId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Feedback")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -386,6 +386,8 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("FeedbackId");
+
+                    b.HasIndex("EmployeeId");
 
                     b.HasIndex("InterviewId");
 
@@ -746,6 +748,12 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                     b.Property<Guid?>("CandidateId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<DateTime?>("ChangePasswordExpiry")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ChangePasswordToken")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
@@ -754,14 +762,23 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
+                    b.Property<DateTime?>("EmailConfirmExpiry")
+                        .HasColumnType("datetime2");
+
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
+
+                    b.Property<string>("EmailToken")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid?>("EmpId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid?>("EmployeeId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsEmployee")
+                        .HasColumnType("bit");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -793,6 +810,9 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Token")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("TwoFactorEnabled")
@@ -1053,9 +1073,15 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
 
             modelBuilder.Entity("Bountous_X_Accolite_Job_Portal.Models.InterviewFeedback", b =>
                 {
+                    b.HasOne("Bountous_X_Accolite_Job_Portal.Models.Employee", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId");
+
                     b.HasOne("Bountous_X_Accolite_Job_Portal.Models.Interview", "Interview")
                         .WithMany()
                         .HasForeignKey("InterviewId");
+
+                    b.Navigation("Employee");
 
                     b.Navigation("Interview");
                 });

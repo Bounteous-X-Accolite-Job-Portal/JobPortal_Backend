@@ -1,13 +1,10 @@
-﻿using Azure;
-using Bountous_X_Accolite_Job_Portal.Models;
+﻿using Bountous_X_Accolite_Job_Portal.Helpers;
 using Bountous_X_Accolite_Job_Portal.Models.InterviewFeedbackViewModel;
 using Bountous_X_Accolite_Job_Portal.Models.InterviewFeedbackViewModel.InterviewFeedbackResponseViewModel;
-using Bountous_X_Accolite_Job_Portal.Models.InterviewViewModel.InterviewResponseViewModel;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Bountous_X_Accolite_Job_Portal.Controllers
 {
@@ -17,29 +14,28 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
     public class InterviewFeedbackController : ControllerBase
     {
         private readonly I_InterviewFeedbackService _InterviewFeedbackService;
-        private readonly UserManager<User> userManager;
 
-        public InterviewFeedbackController(I_InterviewFeedbackService interviewFeedbackService, UserManager<User> userManager)
+        public InterviewFeedbackController(I_InterviewFeedbackService interviewFeedbackService)
         {
             _InterviewFeedbackService = interviewFeedbackService;
-            this.userManager = userManager;
         }
 
         [HttpGet]
-        [Route("getAllInterviewFeedbacks")]
-        public async Task<AllInterviewFeedbackResponseViewModel> GetAllInterviewFeedbacks()
+        [Route("getAllInterviewFeedbacks/{EmployeeId}")]
+        public async Task<AllInterviewFeedbackResponseViewModel> GetAllInterviewFeedbacksByAEmployee(Guid EmployeeId)
         {
             AllInterviewFeedbackResponseViewModel response = new AllInterviewFeedbackResponseViewModel();
-            var emp = await userManager.GetUserAsync(User);
 
-            if(emp==null || emp.EmpId==null)
+            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            Guid employeeId = GetGuidFromString.Get(User.FindFirstValue("EmployeeId"));
+            if (!isEmployee || employeeId != EmployeeId)
             {
                 response.Status = 401;
                 response.Message = "Not Logged In / Not Authorized to See All Interviews Feedbacks";
             }
             else
             {
-                response = _InterviewFeedbackService.GetAllInterviewFeedbacks();
+                response = _InterviewFeedbackService.GetAllInterviewFeedbacksByAEmployee(EmployeeId);
             }
 
             return response;
@@ -50,9 +46,9 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
         public async Task<InterviewFeedbackResponseViewModel> GetInterviewFeedbackById(Guid Id)
         {
             InterviewFeedbackResponseViewModel response = new InterviewFeedbackResponseViewModel();
-            var emp = await userManager.GetUserAsync(User);
 
-            if (emp == null || emp.EmpId == null)
+            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            if (!isEmployee)
             {
                 response.Status = 401;
                 response.Message = "Not Logged In / Not Authorized to See Interview Feedback";
@@ -76,15 +72,16 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
 
-            var emp = await userManager.GetUserAsync(User);
-            if (emp == null || emp.EmpId == null)
+            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            Guid employeeId = GetGuidFromString.Get(User.FindFirstValue("EmployeeId"));
+            if (!isEmployee || employeeId == Guid.Empty)
             {
                 response.Status = 401;
                 response.Message = "Not Logged In / Not Authorized to Add Interview Feedback";
                 return response;
             }
 
-            response = await _InterviewFeedbackService.AddInterviewFeedback(interviewFeedback,(Guid)emp.EmpId);
+            response = await _InterviewFeedbackService.AddInterviewFeedback(interviewFeedback, employeeId);
             return response;
         }
 
@@ -94,8 +91,17 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
         {
             InterviewFeedbackResponseViewModel response = new InterviewFeedbackResponseViewModel();
 
-            var emp = await userManager.GetUserAsync(User);
-            if (emp == null || emp.EmpId == null)
+            InterviewFeedbackResponseViewModel feedback = await GetInterviewFeedbackById(Id);
+            if(feedback.interviewFeedback == null)
+            {
+                response.Status = 401;
+                response.Message = "Not Logged In / Not Authorized to Delete Interview Feedback";
+                return response;
+            }
+
+            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            Guid employeeId = GetGuidFromString.Get(User.FindFirstValue("EmployeeId"));
+            if (!isEmployee || employeeId != feedback.interviewFeedback.EmployeeId)
             {
                 response.Status = 401;
                 response.Message = "Not Logged In / Not Authorized to Delete Interview Feedback";
@@ -120,15 +126,24 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
 
-            var emp = await userManager.GetUserAsync(User);
-            if (emp == null || emp.EmpId == null)
+            InterviewFeedbackResponseViewModel feedback = await GetInterviewFeedbackById(interviewFeedback.FeedbackId);
+            if (feedback.interviewFeedback == null)
+            {
+                response.Status = 401;
+                response.Message = "Interview Feedback with this Id does not exist.";
+                return response;
+            }
+
+            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            Guid employeeId = GetGuidFromString.Get(User.FindFirstValue("EmployeeId"));
+            if (!isEmployee || employeeId != feedback.interviewFeedback.EmployeeId)
             {
                 response.Status = 401;
                 response.Message = "Not Logged In / Not Authorized to Edit Interview Feedback";
                 return response;
             }
 
-            response = await _InterviewFeedbackService.EditInterviewFeedback(interviewFeedback, (Guid)emp.EmpId);
+            response = await _InterviewFeedbackService.EditInterviewFeedback(interviewFeedback, employeeId);
             return response;
         }
     }

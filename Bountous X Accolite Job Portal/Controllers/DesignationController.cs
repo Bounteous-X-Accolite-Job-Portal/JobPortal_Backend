@@ -1,11 +1,10 @@
-﻿using Bountous_X_Accolite_Job_Portal.Models;
+﻿using Bountous_X_Accolite_Job_Portal.Helpers;
 using Bountous_X_Accolite_Job_Portal.Models.DesignationViewModel;
 using Bountous_X_Accolite_Job_Portal.Models.DesignationViewModel.ResponseViewModels;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Bountous_X_Accolite_Job_Portal.Controllers
 {
@@ -14,11 +13,9 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
     [Authorize]
     public class DesignationController : ControllerBase
     {
-        private readonly UserManager<User> _userManager;
         private readonly IDesignationService _designationService;
-        public DesignationController(UserManager<User> userManager, IDesignationService designationService)
+        public DesignationController(IDesignationService designationService)
         {
-            _userManager = userManager; 
             _designationService = designationService;   
         }
 
@@ -36,8 +33,9 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
 
-            var user = await _userManager.GetUserAsync(User);
-            if(user == null || user.EmpId == null)
+            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            Guid employeeId = GetGuidFromString.Get(User.FindFirstValue("EmployeeId"));
+            if (!isEmployee)
             {
                 response = new DesignationResponseViewModel();
                 response.Status = 403;
@@ -45,7 +43,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;  
             }
 
-            response = await _designationService.AddDesignation(addDesignation, (Guid)user.EmpId);
+            response = await _designationService.AddDesignation(addDesignation, employeeId);
             return response;
         }
     }

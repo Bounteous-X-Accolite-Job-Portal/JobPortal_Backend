@@ -1,27 +1,29 @@
-﻿using Azure;
-using Bountous_X_Accolite_Job_Portal.Models;
+﻿using Bountous_X_Accolite_Job_Portal.Helpers;
 using Bountous_X_Accolite_Job_Portal.Models.JobViewModels;
 using Bountous_X_Accolite_Job_Portal.Models.JobViewModels.JobResponseViewModel;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Bountous_X_Accolite_Job_Portal.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class JobController : ControllerBase
     {
         private readonly IJobService _job;
-        private readonly UserManager<User> _userManager;
 
-        public JobController(IJobService job, UserManager<User> userManager)
+        public JobController(IJobService job)
         {
             _job = job;
-            _userManager = userManager;
+        }
+
+        [HttpGet]
+        [Route("getJob/{Id}")]
+        public JobResponseViewModel GetJobById(Guid Id)
+        {
+            return _job.GetJobById(Id);
         }
 
         [HttpGet]
@@ -33,10 +35,11 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
         
         [HttpGet]
         [Route("getAllJobsByEmployee/{Id}")]
-        public async Task<AllJobResponseViewModel> GetAllJobsByEmployeeId()
+        [Authorize]
+        public async Task<AllJobResponseViewModel> GetAllJobsByEmployeeId(Guid Id)
         {
-            var emp = await _userManager.GetUserAsync(User);
-            if (emp == null || emp.EmpId == null)
+            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            if (!isEmployee)
             {
                 AllJobResponseViewModel response = new AllJobResponseViewModel();
                 response.Status = 401;
@@ -44,18 +47,12 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
 
-            return _job.GetAllJobsByEmployeeId((Guid)emp.EmpId);
-        }
-
-        [HttpGet]
-        [Route("getJob/{Id}")]
-        public JobResponseViewModel GetJobById(Guid id)
-        {
-            return _job.GetJobById(id);
+            return _job.GetAllJobsByEmployeeId(Id);
         }
 
         [HttpPost]
         [Route("AddJob")]
+        [Authorize]
         public async Task<JobResponseViewModel> AddJob(CreateJobViewModel job)
         {
             JobResponseViewModel response = new JobResponseViewModel();
@@ -66,20 +63,22 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
 
-            var emp = await _userManager.GetUserAsync(User);
-            if (emp == null || emp.EmpId == null)
+            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            Guid employeeId = GetGuidFromString.Get(User.FindFirstValue("EmployeeId"));
+            if (!isEmployee || employeeId == Guid.Empty)
             {
                 response.Status = 401;
                 response.Message = "Not Logged IN / Not Authorized to Add Job";
                 return response;
             }
 
-            response = await _job.AddJob(job,(Guid)emp.EmpId);
+            response = await _job.AddJob(job, employeeId);
             return response;
         }
 
         [HttpPut]
         [Route("UpdateJob")]
+        [Authorize]
         public async Task<JobResponseViewModel> EditJob(EditJobViewModel job)
         {
             JobResponseViewModel response = new JobResponseViewModel();
@@ -90,11 +89,20 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
 
-            var emp = await _userManager.GetUserAsync(User);
-            if (emp == null || emp.EmpId == null)
+            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            Guid employeeId = GetGuidFromString.Get(User.FindFirstValue("EmployeeId"));
+            if (!isEmployee || employeeId == Guid.Empty)
             {
                 response.Status = 401;
                 response.Message = "Not Logged IN / Not Authorized to Edit Job";
+                return response;
+            }
+
+            var checkJob = GetJobById(job.JobId).job;
+            if(checkJob == null || checkJob.EmployeeId != employeeId)
+            {
+                response.Status = 403;
+                response.Message = "You are not authorised to edit job.";
                 return response;
             }
 
@@ -104,14 +112,25 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
 
         [HttpDelete]
         [Route("DeleteJob/{Id}")]
+        [Authorize]
         public async Task<JobResponseViewModel> DeleteJob(Guid JobId)
         {
             JobResponseViewModel response = new JobResponseViewModel();
-            var emp = await _userManager.GetUserAsync(User);
-            if (emp == null || emp.EmpId == null)
+
+            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            Guid employeeId = GetGuidFromString.Get(User.FindFirstValue("EmployeeId"));
+            if (!isEmployee || employeeId == Guid.Empty)
             {
                 response.Status = 401;
                 response.Message = "Not Logged IN / Not Authorized to Delete Job";
+                return response;
+            }
+
+            var checkJob = GetJobById(JobId).job;
+            if (checkJob == null || checkJob.EmployeeId != employeeId)
+            {
+                response.Status = 403;
+                response.Message = "You are not authorised to delete this job.";
                 return response;
             }
 

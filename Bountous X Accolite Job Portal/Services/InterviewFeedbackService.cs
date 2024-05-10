@@ -118,12 +118,17 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             return response;
         }
 
-        public AllInterviewFeedbackResponseViewModel GetAllInterviewFeedbacks()
+        public AllInterviewFeedbackResponseViewModel GetAllInterviewFeedbacksByAEmployee(Guid EmployeeId)
         {
             List<InterviewFeedback> list = _context.InterviewFeedbacks.ToList();
             List<InterviewFeedbackViewModel> interviewFeedbackList = new List<InterviewFeedbackViewModel>();
-            foreach (var item in list) 
-                interviewFeedbackList.Add(new InterviewFeedbackViewModel(item));
+            foreach (var item in list)
+            {
+                if(item.EmployeeId == EmployeeId)
+                {
+                    interviewFeedbackList.Add(new InterviewFeedbackViewModel(item));
+                }
+            }   
 
             AllInterviewFeedbackResponseViewModel response = new AllInterviewFeedbackResponseViewModel();
             response.Status = 200;

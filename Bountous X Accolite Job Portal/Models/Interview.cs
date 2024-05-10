@@ -17,19 +17,5 @@ namespace Bountous_X_Accolite_Job_Portal.Models
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public Guid? EmpId { get; set; }
         public virtual Employee? Employee { get; set; }
-
-        public Interview()
-        {
-            
-        }
-
-        public Interview(CreateInterviewViewModel interview) 
-        {
-            ApplicationId = interview.ApplicationId;
-            InterviewDate = interview.InterviewDate;
-            InterviewTime = interview.InterviewTime;
-            InterViewerId = interview.InterViewerId;
-            Link = interview.Link;
-        }
     }
 }

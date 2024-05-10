@@ -1,23 +1,20 @@
-﻿using Bountous_X_Accolite_Job_Portal.Models;
+﻿using Bountous_X_Accolite_Job_Portal.Helpers;
 using Bountous_X_Accolite_Job_Portal.Models.EducationInstitutionViewModel;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Bountous_X_Accolite_Job_Portal.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class EducationInstitutionController : ControllerBase
     {
         private readonly IEducationInstitutionService _educationInstitutionService;
-        private readonly UserManager<User> _userManager;
-        public EducationInstitutionController(IEducationInstitutionService educationInstitutionService, UserManager<User> userManager)
+        public EducationInstitutionController(IEducationInstitutionService educationInstitutionService)
         {
             _educationInstitutionService = educationInstitutionService; 
-            _userManager = userManager;
         }
 
         [HttpGet]
@@ -35,6 +32,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
 
         [HttpGet]
         [Route("getInstitution/{id}")]
+        [Authorize]
         public async Task<InstitutionResponseViewModel> GetInstitution(Guid id)
         {
             InstitutionResponseViewModel response = _educationInstitutionService.GetInstitution(id);
@@ -43,6 +41,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
 
         [HttpPost]
         [Route("addInstitution")]
+        [Authorize]
         public async Task<InstitutionResponseViewModel> AddInstution(AddInstitutionViewModel addInstitution)
         {
             InstitutionResponseViewModel response;
@@ -55,8 +54,9 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
 
-            var employee = await _userManager.GetUserAsync(User);
-            if (employee == null || employee.EmpId == null)
+            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            Guid employeeId = GetGuidFromString.Get(User.FindFirstValue("EmployeeId"));
+            if (!isEmployee)
             {
                 response = new InstitutionResponseViewModel();
                 response.Status = 401;
@@ -64,12 +64,13 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
 
-            response = await _educationInstitutionService.AddInstitution(addInstitution, (Guid)employee.EmpId);
+            response = await _educationInstitutionService.AddInstitution(addInstitution, employeeId);
             return response;
         }
 
         [HttpPut]
         [Route("updateInstution")]
+        [Authorize]
         public async Task<InstitutionResponseViewModel> UpdateInstitution(UpdateInstitutionViewModel updateInstitution)
         {
             InstitutionResponseViewModel response;
@@ -82,8 +83,8 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
 
-            var employee = await _userManager.GetUserAsync(User);
-            if (employee == null || employee.EmpId == null)
+            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            if (!isEmployee)
             {
                 response = new InstitutionResponseViewModel();
                 response.Status = 401;
@@ -97,12 +98,13 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
 
         [HttpDelete]
         [Route("removeInstitution/{id}")]
+        [Authorize]
         public async Task<InstitutionResponseViewModel> RemoveInstitution(Guid id)
         {
             InstitutionResponseViewModel response;
 
-            var employee = await _userManager.GetUserAsync(User);
-            if (employee == null || employee.EmpId == null)
+            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            if (!isEmployee)
             {
                 response = new InstitutionResponseViewModel();
                 response.Status = 401;

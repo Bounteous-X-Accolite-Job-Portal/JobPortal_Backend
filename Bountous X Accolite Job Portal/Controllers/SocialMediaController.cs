@@ -1,27 +1,22 @@
-﻿using Bountous_X_Accolite_Job_Portal.Models;
-using Bountous_X_Accolite_Job_Portal.Models.CandidateExperienceViewModel.ResponseViewModels;
-using Bountous_X_Accolite_Job_Portal.Models.ResumeViewModel;
-using Bountous_X_Accolite_Job_Portal.Models.ResumeViewModel.ResponseViewModels;
+﻿using Bountous_X_Accolite_Job_Portal.Helpers;
 using Bountous_X_Accolite_Job_Portal.Models.SocialMediaViewModel;
 using Bountous_X_Accolite_Job_Portal.Models.SocialMediaViewModel.ResponseViewModels;
-using Bountous_X_Accolite_Job_Portal.Services;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Bountous_X_Accolite_Job_Portal.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class SocialMediaController : ControllerBase
     {
-        private readonly UserManager<User> _userManager;
         private readonly ISocialMediaService _socialMediaService;
-        public SocialMediaController(ISocialMediaService socialMediaService, UserManager<User> userManager)
+        public SocialMediaController(ISocialMediaService socialMediaService)
         {
             _socialMediaService = socialMediaService;
-            _userManager = userManager;
         }
 
         [HttpGet]
@@ -30,8 +25,9 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
         {
             SocialMediaResponseViewModel response;
 
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null || (user.CandidateId != null && user.CandidateId != CandidateId))
+            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            Guid candidateId = GetGuidFromString.Get(User.FindFirstValue("CandidateId"));
+            if (!isEmployee && candidateId != CandidateId)
             {
                 response = new SocialMediaResponseViewModel();
                 response.Status = 403;
@@ -53,8 +49,9 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
 
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null || (user.CandidateId != null && response.SocialMedia.CandidateId != null && user.CandidateId != response.SocialMedia.CandidateId))
+            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            Guid candidateId = GetGuidFromString.Get(User.FindFirstValue("CandidateId"));
+            if (response.SocialMedia.CandidateId == null || (!isEmployee && candidateId != response.SocialMedia.CandidateId))
             {
                 SocialMediaResponseViewModel res = new SocialMediaResponseViewModel();
                 res.Status = 401;
@@ -79,8 +76,9 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
 
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null || user.EmpId != null)
+            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            Guid candidateId = GetGuidFromString.Get(User.FindFirstValue("CandidateId"));
+            if (isEmployee || candidateId == Guid.Empty)
             {
                 response = new SocialMediaResponseViewModel();
                 response.Status = 401;
@@ -88,7 +86,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
 
-            response = await _socialMediaService.AddSocialMedia(addSocialMedia, (Guid)user.CandidateId);
+            response = await _socialMediaService.AddSocialMedia(addSocialMedia, candidateId);
             return response;
         }
 
@@ -106,8 +104,9 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
 
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null || user.EmpId != null)
+            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            Guid candidateId = GetGuidFromString.Get(User.FindFirstValue("CandidateId"));
+            if (isEmployee)
             {
                 response = new SocialMediaResponseViewModel();
                 response.Status = 401;
@@ -121,7 +120,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return socialMedia;
             }
 
-            if (socialMedia.SocialMedia.CandidateId == null || user.CandidateId != socialMedia.SocialMedia.CandidateId)
+            if (socialMedia.SocialMedia.CandidateId == null || candidateId != socialMedia.SocialMedia.CandidateId)
             {
                 response = new SocialMediaResponseViewModel();
                 response.Status = 401;
@@ -139,8 +138,9 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
         {
             SocialMediaResponseViewModel response;
 
-            var user = await _userManager.GetUserAsync(User);
-            if (user == null || user.EmpId != null)
+            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            Guid candidateId = GetGuidFromString.Get(User.FindFirstValue("CandidateId"));
+            if (isEmployee)
             {
                 response = new SocialMediaResponseViewModel();
                 response.Status = 401;
@@ -154,7 +154,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return socialMedia;
             }
 
-            if (socialMedia.SocialMedia.CandidateId == null || user.CandidateId != socialMedia.SocialMedia.CandidateId)
+            if (socialMedia.SocialMedia.CandidateId == null || candidateId != socialMedia.SocialMedia.CandidateId)
             {
                 response = new SocialMediaResponseViewModel();
                 response.Status = 401;

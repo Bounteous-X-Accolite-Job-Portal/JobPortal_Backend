@@ -1,12 +1,11 @@
 ﻿
-using Bountous_X_Accolite_Job_Portal.Models;
+using Bountous_X_Accolite_Job_Portal.Helpers;
 using Bountous_X_Accolite_Job_Portal.Models.JobLocationViewModel;
 using Bountous_X_Accolite_Job_Portal.Models.JobLocationViewModel.JobLocationResponseViewModel;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Bountous_X_Accolite_Job_Portal.Controllers
 {
@@ -15,12 +14,10 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
     public class JobLocationController : ControllerBase
     {
         private readonly IJobLocationService _jobLocationService;
-        private readonly UserManager<User> _userManager;
 
-        public JobLocationController(IJobLocationService jobLocationService, UserManager<User> userManager)
+        public JobLocationController(IJobLocationService jobLocationService)
         {
             _jobLocationService = jobLocationService;
-            _userManager = userManager;
         }
 
         [HttpGet]
@@ -51,8 +48,10 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 response.Message = "Please Enter All Details";
                 return response;
             }
-            var emp = await _userManager.GetUserAsync(User);
-            if(emp==null || emp.EmpId==null)
+
+            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            Guid employeeId = GetGuidFromString.Get(User.FindFirstValue("EmployeeId"));
+            if (!isEmployee || employeeId == Guid.Empty)
             {
                 response = new JobLocationResponseViewModel();
                 response.Status = 401;
@@ -60,7 +59,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
 
-            response = await _jobLocationService.AddLocation(location,(Guid)emp.EmpId);
+            response = await _jobLocationService.AddLocation(location, employeeId);
             return response;
         }
 
@@ -70,9 +69,9 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
         public async Task<JobLocationResponseViewModel> DeleteLocation(Guid locationId)
         {
             JobLocationResponseViewModel response;
-           
-            var emp = await _userManager.GetUserAsync(User);
-            if (emp == null || emp.EmpId == null)
+
+            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            if (!isEmployee)
             {
                 response = new JobLocationResponseViewModel();
                 response.Status = 401;
@@ -85,8 +84,8 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
         }
 
         [HttpPut]
-        [Authorize]
         [Route("UpdateJobLocation")]
+        [Authorize]
         public async Task<JobLocationResponseViewModel> UpdateLocation(EditJobLocationViewModel location)
         {
             JobLocationResponseViewModel response;
@@ -97,8 +96,9 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 response.Message = "Please Enter All Details";
                 return response;
             }
-            var emp = await _userManager.GetUserAsync(User);
-            if (emp == null || emp.EmpId == null)
+
+            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            if (!isEmployee)
             {
                 response = new JobLocationResponseViewModel();
                 response.Status = 401;

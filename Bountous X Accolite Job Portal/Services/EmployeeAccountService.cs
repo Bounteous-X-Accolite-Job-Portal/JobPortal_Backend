@@ -51,6 +51,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             user.UserName = employee.Email;
             user.Email = employee.Email;
             user.EmpId = employee.EmployeeId;
+            user.IsEmployee = true;
 
             var result = await _userManager.CreateAsync(user, RegisterEmployee.Password);
             if (!result.Succeeded)
@@ -65,7 +66,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
 
             response.Status = 200;
             response.Message = "Successfully created employee.";
-            response.Employee = new EmployeeViewModel(employee);
+            response.Employee = new EmployeeViewModels(employee);
             return response;
         }
     }

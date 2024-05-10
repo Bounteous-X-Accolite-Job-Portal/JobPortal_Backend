@@ -1,12 +1,10 @@
-﻿using Bountous_X_Accolite_Job_Portal.Models;
+﻿using Bountous_X_Accolite_Job_Portal.Helpers;
 using Bountous_X_Accolite_Job_Portal.Models.InterviewViewModel;
 using Bountous_X_Accolite_Job_Portal.Models.InterviewViewModel.InterviewResponseViewModel;
-using Bountous_X_Accolite_Job_Portal.Models.JobTypeViewModel.JobTypeResponseViewModel;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Bountous_X_Accolite_Job_Portal.Controllers
 {
@@ -16,47 +14,27 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
     public class InterviewController : ControllerBase
     {
         private readonly I_InterviewService _InterviewService;
-        private readonly UserManager<User> userManager;
-        public InterviewController(I_InterviewService interviewService, UserManager<User> userManager)
+        public InterviewController(I_InterviewService interviewService)
         {
             _InterviewService = interviewService;
-            this.userManager = userManager;
         }
 
         [HttpGet]
-        [Route("getAllInterviews")]
-        public async Task<All_InterviewResponseViewModel> GetAllInterviews()
+        [Route("GetAllInterviewsForInterviewer/{EmployeeId}")]
+        public async Task<All_InterviewResponseViewModel> GetAllInterviewsForInterviewer(Guid EmployeeId)
         {
             All_InterviewResponseViewModel response = new All_InterviewResponseViewModel();
-            var emp = await userManager.GetUserAsync(User);
 
-            if(emp==null || emp.EmpId==null)
-            {
-                response.Status = 401;
-                response.Message = "Not Logged In / Not Authorized to See All Interviews";
-            }
-            else
-            {
-                response = _InterviewService.GetAllInterviews();
-            }
-            return response;
-        }
-
-        [HttpGet]
-        [Route("GetAllInterviewsForInterviewer/{Id}")]
-        public async Task<All_InterviewResponseViewModel> GetAllInterviewsForInterviewer()
-        {
-            All_InterviewResponseViewModel response = new All_InterviewResponseViewModel();
-            var emp = await userManager.GetUserAsync(User);
-
-            if(emp==null || emp.EmpId==null)
+            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            Guid employeeId = GetGuidFromString.Get(User.FindFirstValue("EmployeeId"));
+            if (!isEmployee || employeeId != EmployeeId)
             {
                 response.Status = 401;
                 response.Message = "Not Logged In / Not Authorized to See Interviewer Interviews !";
             }
             else
             {
-                response = _InterviewService.GetAllInterviewsForInterviewer((Guid)emp.EmpId);
+                response = _InterviewService.GetAllInterviewsForInterviewer(EmployeeId);
             }
             return response;
         }
@@ -80,8 +58,10 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 response.Message = "Please Enter All Details";
                 return response;
             }
-            var emp = await userManager.GetUserAsync(User);
-            if (emp == null || emp.EmpId == null)
+
+            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            Guid employeeId = GetGuidFromString.Get(User.FindFirstValue("EmployeeId"));
+            if (!isEmployee)
             {
                 response = new InterviewResponseViewModel();
                 response.Status = 401;
@@ -89,7 +69,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
 
-            response = await _InterviewService.AddInterview(interview,(Guid)emp.EmpId);
+            response = await _InterviewService.AddInterview(interview, employeeId);
             return response;
         }
 
@@ -98,8 +78,19 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
         public async Task<InterviewResponseViewModel> DeleteInterview(Guid Id)
         {
             InterviewResponseViewModel response;
-            var emp = await userManager.GetUserAsync(User);
-            if (emp == null || emp.EmpId == null)
+
+            InterviewResponseViewModel res = GetInterviewById(Id);
+            if(res.Interview == null)
+            {
+                response = new InterviewResponseViewModel();
+                response.Status = res.Status;
+                response.Message = "Interview with this Id does not exist.";
+                return response;
+            }
+
+            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            Guid employeeId = GetGuidFromString.Get(User.FindFirstValue("EmployeeId"));
+            if (!isEmployee || employeeId != res.Interview.EmpId)
             {
                 response = new InterviewResponseViewModel();
                 response.Status = 401;
@@ -123,8 +114,19 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 response.Message = "Please Enter All Details";
                 return response;
             }
-            var emp = await userManager.GetUserAsync(User);
-            if (emp == null || emp.EmpId == null)
+
+            InterviewResponseViewModel res = GetInterviewById(interview.InterviewId);
+            if (res.Interview == null)
+            {
+                response = new InterviewResponseViewModel();
+                response.Status = res.Status;
+                response.Message = "Interview with this Id does not exist.";
+                return response;
+            }
+
+            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            Guid employeeId = GetGuidFromString.Get(User.FindFirstValue("EmployeeId"));
+            if (!isEmployee || employeeId != res.Interview.EmpId)
             {
                 response = new InterviewResponseViewModel();
                 response.Status = 401;

@@ -2,6 +2,6 @@
 {
     public class EditInterviewFeedbackViewModel : CreateInterviewFeedbackViewModel
     {
-        public Guid? FeedbackId { get; set; }
+        public Guid FeedbackId { get; set; }
     }
 }

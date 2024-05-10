@@ -1,26 +1,22 @@
-﻿using Bountous_X_Accolite_Job_Portal.Models;
+﻿using Bountous_X_Accolite_Job_Portal.Helpers;
 using Bountous_X_Accolite_Job_Portal.Models.JobPositionViewModel;
 using Bountous_X_Accolite_Job_Portal.Models.JobPositionViewModel.JobPositionResponseViewModel;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace Bountous_X_Accolite_Job_Portal.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class JobPositionController : ControllerBase
     {
         private readonly IJobPositionService _jobPosition;
-        private readonly UserManager<User> _userManager;
 
-        public JobPositionController(IJobPositionService jobPosition, UserManager<User> userManager)
+        public JobPositionController(IJobPositionService jobPosition)
         {
             _jobPosition = jobPosition;
-            _userManager = userManager;
         }
 
         [HttpGet]
@@ -32,13 +28,14 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
 
         [HttpGet]
         [Route("getJobPosition/{Id}")]
-        public JobPositionResponseViewModel GetJobPositionById(Guid PositionId)
+        public JobPositionResponseViewModel GetJobPositionById(Guid Id)
         {
-            return _jobPosition.GetJobPositionById(PositionId);
+            return _jobPosition.GetJobPositionById(Id);
         }
 
         [HttpPost]
         [Route("AddJobPosition")]
+        [Authorize]
         public async Task<JobPositionResponseViewModel> AddJobPosition(CreateJobPositionViewModel jobPosition)
         {
             JobPositionResponseViewModel response = new JobPositionResponseViewModel();
@@ -49,20 +46,22 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
 
-            var emp = await _userManager.GetUserAsync(User);
-            if (emp == null || emp.EmpId == null)
+            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            Guid employeeId = GetGuidFromString.Get(User.FindFirstValue("EmployeeId"));
+            if (!isEmployee || employeeId == Guid.Empty)
             {
                 response.Status = 401;
                 response.Message = "Not Logged IN / Not Authorized to Add Position";
                 return response;
             }
 
-            response = await _jobPosition.AddJobPosition(jobPosition,(Guid)emp.EmpId);
+            response = await _jobPosition.AddJobPosition(jobPosition, employeeId);
             return response;
         }
 
         [HttpPut]
         [Route("UpdateJobPosition")]
+        [Authorize]
         public async Task<JobPositionResponseViewModel> UpdateJobPosition(EditJobPositionViewModel jobPosition)
         {
             JobPositionResponseViewModel response = new JobPositionResponseViewModel();
@@ -73,8 +72,8 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
 
-            var emp = await _userManager.GetUserAsync(User);
-            if (emp == null || emp.EmpId == null)
+            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            if (!isEmployee)
             {
                 response.Status = 401;
                 response.Message = "Not Logged IN / Not Authorized to Update Position";
@@ -87,12 +86,13 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
 
         [HttpDelete]
         [Route("DeleteJobPosition/{Id}")]
+        [Authorize]
         public async Task<JobPositionResponseViewModel> DeleteJobPosition(Guid PositionId)
         {
             JobPositionResponseViewModel response = new JobPositionResponseViewModel();
-            
-            var emp = await _userManager.GetUserAsync(User);
-            if (emp == null || emp.EmpId == null)
+
+            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            if (!isEmployee)
             {
                 response.Status = 401;
                 response.Message = "Not Logged IN / Not Authorized to Delete Position";
