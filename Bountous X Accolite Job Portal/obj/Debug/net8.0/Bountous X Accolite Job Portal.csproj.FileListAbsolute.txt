@@ -429,3 +429,11 @@ C:\Users\vishal.s_INT1587\Desktop\JobPortal_WebAPI\Bountous X Accolite Job Porta
 C:\Users\vishal.s_INT1587\Desktop\JobPortal_WebAPI\Bountous X Accolite Job Portal\obj\Debug\net8.0\Bountous X Accolite Job Portal.genruntimeconfig.cache
 C:\Users\vishal.s_INT1587\Desktop\JobPortal_WebAPI\Bountous X Accolite Job Portal\obj\Debug\net8.0\ref\Bountous X Accolite Job Portal.dll
 C:\Users\shagun.p_int1590\Desktop\JobPortal_Backend\Bountous X Accolite Job Portal\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\shagun.p_int1590\Desktop\JobPortal_Backend\Bountous X Accolite Job Portal\bin\Debug\net8.0\BouncyCastle.Cryptography.dll
+C:\Users\shagun.p_int1590\Desktop\JobPortal_Backend\Bountous X Accolite Job Portal\bin\Debug\net8.0\MailKit.dll
+C:\Users\shagun.p_int1590\Desktop\JobPortal_Backend\Bountous X Accolite Job Portal\bin\Debug\net8.0\MimeKit.dll
+C:\Users\shagun.p_int1590\Desktop\JobPortal_Backend\Bountous X Accolite Job Portal\bin\Debug\net8.0\NETCore.MailKit.dll
+C:\Users\vishal.s_INT1587\Desktop\JobPortal_WebAPI\Bountous X Accolite Job Portal\bin\Debug\net8.0\BouncyCastle.Cryptography.dll
+C:\Users\vishal.s_INT1587\Desktop\JobPortal_WebAPI\Bountous X Accolite Job Portal\bin\Debug\net8.0\MailKit.dll
+C:\Users\vishal.s_INT1587\Desktop\JobPortal_WebAPI\Bountous X Accolite Job Portal\bin\Debug\net8.0\MimeKit.dll
+C:\Users\vishal.s_INT1587\Desktop\JobPortal_WebAPI\Bountous X Accolite Job Portal\bin\Debug\net8.0\NETCore.MailKit.dll

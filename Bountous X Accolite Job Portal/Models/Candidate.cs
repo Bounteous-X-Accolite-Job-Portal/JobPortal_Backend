@@ -12,6 +12,8 @@ namespace Bountous_X_Accolite_Job_Portal.Models
         public string LastName { get; set; }
         public string Email { get; set; }
         public string? Phone { get; set; }
+
+
         public Boolean IsEmailVerified { get; set; }
         public string? AddressLine1 { get; set; }
         public string? City { get; set; }
@@ -19,6 +21,14 @@ namespace Bountous_X_Accolite_Job_Portal.Models
         public string? Country { get; set; }
         public string? ZipCode { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
+
+          
+
+       
+        
+       
+        public string? ResetPasswordToken { get; set; }
+        public DateTime ResetPasswordExpiry {  get; set; }
     }
 
 }

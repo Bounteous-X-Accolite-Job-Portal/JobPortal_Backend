@@ -67,6 +67,14 @@
               "target": "Package",
               "version": "[8.0.4, )"
             },
+            "MimeKit": {
+              "target": "Package",
+              "version": "[4.5.0, )"
+            },
+            "NETCore.MailKit": {
+              "target": "Package",
+              "version": "[2.1.0, )"
+            },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[6.4.0, )"
