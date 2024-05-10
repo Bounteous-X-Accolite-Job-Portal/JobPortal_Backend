@@ -6,7 +6,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Bountous_X_Accolite_Job_Portal.Migrations
 {
     /// <inheritdoc />
+<<<<<<<< HEAD:Bountous X Accolite Job Portal/Migrations/20240504173120_hello.cs
+    public partial class hello : Migration
+========
     public partial class InitialMigration : Migration
+>>>>>>>> 40e75ea24e99985110b640909b0dcb5a511b937b:Bountous X Accolite Job Portal/Migrations/20240508174101_Initial Migration.cs
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -40,7 +44,9 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                     State = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Country = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ZipCode = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ResetPasswordToken = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ResetPasswordExpiry = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -178,9 +184,16 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+<<<<<<<< HEAD:Bountous X Accolite Job Portal/Migrations/20240504173120_hello.cs
+                    IsEmployee = table.Column<bool>(type: "bit", nullable: false),
+                    Token = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ResetPasswordExpiry = table.Column<DateTime>(type: "datetime2", nullable: true),
+========
+>>>>>>>> 40e75ea24e99985110b640909b0dcb5a511b937b:Bountous X Accolite Job Portal/Migrations/20240508174101_Initial Migration.cs
                     EmpId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     EmployeeId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     CandidateId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    ResetPasswordToken = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),

@@ -60,5 +60,6 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             ResponseViewModel response = await _authService.Logout();
             return response;
         }
+
     }
 }

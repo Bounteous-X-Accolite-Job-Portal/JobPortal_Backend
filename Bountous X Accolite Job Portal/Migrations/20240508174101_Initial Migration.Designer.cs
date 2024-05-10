@@ -12,8 +12,13 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Bountous_X_Accolite_Job_Portal.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
+<<<<<<<< HEAD:Bountous X Accolite Job Portal/Migrations/20240504173120_hello.Designer.cs
+    [Migration("20240504173120_hello")]
+    partial class hello
+========
     [Migration("20240508174101_Initial Migration")]
     partial class InitialMigration
+>>>>>>>> 40e75ea24e99985110b640909b0dcb5a511b937b:Bountous X Accolite Job Portal/Migrations/20240508174101_Initial Migration.Designer.cs
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -59,6 +64,12 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Phone")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("ResetPasswordExpiry")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ResetPasswordToken")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("State")
@@ -972,6 +983,12 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ResetPasswordExpiry")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ResetPasswordToken")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");

@@ -1,4 +1,3 @@
-
 using Bountous_X_Accolite_Job_Portal.Data;
 using Bountous_X_Accolite_Job_Portal.Models;
 using Microsoft.EntityFrameworkCore;
@@ -36,6 +35,11 @@ namespace Bountous_X_Accolite_Job_Portal
             builder.Services.AddIdentity<User, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = false)
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
+            builder.Services.Configure<IdentityOptions>
+                (
+            options => options.SignIn.RequireConfirmedEmail = true);
+
+
 
             builder.Services.AddCors(options => options.AddPolicy(name: "FrontendUI",
                 policy =>
@@ -43,8 +47,8 @@ namespace Bountous_X_Accolite_Job_Portal
                     policy.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowAnyMethod();
                 }));
 
-            // Adding JWT Authentication
-            var jwtSettings = builder.Configuration.GetSection("JwtSettings");
+           // Adding JWT Authentication
+           var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 
             builder.Services.AddAuthentication(opt =>
             {
@@ -115,6 +119,7 @@ namespace Bountous_X_Accolite_Job_Portal
             builder.Services.AddScoped<ISkillsService, SkillsService>();
             builder.Services.AddScoped<IJobApplicationService, JobApplicationService>();
             builder.Services.AddScoped<IJobStatusService, JobStatusService>();
+            builder.Services.AddScoped<IEmailService, EmailService>();
             builder.Services.AddScoped<IDesignationWithPrivilegeService, DesignationWithPrivilegeService>();
             builder.Services.AddScoped<IReferralService, ReferralService>();
 
