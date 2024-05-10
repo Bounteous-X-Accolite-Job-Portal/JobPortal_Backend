@@ -27,7 +27,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             AllInterviewFeedbackResponseViewModel response = new AllInterviewFeedbackResponseViewModel();
 
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
-            Guid employeeId = GetGuidFromString.Get(User.FindFirstValue("EmployeeId"));
+            Guid employeeId = GetGuidFromString.Get(User.FindFirstValue("Id"));
             if (!isEmployee || employeeId != EmployeeId)
             {
                 response.Status = 401;
@@ -73,7 +73,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             }
 
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
-            Guid employeeId = GetGuidFromString.Get(User.FindFirstValue("EmployeeId"));
+            Guid employeeId = GetGuidFromString.Get(User.FindFirstValue("Id"));
             if (!isEmployee || employeeId == Guid.Empty)
             {
                 response.Status = 401;
@@ -100,7 +100,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             }
 
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
-            Guid employeeId = GetGuidFromString.Get(User.FindFirstValue("EmployeeId"));
+            Guid employeeId = GetGuidFromString.Get(User.FindFirstValue("Id"));
             if (!isEmployee || employeeId != feedback.interviewFeedback.EmployeeId)
             {
                 response.Status = 401;
@@ -135,7 +135,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             }
 
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
-            Guid employeeId = GetGuidFromString.Get(User.FindFirstValue("EmployeeId"));
+            Guid employeeId = GetGuidFromString.Get(User.FindFirstValue("Id"));
             if (!isEmployee || employeeId != feedback.interviewFeedback.EmployeeId)
             {
                 response.Status = 401;

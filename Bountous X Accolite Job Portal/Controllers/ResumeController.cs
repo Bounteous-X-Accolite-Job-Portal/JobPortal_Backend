@@ -26,7 +26,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             ResumeResponseViewModel response;
 
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
-            Guid candidateId = GetGuidFromString.Get(User.FindFirstValue("CandidateId"));
+            Guid candidateId = GetGuidFromString.Get(User.FindFirstValue("Id"));
             if (!isEmployee && candidateId != CandidateId)
             {
                 response = new ResumeResponseViewModel();
@@ -50,7 +50,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             }
 
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
-            Guid candidateId = GetGuidFromString.Get(User.FindFirstValue("CandidateId"));
+            Guid candidateId = GetGuidFromString.Get(User.FindFirstValue("Id"));
             if (response.Resume.CandidateId == null || (!isEmployee && candidateId != response.Resume.CandidateId))
             {
                 ResumeResponseViewModel res = new ResumeResponseViewModel();
@@ -77,7 +77,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             }
 
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
-            Guid candidateId = GetGuidFromString.Get(User.FindFirstValue("CandidateId"));
+            Guid candidateId = GetGuidFromString.Get(User.FindFirstValue("Id"));
             if (isEmployee || candidateId == Guid.Empty)
             {
                 response = new ResumeResponseViewModel();
@@ -97,7 +97,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             ResumeResponseViewModel response;
 
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
-            Guid candidateId = GetGuidFromString.Get(User.FindFirstValue("CandidateId"));
+            Guid candidateId = GetGuidFromString.Get(User.FindFirstValue("Id"));
             if (isEmployee)
             {
                 response = new ResumeResponseViewModel();

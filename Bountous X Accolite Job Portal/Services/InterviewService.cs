@@ -123,6 +123,20 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             return response;
         }
 
+        public async void ChangeInterviewApplicationToClosedApplication(Guid ApplicationId, Guid ClosedApplicationId)
+        {
+            List<Interview> list = _context.Interviews.Where(item => item.ApplicationId == ApplicationId).ToList();
+            foreach(Interview interview in list)
+            {
+                interview.ApplicationId = null;
+                interview.ClosedJobApplicationId = ClosedApplicationId;
+
+                _context.Interviews.Update(interview);
+            }
+
+            await _context.SaveChangesAsync();
+        }
+
         public All_InterviewResponseViewModel GetAllInterviews()
         {
             List<Interview> list = _context.Interviews.ToList();

@@ -1,5 +1,6 @@
 ﻿using Bountous_X_Accolite_Job_Portal.Helpers;
 using Bountous_X_Accolite_Job_Portal.Models.JobStatusViewModel;
+using Bountous_X_Accolite_Job_Portal.Services;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,9 +13,11 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
     public class JobStatusController : Controller
     {
         private readonly IJobStatusService _jobStatusService;
-        public JobStatusController(IJobStatusService jobStatusService)
+        private readonly IDesignationService _designationService;
+        public JobStatusController(IJobStatusService jobStatusService, IDesignationService designationService)
         {
             _jobStatusService = jobStatusService;
+            _designationService = designationService;
         }
 
         [HttpPost]
@@ -28,8 +31,9 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             }
 
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
-            Guid employeeId = GetGuidFromString.Get(User.FindFirstValue("EmployeeId"));
-            if (!isEmployee || employeeId == Guid.Empty)
+            Guid employeeId = GetGuidFromString.Get(User.FindFirstValue("Id"));
+            var role = User.FindFirstValue("Role");
+            if (!isEmployee || role == null || !_designationService.HasPrivilege(role) || employeeId == Guid.Empty)
             {
                 return BadRequest(new { Message = "You are not authorized to add Status." });
             }

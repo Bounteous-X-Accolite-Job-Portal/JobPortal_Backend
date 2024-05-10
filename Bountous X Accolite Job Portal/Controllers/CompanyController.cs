@@ -4,6 +4,7 @@ using Bountous_X_Accolite_Job_Portal.Models.CompanyViewModel.CompanyResponseView
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 using System.Security.Claims;
 
 namespace Bountous_X_Accolite_Job_Portal.Controllers
@@ -13,9 +14,11 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
     public class CompanyController : ControllerBase
     {
         private readonly ICompanyService _companyService;
-        public CompanyController(ICompanyService companyService)
+        private readonly IDesignationService _designationService;
+        public CompanyController(ICompanyService companyService, IDesignationService designationService)
         {
             _companyService = companyService;
+            _designationService = designationService;
         }
 
         [HttpGet]
@@ -51,8 +54,9 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             }
 
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
-            Guid employeeId = GetGuidFromString.Get(User.FindFirstValue("EmployeeId"));
-            if (!isEmployee)
+            Guid employeeId = GetGuidFromString.Get(User.FindFirstValue("Id"));
+            var role = User.FindFirstValue("Role");
+            if (!isEmployee || role == null || !_designationService.HasPrivilege(role))
             {
                 response = new CompanyResponseViewModel();
                 response.Status = 401;
@@ -80,7 +84,8 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             }
 
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
-            if (!isEmployee)
+            var role = User.FindFirstValue("Role");
+            if (!isEmployee || role == null || !_designationService.HasPrivilege(role))
             {
                 response = new CompanyResponseViewModel();
                 response.Status = 401;
@@ -100,7 +105,8 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             CompanyResponseViewModel response;
 
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
-            if (!isEmployee)
+            var role = User.FindFirstValue("Role");
+            if (!isEmployee || role == null || !_designationService.HasPrivilege(role))
             {
                 response = new CompanyResponseViewModel();
                 response.Status = 401;

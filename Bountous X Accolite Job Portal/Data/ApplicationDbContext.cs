@@ -32,6 +32,10 @@ namespace Bountous_X_Accolite_Job_Portal.Data
         public DbSet<SocialMedia> SocialMedia { get; set; }
         public DbSet<Skills> Skills { get; set; }
         public DbSet<Status> Status { get; set; }
+        public DbSet<DesignationWhichHasPrivilege> DesignationWhichHasPrivileges { get; set; }
+        public DbSet<ClosedJobApplication> ClosedJobApplications { get; set; }
+        public DbSet<ClosedJob> ClosedJobs { get; set; }
+        public DbSet<Referral> Referrals { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

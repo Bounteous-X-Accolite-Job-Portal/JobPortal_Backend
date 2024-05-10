@@ -26,7 +26,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             MultipleExperienceResponseViewModel response;
 
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
-            Guid candidateId = GetGuidFromString.Get(User.FindFirstValue("CandidateId"));
+            Guid candidateId = GetGuidFromString.Get(User.FindFirstValue("Id"));
             if (!isEmployee && candidateId != CandidateId)
             {
                 response = new MultipleExperienceResponseViewModel();
@@ -50,7 +50,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             }
 
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
-            Guid candidateId = GetGuidFromString.Get(User.FindFirstValue("CandidateId"));
+            Guid candidateId = GetGuidFromString.Get(User.FindFirstValue("Id"));
             if (!isEmployee && candidateId != response.Experience.CandidateId)
             {
                 CandidateExperienceResponseViewModel res = new CandidateExperienceResponseViewModel();
@@ -85,7 +85,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
 
-            Guid candidateId = GetGuidFromString.Get(User.FindFirstValue("CandidateId"));
+            Guid candidateId = GetGuidFromString.Get(User.FindFirstValue("Id"));
             response = await _candidateExperienceService.AddCandidateExperience(addExperience, candidateId);
             return response;
         }
@@ -119,7 +119,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return experience;
             }
 
-            Guid candidateId = GetGuidFromString.Get(User.FindFirstValue("CandidateId"));
+            Guid candidateId = GetGuidFromString.Get(User.FindFirstValue("Id"));
             if (experience.Experience.CandidateId == null || candidateId != experience.Experience.CandidateId)
             {
                 response = new CandidateExperienceResponseViewModel();
@@ -153,7 +153,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return experience;
             }
 
-            Guid candidateId = GetGuidFromString.Get(User.FindFirstValue("CandidateId"));
+            Guid candidateId = GetGuidFromString.Get(User.FindFirstValue("Id"));
             if (experience.Experience.CandidateId == null || candidateId != experience.Experience.CandidateId)
             {
                 response = new CandidateExperienceResponseViewModel();

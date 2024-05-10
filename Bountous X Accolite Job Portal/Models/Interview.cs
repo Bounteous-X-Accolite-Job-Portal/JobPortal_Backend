@@ -9,6 +9,8 @@ namespace Bountous_X_Accolite_Job_Portal.Models
         public Guid InterviewId { get; set; }
         public Guid? ApplicationId { get; set; } 
         public virtual JobApplication? JobApplication { get; set; } 
+        public Guid? ClosedJobApplicationId { get; set; }
+        public virtual ClosedJobApplication? ClosedJobApplication { get; set; }
         public DateOnly? InterviewDate { get; set; }
         public TimeOnly? InterviewTime { get; set; }
         public Guid? InterViewerId { get; set; }

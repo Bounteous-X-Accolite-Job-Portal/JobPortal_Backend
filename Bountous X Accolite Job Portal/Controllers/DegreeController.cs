@@ -13,9 +13,11 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
     public class DegreeController : ControllerBase
     {
         private readonly IDegreeService _degreeService;
-        public DegreeController(IDegreeService degreeService)
+        private readonly IDesignationService _designationService;
+        public DegreeController(IDegreeService degreeService, IDesignationService designationService)
         {
             _degreeService = degreeService;
+            _designationService = designationService;
         }
 
         [HttpGet]
@@ -56,8 +58,9 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             }
 
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
-            Guid employeeId = GetGuidFromString.Get(User.FindFirstValue("EmployeeId"));
-            if (!isEmployee)
+            Guid employeeId = GetGuidFromString.Get(User.FindFirstValue("Id"));
+            var role = User.FindFirstValue("Role");
+            if (!isEmployee || role == null || !_designationService.HasPrivilege(role))
             {
                 response = new DegreeResponseViewModel();
                 response.Status = 401;
@@ -85,7 +88,8 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             }
 
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
-            if (!isEmployee)
+            var role = User.FindFirstValue("Role");
+            if (!isEmployee || role == null || !_designationService.HasPrivilege(role))
             {
                 response = new DegreeResponseViewModel();
                 response.Status = 401;
@@ -105,7 +109,8 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             DegreeResponseViewModel response;
 
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
-            if (!isEmployee)
+            var role = User.FindFirstValue("Role");
+            if (!isEmployee || role == null || !_designationService.HasPrivilege(role))
             {
                 response = new DegreeResponseViewModel();
                 response.Status = 401;

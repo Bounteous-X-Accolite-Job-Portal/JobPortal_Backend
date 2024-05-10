@@ -14,27 +14,30 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
     public class InterviewController : ControllerBase
     {
         private readonly I_InterviewService _InterviewService;
-        public InterviewController(I_InterviewService interviewService)
+        private readonly IDesignationService _designationService;
+        public InterviewController(I_InterviewService interviewService, IDesignationService designationService)
         {
             _InterviewService = interviewService;
+            _designationService = designationService;
         }
 
         [HttpGet]
-        [Route("GetAllInterviewsForInterviewer/{EmployeeId}")]
-        public async Task<All_InterviewResponseViewModel> GetAllInterviewsForInterviewer(Guid EmployeeId)
+        [Route("GetAllInterviewsForInterviewer")]
+        [Authorize]
+        public async Task<All_InterviewResponseViewModel> GetAllInterviewsForInterviewer()
         {
             All_InterviewResponseViewModel response = new All_InterviewResponseViewModel();
 
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
-            Guid employeeId = GetGuidFromString.Get(User.FindFirstValue("EmployeeId"));
-            if (!isEmployee || employeeId != EmployeeId)
+            Guid employeeId = GetGuidFromString.Get(User.FindFirstValue("Id"));
+            if (!isEmployee)
             {
                 response.Status = 401;
                 response.Message = "Not Logged In / Not Authorized to See Interviewer Interviews !";
             }
             else
             {
-                response = _InterviewService.GetAllInterviewsForInterviewer(EmployeeId);
+                response = _InterviewService.GetAllInterviewsForInterviewer(employeeId);
             }
             return response;
         }
@@ -60,8 +63,9 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             }
 
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
-            Guid employeeId = GetGuidFromString.Get(User.FindFirstValue("EmployeeId"));
-            if (!isEmployee)
+            Guid employeeId = GetGuidFromString.Get(User.FindFirstValue("Id"));
+            var role = User.FindFirstValue("Role");
+            if (!isEmployee || role == null || !_designationService.HasPrivilege(role))
             {
                 response = new InterviewResponseViewModel();
                 response.Status = 401;
@@ -89,7 +93,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             }
 
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
-            Guid employeeId = GetGuidFromString.Get(User.FindFirstValue("EmployeeId"));
+            Guid employeeId = GetGuidFromString.Get(User.FindFirstValue("Id"));
             if (!isEmployee || employeeId != res.Interview.EmpId)
             {
                 response = new InterviewResponseViewModel();
@@ -125,7 +129,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             }
 
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
-            Guid employeeId = GetGuidFromString.Get(User.FindFirstValue("EmployeeId"));
+            Guid employeeId = GetGuidFromString.Get(User.FindFirstValue("Id"));
             if (!isEmployee || employeeId != res.Interview.EmpId)
             {
                 response = new InterviewResponseViewModel();
