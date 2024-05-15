@@ -162,6 +162,24 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             return response;
         }
 
+        [HttpGet]
+        [Route("CandidateAppliedJobs/{CandidateId}")]
+        public AllJobResponseViewModel GetJobsAppliedByCandidateId(Guid CandidateId)
+        {
+            AllJobResponseViewModel response;
+            //Guid candidateId = GetGuidFromString.Get(User.FindFirstValue("Id"));
+            //if(candidateId!=CandidateId)
+            //{
+            //    response= new AllJobResponseViewModel();
+            //    response.Status = 401;
+            //    response.Message = "Candidate Not Found !!";
+            //    return response;
+            //}
+
+            response = _jobApplicationService.GetJobsAppliedByCandidateId(CandidateId);
+            return response;
+        }
+
         [HttpPost]
         [Route("apply")]
         public async Task<JobApplicationResponseViewModel> Apply(AddJobApplication addjobapplication)
