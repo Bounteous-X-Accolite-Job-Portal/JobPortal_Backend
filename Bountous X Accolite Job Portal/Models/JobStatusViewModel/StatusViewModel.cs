@@ -3,6 +3,12 @@
     public class StatusViewModel
     {
         public int StatusId { get; set; }
-        public string StatusName { get; set; } 
+        public string StatusName { get; set; }
+
+        public StatusViewModel(Status status)
+        {
+            StatusId = status.StatusId;
+            StatusName = status.StatusName;
+        }
     }
 }

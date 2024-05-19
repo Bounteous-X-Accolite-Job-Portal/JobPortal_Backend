@@ -131,19 +131,19 @@ namespace Bountous_X_Accolite_Job_Portal.Services
                 }
             }
 
-            Dictionary<Guid, ClosedJob> closedDic = new Dictionary<Guid, ClosedJob>();
+            Dictionary<Guid, Guid> closedDic = new Dictionary<Guid, Guid>();
             foreach (KeyValuePair<Guid, Job> entry in dic)
             {
                 // do something with entry.Value or entry.Key
                 ClosedJob closedJob = new ClosedJob(entry.Value);
-                _context.ClosedJobs.Add(closedJob);
+                await _context.ClosedJobs.AddAsync(closedJob);
 
-                closedDic.Add(entry.Key, closedJob);
+                closedDic.Add(entry.Key, closedJob.ClosedJobId);
             }
 
             foreach(JobApplication app in validApplications)
             {
-                app.ClosedJobId = closedDic[(Guid)app.JobId].ClosedJobId;
+                app.ClosedJobId = closedDic[(Guid)app.JobId];
                 app.JobId = null;
                 _context.JobApplications.Update(app);
             }

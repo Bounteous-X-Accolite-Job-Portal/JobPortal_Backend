@@ -26,5 +26,10 @@
             Country = candidate.Country;
             ZipCode = candidate.ZipCode;
         }
+
+        public static implicit operator CandidateViewModel(CandidateResponseViewModel v)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -37,7 +37,7 @@ namespace Bountous_X_Accolite_Job_Portal
                 .AddDefaultTokenProviders();
             builder.Services.Configure<IdentityOptions>
                 (
-            options => options.SignIn.RequireConfirmedEmail = true);
+            options => options.SignIn.RequireConfirmedEmail = false);
 
 
 
