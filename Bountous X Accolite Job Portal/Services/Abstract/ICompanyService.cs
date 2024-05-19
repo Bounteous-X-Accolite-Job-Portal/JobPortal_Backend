@@ -1,5 +1,5 @@
-﻿using Bountous_X_Accolite_Job_Portal.Models.CompanyViewModel;
-using Bountous_X_Accolite_Job_Portal.Models.CompanyViewModel.CompanyResponseViewModel;
+﻿using Bountous_X_Accolite_Job_Portal.Models.CompanyModels;
+using Bountous_X_Accolite_Job_Portal.Models.CompanyModels.CompanyResponseViewModel;
 
 namespace Bountous_X_Accolite_Job_Portal.Services.Abstract
 {

@@ -13,5 +13,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services.Abstract
         Task<InterviewResponseViewModel> EditInterview(EditInterviewViewModel interview);
         Task<bool> UpdateFeedbackId(Guid InterviewId, Guid FeedbackId);
         void ChangeInterviewApplicationToClosedApplication(Guid ApplicationId, Guid ClosedApplicationId);
+        All_InterviewResponseViewModel GetAllInterviewByApplicationId(Guid ApplicationId);
+        Task<AllApplicantInterviewResponseViewModel> GetAllApplicantInterviewByApplicantionId(Guid ApplicationId);
     }
 }

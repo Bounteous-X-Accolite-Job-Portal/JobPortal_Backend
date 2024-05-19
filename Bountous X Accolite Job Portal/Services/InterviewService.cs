@@ -1,5 +1,6 @@
 ﻿using Bountous_X_Accolite_Job_Portal.Data;
 using Bountous_X_Accolite_Job_Portal.Models;
+using Bountous_X_Accolite_Job_Portal.Models.InterviewFeedbackModels.InterviewFeedbackResponseViewModel;
 using Bountous_X_Accolite_Job_Portal.Models.InterviewViewModel;
 using Bountous_X_Accolite_Job_Portal.Models.InterviewViewModel.InterviewResponseViewModel;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
@@ -9,9 +10,14 @@ namespace Bountous_X_Accolite_Job_Portal.Services
     public class InterviewService : I_InterviewService
     {
         private readonly ApplicationDbContext _context;
-        public InterviewService(ApplicationDbContext context)
+        private readonly IEmployeeAccountService _employeeAccountService;
+        public InterviewService(
+            ApplicationDbContext context, 
+            IEmployeeAccountService employeeAccountService
+        )
         {
             _context = context;
+            _employeeAccountService = employeeAccountService;
         }
 
         public async Task<InterviewResponseViewModel> AddInterview(CreateInterviewViewModel interview , Guid EmpId)
@@ -203,6 +209,64 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             await _context.SaveChangesAsync();
 
             return true;
+        }
+
+        public All_InterviewResponseViewModel GetAllInterviewByApplicationId(Guid ApplicationId)
+        {
+            All_InterviewResponseViewModel response = new All_InterviewResponseViewModel();
+
+            var application = _context.JobApplications.Find(ApplicationId);
+            if (application == null)
+            {
+                response.Status = 404;
+                response.Message = "Application with this Id does not exist.";
+                return response;
+            }
+
+            List<Interview> interviews = _context.Interviews.Where(item => item.ApplicationId == ApplicationId).ToList();
+
+            List<InterviewViewModel> allInterview = new List<InterviewViewModel>();
+            foreach (var item in interviews)
+            {
+                allInterview.Add(new InterviewViewModel(item));
+            }
+
+            response.Status = 200;
+            response.Message = "Successfully retrieved all interviews by applicationId";
+            response.allInterviews = allInterview;
+            return response;
+        }
+
+        public async Task<AllApplicantInterviewResponseViewModel> GetAllApplicantInterviewByApplicantionId(Guid ApplicationId)
+        {
+            AllApplicantInterviewResponseViewModel response = new AllApplicantInterviewResponseViewModel();
+
+            var allInterviews = GetAllInterviewByApplicationId(ApplicationId);
+            if(allInterviews.Status != 200)
+            {
+                response.Status = allInterviews.Status;
+                response.Message = allInterviews.Message;
+                return response;
+            }
+
+            response.Status = 200;
+            response.Message = "Successfully retrived all applicant interviews.";
+            response.AllInterviews = new List<ApplicantInterviewViewModel>();
+
+            foreach (var item in allInterviews.allInterviews)
+            {
+                var interviewer = _employeeAccountService.GetEmployeeById((Guid)item.InterViewerId);
+                var feedback = _context.InterviewFeedbacks.Find(item.FeedbackId);
+
+                ApplicantInterviewViewModel interview = new ApplicantInterviewViewModel();
+                interview.Interview = item;
+                interview.Interviewer = interviewer.Employee;
+                interview.Feedback = feedback == null ? null : new InterviewFeedbackViewModel(feedback);
+
+                response.AllInterviews.Add(interview);
+            }
+
+            return response;
         }
     }
 }

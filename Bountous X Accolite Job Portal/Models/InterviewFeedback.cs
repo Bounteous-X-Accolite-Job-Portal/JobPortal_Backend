@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Bountous_X_Accolite_Job_Portal.Models.InterviewFeedbackViewModel;
+using Bountous_X_Accolite_Job_Portal.Models.InterviewFeedbackModels;
 
 namespace Bountous_X_Accolite_Job_Portal.Models
 {

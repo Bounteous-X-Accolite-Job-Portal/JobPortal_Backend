@@ -1,6 +1,6 @@
 ﻿using Bountous_X_Accolite_Job_Portal.Helpers;
-using Bountous_X_Accolite_Job_Portal.Models.SkillsViewModel;
-using Bountous_X_Accolite_Job_Portal.Models.SkillsViewModel.ResponseViewModels;
+using Bountous_X_Accolite_Job_Portal.Models.SkillsModels;
+using Bountous_X_Accolite_Job_Portal.Models.SkillsModels.ResponseViewModels;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

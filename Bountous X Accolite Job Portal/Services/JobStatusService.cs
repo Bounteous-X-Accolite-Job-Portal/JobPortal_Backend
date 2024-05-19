@@ -31,7 +31,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
 
         public int GetInitialStatus()
         {
-            return 5;
+            return 1;
         }
 
         public bool IsRejectedStatus(int StatusId)
@@ -67,6 +67,40 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             return true;
         }
 
-        
+        public JobStatusResponseViewModel GetStatusById(int statusId)
+        {
+            JobStatusResponseViewModel response = new JobStatusResponseViewModel();
+
+            var status = _dbContext.Status.Find(statusId);
+            if( status == null)
+            {
+                response.Status = 404;
+                response.Message = "Status with this Id does not exist.";
+                return response;
+            }
+
+            response.Status = 200;
+            response.Message = "Successfully retrieved status with this Id.";
+            response.StatusViewModel = new StatusViewModel(status);
+            return response;
+        }
+
+        public AllStatusResponseViewModel GetAllStatus()
+        {
+            AllStatusResponseViewModel response = new AllStatusResponseViewModel();
+
+            List<Status> l = _dbContext.Status.Where(ite => true).ToList();
+
+            List<StatusViewModel> list = new List<StatusViewModel>();
+            foreach (var item in l)
+            {
+                list.Add(new StatusViewModel(item));
+            }
+
+            response.Status = 200;
+            response.Message = "Successfully retrived all status.";
+            response.AllStatus = list;
+            return response;
+        }
     }
 }

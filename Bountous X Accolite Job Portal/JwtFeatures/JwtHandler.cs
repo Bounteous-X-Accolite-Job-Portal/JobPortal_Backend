@@ -1,5 +1,6 @@
 ﻿using Bountous_X_Accolite_Job_Portal.Data;
 using Bountous_X_Accolite_Job_Portal.Models;
+using Bountous_X_Accolite_Job_Portal.Services.Abstract;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -12,11 +13,13 @@ namespace Bountous_X_Accolite_Job_Portal.JwtFeatures
         private readonly IConfiguration _configuration;
         private readonly IConfigurationSection _jwtSettings;
         private readonly ApplicationDbContext _dbContext;
-        public JwtHandler(IConfiguration configuration, ApplicationDbContext dbContext)
+        private readonly IDesignationService _designationService;
+        public JwtHandler(IConfiguration configuration, ApplicationDbContext dbContext, IDesignationService designationService)
         {
             _configuration = configuration;
             _jwtSettings = _configuration.GetSection("JwtSettings");
             _dbContext = dbContext;
+            _designationService = designationService;
         }
         public SigningCredentials GetSigningCredentials()
         {
@@ -35,11 +38,17 @@ namespace Bountous_X_Accolite_Job_Portal.JwtFeatures
 
             var role = "user";
             string name = "";
+            bool hasPrivilege = false;
+            bool hasSpecialPrivilege = false;
             if (user.EmpId != null)
             {
                 var employee = _dbContext.Employees.Find(user.EmpId);
                 name = employee.FirstName;
                 role = _dbContext.Designations.Find(employee.DesignationId).DesignationName.ToLower();
+
+                hasPrivilege = _designationService.HasPrivilege(role);
+
+                hasSpecialPrivilege = _designationService.HasSpecialPrivilege(role);
             }
             else
             {
@@ -49,6 +58,8 @@ namespace Bountous_X_Accolite_Job_Portal.JwtFeatures
 
             claims.Add(new Claim(type: "Role", value: role));
             claims.Add(new Claim(type: "Name", value: name));
+            claims.Add(new Claim(type: "HasPrivilege", value: hasPrivilege.ToString(), ClaimValueTypes.Boolean));
+            claims.Add(new Claim(type: "HasSpecialPrivilege", value: hasSpecialPrivilege.ToString(), ClaimValueTypes.Boolean));
 
             return claims;
         }

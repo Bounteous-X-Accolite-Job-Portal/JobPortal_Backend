@@ -1,5 +1,5 @@
-﻿using Bountous_X_Accolite_Job_Portal.Models.InterviewFeedbackViewModel;
-using Bountous_X_Accolite_Job_Portal.Models.InterviewFeedbackViewModel.InterviewFeedbackResponseViewModel;
+﻿using Bountous_X_Accolite_Job_Portal.Models.InterviewFeedbackModels;
+using Bountous_X_Accolite_Job_Portal.Models.InterviewFeedbackModels.InterviewFeedbackResponseViewModel;
 
 namespace Bountous_X_Accolite_Job_Portal.Services.Abstract
 {
