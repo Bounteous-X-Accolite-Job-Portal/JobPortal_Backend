@@ -30,7 +30,6 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
 
         [HttpGet]
         [Route("getJobLocation/{Id}")]
-        [Authorize]
         public JobLocationResponseViewModel getJobLocation(Guid Id)
         {
             return _jobLocationService.GetLocationById(Id);

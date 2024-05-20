@@ -356,6 +356,80 @@ namespace Bountous_X_Accolite_Job_Portal.Services
 
             return response;
         }
+
+        public async Task<AllApplicantResponseViewModel> GetApplicantsByClosedJobId(Guid JobId)
+        {
+            AllApplicantResponseViewModel response = new AllApplicantResponseViewModel();
+
+            var applications = GetJobApplicationByClosedJobId(JobId);
+            if (applications.Status != 200)
+            {
+                response.Status = applications.Status;
+                response.Message = applications.Message;
+                return response;
+            }
+
+            response.Status = 200;
+            response.Message = "Successfully retrieved all applicants.";
+            response.Applicants = new List<ApplicantViewModel>();
+
+            foreach (var item in applications.AllJobApplications)
+            {
+                List<CompleteEducationViewModel> education = new List<CompleteEducationViewModel>();
+                var educations = _candidateEducationService.GetAllEducationOfACandidate((Guid)item.CandidateId);
+                foreach (var element in educations.CandidateEducation)
+                {
+                    CompleteEducationViewModel edu = new CompleteEducationViewModel();
+
+                    var institution = _educationInstitutionService.GetInstitution((Guid)element.InstitutionId);
+                    var degree = _degreeService.GetDegree((Guid)element.DegreeId);
+
+                    edu.Education = element;
+                    edu.Institution = institution.EducationInstitution;
+                    edu.Degree = degree.Degree;
+
+                    education.Add(edu);
+                }
+
+                List<ExperienceWithCompanyViewModel> exp = new List<ExperienceWithCompanyViewModel>();
+                var experiences = _candidateExperienceService.GetAllExperienceOfACandidate((Guid)item.CandidateId);
+                foreach (var element in experiences.Experiences)
+                {
+                    ExperienceWithCompanyViewModel experience = new ExperienceWithCompanyViewModel();
+
+                    var company = _companyService.GetCompanyById((Guid)element.CompanyId);
+
+                    experience.Experience = element;
+                    experience.Company = company.Company;
+
+                    exp.Add(experience);
+                }
+
+                ApplicantViewModel applicant = new ApplicantViewModel();
+
+                var candidate = _candidateAccountService.GetCandidateById((Guid)item.CandidateId);
+                var skills = _skillsService.GetSkillsOfACandidate((Guid)item.CandidateId);
+                var resume = _resumeService.GetResumeOfACandidate((Guid)item.CandidateId);
+                var status = _statusService.GetStatusById((int)item.StatusId);
+
+                if (candidate.Candidate != null)
+                {
+                    applicant.ApplicationId = item.ApplicationId;
+                    applicant.CandidateId = (Guid)item.CandidateId;
+                    applicant.JobId = (Guid)item.ClosedJobId;
+                    applicant.Candidate = candidate.Candidate;
+                    applicant.Skills = skills.Skills;
+                    applicant.Resume = resume.Resume;
+                    applicant.Status = status.StatusViewModel;
+                    applicant.Education = education;
+                    applicant.Experience = exp;
+
+                    response.Applicants.Add(applicant);
+                }
+            }
+
+            return response;
+        }
     }
 }
 
