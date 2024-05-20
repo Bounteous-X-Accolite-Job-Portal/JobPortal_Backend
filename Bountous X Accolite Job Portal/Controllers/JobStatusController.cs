@@ -47,6 +47,8 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             return BadRequest("Could not register Status.");
         }
 
+      
+
 
 
     }

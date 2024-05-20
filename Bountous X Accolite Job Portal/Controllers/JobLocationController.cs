@@ -38,7 +38,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
 
         [HttpPost]
         [Route("AddJobLocation")]
-        [Authorize]
+        //[Authorize]
         public async Task<JobLocationResponseViewModel> AddJobLocation(CreateJobLocationViewModel location)
         {
             JobLocationResponseViewModel response;

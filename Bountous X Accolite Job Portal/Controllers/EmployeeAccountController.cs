@@ -46,49 +46,49 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
         {
             EmployeeResponseViewModel response;
 
-            if(!ModelState.IsValid)
-            {
-                response = new EmployeeResponseViewModel();
-                response.Status = 404;
-                response.Message = "Please fill all the details.";
-                return response;
-            }
+            //if(!ModelState.IsValid)
+            //{
+            //    response = new EmployeeResponseViewModel();
+            //    response.Status = 404;
+            //    response.Message = "Please fill all the details.";
+            //    return response;
+            //}
 
-            var email = User.FindFirstValue("Name");
-            if (email == null)
-            {
-                response = new EmployeeResponseViewModel();
-                response.Status = 401;
-                response.Message = "You are not loggedIn or not authorised to do add other employees.";
-                return response;
-            }
+            //var email = User.FindFirstValue("Name");
+            //if (email == null)
+            //{
+            //    response = new EmployeeResponseViewModel();
+            //    response.Status = 401;
+            //    response.Message = "You are not loggedIn or not authorised to do add other employees.";
+            //    return response;
+            //}
 
-            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
-            var role = User.FindFirstValue("Role");
-            if (!isEmployee || role == null || !_designationService.HasPrivilege(role))
-            {
-                response = new EmployeeResponseViewModel();
-                response.Status = 401;
-                response.Message = "You are not loggedIn or not authorised to do add other employees.";
-                return response;
-            }
+            //bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            //var role = User.FindFirstValue("Role");
+            //if (!isEmployee || role == null || !_designationService.HasPrivilege(role))
+            //{
+            //    response = new EmployeeResponseViewModel();
+            //    response.Status = 401;
+            //    response.Message = "You are not loggedIn or not authorised to do add other employees.";
+            //    return response;
+            //}
 
-            DesignationResponseViewModel designation = await _designationService.GetDesignationById(employee.DesignationId);
-            if(designation.Designation == null)
-            {
-                response = new EmployeeResponseViewModel();
-                response.Status = designation.Status;
-                response.Message = designation.Message;
-                return response;
-            }
+            //DesignationResponseViewModel designation = await _designationService.GetDesignationById(employee.DesignationId);
+            //if(designation.Designation == null)
+            //{
+            //    response = new EmployeeResponseViewModel();
+            //    response.Status = designation.Status;
+            //    response.Message = designation.Message;
+            //    return response;
+            //}
              
-            if(String.Equals(designation.Designation.DesignationName.ToLower(), "admin") && !_designationService.HasSpecialPrivilege(role))
-            {
-                response = new EmployeeResponseViewModel();
-                response.Status = 401;
-                response.Message = "You are not loggedIn or not authorised to do add other employees with this designation.";
-                return response;
-            }
+            //if(String.Equals(designation.Designation.DesignationName.ToLower(), "admin") && !_designationService.HasSpecialPrivilege(role))
+            //{
+            //    response = new EmployeeResponseViewModel();
+            //    response.Status = 401;
+            //    response.Message = "You are not loggedIn or not authorised to do add other employees with this designation.";
+            //    return response;
+            //}
 
             response = await _employeeAuthService.Register(employee);
             return response;

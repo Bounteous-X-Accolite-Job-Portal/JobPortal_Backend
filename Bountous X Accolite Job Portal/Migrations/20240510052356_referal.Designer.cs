@@ -12,13 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Bountous_X_Accolite_Job_Portal.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-<<<<<<<< HEAD:Bountous X Accolite Job Portal/Migrations/20240504173120_hello.Designer.cs
-    [Migration("20240504173120_hello")]
-    partial class hello
-========
-    [Migration("20240508174101_Initial Migration")]
-    partial class InitialMigration
->>>>>>>> 40e75ea24e99985110b640909b0dcb5a511b937b:Bountous X Accolite Job Portal/Migrations/20240508174101_Initial Migration.Designer.cs
+    [Migration("20240510052356_referal")]
+    partial class referal
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -944,6 +939,12 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                     b.Property<Guid?>("CandidateId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<DateTime?>("ChangePasswordExpiry")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ChangePasswordToken")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
@@ -952,8 +953,14 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
+                    b.Property<DateTime?>("EmailConfirmExpiry")
+                        .HasColumnType("datetime2");
+
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
+
+                    b.Property<string>("EmailToken")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid?>("EmpId")
                         .HasColumnType("uniqueidentifier");
@@ -983,6 +990,9 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
+
+                    b.Property<string>("ReferalToken")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime?>("ResetPasswordExpiry")
                         .HasColumnType("datetime2");

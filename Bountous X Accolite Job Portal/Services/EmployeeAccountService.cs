@@ -1,6 +1,8 @@
 ﻿using Bountous_X_Accolite_Job_Portal.Data;
+using Bountous_X_Accolite_Job_Portal.Helpers;
 using Bountous_X_Accolite_Job_Portal.Models;
 using Bountous_X_Accolite_Job_Portal.Models.AuthenticationViewModel.EmployeeViewModel;
+using Bountous_X_Accolite_Job_Portal.Models.EMAIL;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
 using Microsoft.AspNetCore.Identity;
 
@@ -11,12 +13,14 @@ namespace Bountous_X_Accolite_Job_Portal.Services
         private readonly UserManager<User> _userManager;
         private readonly ApplicationDbContext _dbContext;
         private readonly IDesignationService _designationService;
+        private readonly IEmailService _emailService;
 
-        public EmployeeAccountService(UserManager<User> userManager, ApplicationDbContext applicationDbContext, IDesignationService designationService)
+        public EmployeeAccountService(UserManager<User> userManager, ApplicationDbContext applicationDbContext, IDesignationService designationService, IEmailService emailService)
         {
             _userManager = userManager;
             _dbContext = applicationDbContext;
             _designationService = designationService;
+            _emailService = emailService;
         }
 
         public AllEmployeesResponseViewModel GetAllEmployees()
@@ -95,11 +99,20 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             employee.Email = RegisterEmployee.Email;
             employee.DesignationId = RegisterEmployee.DesignationId;
             employee.Inactive = false;
+            //employee.Password = GeneratePassword.GenerateRandomPassword();
+            //var password = employee.Password;
+
+            var userEmail = employee.Email;
+
+            EmailData email = new EmailData(userEmail, "bounteous x Accolite Job Portal!", EmplyoeeRegisterdMail.EmailStringBody());
+            _emailService.SendEmail(email);
 
             await _dbContext.Employees.AddAsync(employee);
             await _dbContext.SaveChangesAsync();
 
-            if(employee == null)
+            
+
+            if (employee == null)
             {
                 response.Status = 500;
                 response.Message = "Unable to create Employee, please try again.";

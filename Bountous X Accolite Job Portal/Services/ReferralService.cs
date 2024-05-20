@@ -2,9 +2,12 @@
 using Bountous_X_Accolite_Job_Portal.Helpers;
 using Bountous_X_Accolite_Job_Portal.Models;
 using Bountous_X_Accolite_Job_Portal.Models.AuthenticationViewModel.CandidateViewModels;
+using Bountous_X_Accolite_Job_Portal.Models.EMAIL;
 using Bountous_X_Accolite_Job_Portal.Models.ReferralViewModel;
 using Bountous_X_Accolite_Job_Portal.Models.ReferralViewModel.ResponseViewModels;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
+using Microsoft.AspNetCore.Identity;
+using System.Security.Cryptography;
 
 namespace Bountous_X_Accolite_Job_Portal.Services
 {
@@ -13,11 +16,15 @@ namespace Bountous_X_Accolite_Job_Portal.Services
         private readonly ApplicationDbContext _dbContext;
         private readonly ICandidateAccountService _candidateAccountService;
         private readonly IJobStatusService _jobStatusService;
-        public ReferralService(ApplicationDbContext dbContext, ICandidateAccountService candidateAccountService, IJobStatusService jobStatusService)
+        private readonly UserManager<User> _userManager;
+        private readonly IEmailService _emailService;
+        public ReferralService(ApplicationDbContext dbContext, ICandidateAccountService candidateAccountService, IJobStatusService jobStatusService,UserManager<User> userManager, IEmailService emailService)
         {
             _dbContext = dbContext;
             _candidateAccountService = candidateAccountService;
             _jobStatusService = jobStatusService;
+            _userManager = userManager;
+            _emailService = emailService;
         }
 
         public async Task<ReferralResponseViewModel> Refer(AddReferralViewModel addReferral, Guid EmpId)
@@ -35,16 +42,49 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             }
 
             var user = _dbContext.Users.Where(item => String.Equals(item.Email, addReferral.Email)).FirstOrDefault();
-            if(user == null)
+            if (user != null)
+            {
+                var candRegisterd = await _userManager.FindByEmailAsync(user.Email);
+                var token = RandomNumberGenerator.GetBytes(64);
+                var referal = Convert.ToBase64String(token);
+                candRegisterd.ReferalToken = referal;
+                EmailData email = new EmailData(candRegisterd.Email, "You are being referred", ReferalBodyForAlreadyRegisterd.EmailStringBody());
+                _emailService.SendEmail(email);
+            }
+
+
+
+
+            if (user == null)
             {
                 CandidateRegisterViewModel newCandidate = new CandidateRegisterViewModel();
+                ConfirmPasswordDTO confirm=new ConfirmPasswordDTO();
                 newCandidate.Email = addReferral.Email;
                 newCandidate.FirstName = addReferral.FirstName;
                 newCandidate.LastName = addReferral.LastName;
                 newCandidate.Password = GeneratePassword.GenerateRandomPassword();
+                var password=newCandidate.Password;
+
+
 
                 CandidateResponseViewModel candidate = await _candidateAccountService.Register(newCandidate);
-                if(candidate.Candidate == null)
+                var cand = await _userManager.FindByEmailAsync(newCandidate.Email);
+                var tokenBytes = RandomNumberGenerator.GetBytes(64);
+                var referalToken = Convert.ToBase64String(tokenBytes);
+                cand.ReferalToken = referalToken;
+                cand.AutoPassword = password;
+
+               
+                EmailData emailRef = new EmailData(cand.Email, "bounteous x Accolite Job Portal!", ReferalEmailBody.EmailStringBody(cand.Email, cand.ReferalToken,cand.AutoPassword));
+                _emailService.SendEmail(emailRef);
+
+
+                //await _dbContext.Users.AddAsync(cand);
+                //await _dbContext.SaveChangesAsync();
+
+
+
+                if (candidate.Candidate == null)
                 {
                     response = new ReferralResponseViewModel();
                     response.Status = candidate.Status;

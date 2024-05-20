@@ -12,6 +12,9 @@ using MimeKit.Text;
 using MimeKit;
 using static Org.BouncyCastle.Math.EC.ECCurve;
 using MailKit.Net.Smtp;
+using static Org.BouncyCastle.Asn1.Cmp.Challenge;
+using System.Security.Cryptography;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace Bountous_X_Accolite_Job_Portal.Services
@@ -37,6 +40,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
         public CandidateResponseViewModel GetCandidateById(Guid CandidateId)
         {
             CandidateResponseViewModel response = new CandidateResponseViewModel();
+            
 
             var candidate = _dbContext.Candidates.Find(CandidateId);
             if(candidate == null)
@@ -55,6 +59,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
         public async Task<CandidateResponseViewModel> Register(CandidateRegisterViewModel registerUser)
         {
             CandidateResponseViewModel response = new CandidateResponseViewModel();
+            
 
             var checkUserWhetherExist = _dbContext.Users.Where(item => item.Email == registerUser.Email).ToList();
             if (checkUserWhetherExist.Count != 0)
@@ -68,10 +73,14 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             candidate.FirstName = registerUser.FirstName;
             candidate.LastName = registerUser.LastName;
             candidate.Email = registerUser.Email;
-            
+            var mail= candidate.Email;
+
+           
 
             await _dbContext.Candidates.AddAsync(candidate);
             await _dbContext.SaveChangesAsync();
+
+           
 
             if (candidate == null)
             {
@@ -95,56 +104,35 @@ namespace Bountous_X_Accolite_Job_Portal.Services
                 return response;
             }
 
-            //ConfirmEMail
+            var userEmail = await _userManager.FindByEmailAsync(mail);
+            var tokenBytes = RandomNumberGenerator.GetBytes(64);
+            var emailToken = Convert.ToBase64String(tokenBytes);
+            userEmail.EmailToken = emailToken;
+            userEmail.EmailConfirmExpiry = DateTime.Now.AddMinutes(5);
+            EmailData emailRef = new EmailData(userEmail.Email, "bounteous x Accolite Job Portal!", ConfirmEmailBody.EmailStringBody(userEmail.Email, userEmail.EmailToken));
+            _emailService.SendEmail(emailRef);
 
-            //var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-            ////onsole.WriteLine(token);
-            //_dbContext.Update(user);
-            //await _dbContext.SaveChangesAsync();
+            _dbContext.Entry(userEmail).State = EntityState.Modified;
 
+            //var newToken = confirmEmailDTO.EmailToken.Replace(" ", "+");
+            //var newToken = confirm.EmailToken.Replace(" ", "+");
+            
+            var TokenCode = user.EmailToken;
+            DateTime emailTokenExpiry = (DateTime)user.EmailConfirmExpiry;
+            
 
+            //await _userManager.ConfirmEmailAsync(user, newToken);
+            //user.EmailConfirmed = true;
 
             response.Status = 200;
             response.Message = "Successfully created Candidate.";
             response.Candidate = new CandidateViewModel(candidate);
             return response;
         }
-        public void SendConfirmEmail(EmailData request)
-        {
-            var email = new MimeMessage();
-            var from = _config["EmailSettings:From"];
-            email.From.Add(new MailboxAddress("Job Portal", from));
-            email.To.Add(new MailboxAddress(request.To, request.To));
-            email.Subject = request.Subject;
-            email.Body = new TextPart(TextFormat.Html)
-            { Text = string.Format(request.Body) };
-
-            using var smtp = new SmtpClient();
-            {
-                try
-                {
-                    smtp.Connect(_config["EmailSettings:SmtpServer"], 465, true);
-                    var temp = _config.GetSection("EmailSettings:From").Value;
-                    var temp2 = _config.GetSection("EmailSettings:EmailPassword").Value;
-
-                    smtp.Authenticate(_config.GetSection("EmailSettings:From").Value, _config.GetSection("EmailSettings:EmailPassword").Value);
-                    smtp.Send(email);
-                }
-                catch (Exception ex)
-                {
-                    throw;
-
-                }
-                finally
-                {
-                    smtp.Disconnect(true);
-                    smtp.Dispose();
-                }
-            }
+        
 
 
 
         }
 
     }
-}

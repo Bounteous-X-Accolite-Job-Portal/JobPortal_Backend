@@ -80,69 +80,69 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
         }
 
 
-        [HttpPost("ConfirmEmail")]
-        public async Task<IActionResult> SendEmail(string email, IConfiguration _config)
-        {
-            var user=await _userManager.FindByEmailAsync(email);
-            if (user != null)
-            {
+        //[HttpGet("ConfirmEmail")]
+        //public async Task<IActionResult> SendEmail(string email, IConfiguration _config)
+        //{
+        //    var user=await _userManager.FindByEmailAsync(email);
+        //    if (user != null)
+        //    {
 
-                if (user == null)
-                {
-                    return NotFound(new
-                    {
-                        StatusCode = 404,
-                        Message = "User Not Found"
-                    });
-                }
-                var tokenBytes = RandomNumberGenerator.GetBytes(64);
-                    var emailToken = Convert.ToBase64String(tokenBytes);
-                user.EmailToken = emailToken;
-                user.EmailConfirmExpiry = DateTime.Now.AddMinutes(5);
+        //        if (user == null)
+        //        {
+        //            return NotFound(new
+        //            {
+        //                StatusCode = 404,
+        //                Message = "User Not Found"
+        //            });
+        //        }
+        //        var tokenBytes = RandomNumberGenerator.GetBytes(64);
+        //            var emailToken = Convert.ToBase64String(tokenBytes);
+        //        user.EmailToken = emailToken;
+        //        user.EmailConfirmExpiry = DateTime.Now.AddMinutes(5);
 
-                string from = _config["EmailSettings:From"];
-                    var emailModel = new EmailData(email, "Confirm Email", ConfirmEmailBody.EmailStringBody(email, emailToken));
-                    _emailService.SendEmail(emailModel);
+        //        string from = _config["EmailSettings:From"];
+        //            var emailModel = new EmailData(email, "Confirm Email", ConfirmEmailBody.EmailStringBody(email, emailToken));
+        //            _emailService.SendEmail(emailModel);
 
-                    _authContext.Entry(user).State = EntityState.Modified;
-                    await _authContext.SaveChangesAsync();
+        //            _authContext.Entry(user).State = EntityState.Modified;
+        //            await _authContext.SaveChangesAsync();
                     
 
 
-                }
-            return Ok();
+        //        }
+        //    return Ok();
 
-        }
-            [HttpPost("confirm")]
-        public async Task<IActionResult> ConfirmEmail(ConfirmPasswordDTO confirm)
-        {
-            var newToken = confirm.EmailToken.Replace(" ", "+");
+        //}
+        //    [HttpPost("confirm")]
+        //public async Task<IActionResult> ConfirmEmail(ConfirmPasswordDTO confirm)
+        //{
+        //    var newToken = confirm.EmailToken.Replace(" ", "+");
 
-            var user = await _userManager.FindByEmailAsync(confirm.Email);
-            if (user == null) { return NotFound(); }
+        //    var user = await _userManager.FindByEmailAsync(confirm.Email);
+        //    if (user == null) { return NotFound(); }
 
-            var TokenCode = user.EmailToken;
-            DateTime emailTokenExpiry = (DateTime)user.EmailConfirmExpiry;
-            if (TokenCode != confirm.EmailToken || emailTokenExpiry < DateTime.Now)
-            {
-                return BadRequest(
-                    new
-                    {
-                        StatusCode = 400,
-                        Message = "NO"
-                    });
-            }
+        //    var TokenCode = user.EmailToken;
+        //    DateTime emailTokenExpiry = (DateTime)user.EmailConfirmExpiry;
+        //    if (TokenCode != confirm.EmailToken || emailTokenExpiry < DateTime.Now)
+        //    {
+        //        return BadRequest(
+        //            new
+        //            {
+        //                StatusCode = 400,
+        //                Message = "NO"
+        //            });
+        //    }
 
-            //await _userManager.ConfirmEmailAsync(user, newToken);
-            user.EmailConfirmed = true;
+        //    //await _userManager.ConfirmEmailAsync(user, newToken);
+        //    user.EmailConfirmed = true;
 
             
-            _authContext.Update(user);
-            await _authContext.SaveChangesAsync();
-            return Ok();
+        //    _authContext.Update(user);
+        //    await _authContext.SaveChangesAsync();
+        //    return Ok();
 
 
         }
 
     }
-}
+

@@ -15,5 +15,7 @@ namespace Bountous_X_Accolite_Job_Portal.Models
         public int? DesignationId { get; set; }
         public virtual Designation? Designation { get; set; }
         public bool Inactive { get; set; }
+
+        
     }
 }
