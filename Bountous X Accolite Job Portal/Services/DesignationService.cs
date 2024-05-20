@@ -82,5 +82,22 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             response.Message = "Successfully add designation.";
             return response;
         }
+
+        public AllDesignationResponseViewModel GetAllDesignation()
+        {
+            List<Designation> list = _dbContext.Designations.ToList();
+
+            List<DesignationViewModel> designations = new List<DesignationViewModel>();
+            foreach (var item in list)
+            {
+                designations.Add(new DesignationViewModel(item));
+            }
+
+            AllDesignationResponseViewModel response = new AllDesignationResponseViewModel();
+            response.Status = 200;
+            response.Message = "Successfully retrieved all designations.";
+            response.AllDesignations = designations;
+            return response;
+        }
     }
 }

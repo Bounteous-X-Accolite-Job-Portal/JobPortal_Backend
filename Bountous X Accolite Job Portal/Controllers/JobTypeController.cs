@@ -30,7 +30,6 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
         
         [HttpGet]
         [Route("getJobType/{Id}")]
-        [Authorize]
         public JobTypeResponseViewModel GetJobTypeById(Guid Id)
         {
             return _jobTypeService.GetJobTypeById(Id);

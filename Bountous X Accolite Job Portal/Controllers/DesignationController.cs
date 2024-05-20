@@ -19,6 +19,20 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             _designationService = designationService;   
         }
 
+        [HttpGet]
+        [Route("getAllDesignations")]
+        public AllDesignationResponseViewModel GetAllDesignations()
+        {
+            return _designationService.GetAllDesignation();
+        }
+
+        [HttpGet]
+        [Route("designation/{Id}")]
+        public async Task<DesignationResponseViewModel> GetDesignationsById(int Id)
+        {
+            return await _designationService.GetDesignationById(Id);
+        }
+
         [HttpPost]
         [Route("addDesignation")]
         public async Task<DesignationResponseViewModel> AddDesignation(AddDesignationViewModel addDesignation)
