@@ -17,6 +17,23 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             _context = context;
         }
 
+        public AllClosedJobResponseViewModel GetAllClosedJobs()
+        {
+            List<ClosedJob> list = _context.ClosedJobs.ToList();
+
+            List<ClosedJobViewModel> closedJobs = new List<ClosedJobViewModel>();
+            foreach (var item in list)
+            {
+                closedJobs.Add(new ClosedJobViewModel(item));
+            }
+
+            AllClosedJobResponseViewModel response = new AllClosedJobResponseViewModel();
+            response.Status = 200;
+            response.Message = "Successfully retrived all closed jobs";
+            response.ClosedJobs = closedJobs;
+            return response;
+        }
+
         public async Task<JobResponseViewModel> AddJob(CreateJobViewModel job, Guid EmpId)
         {
             Job newJob = new Job();

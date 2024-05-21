@@ -42,7 +42,14 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
         {
             return await _job.GetAllJobs();
         }
-        
+
+        [HttpGet]
+        [Route("getAllClosedJobs")]
+        public AllClosedJobResponseViewModel GetAllClosedJobs()
+        {
+            return _job.GetAllClosedJobs(); 
+        }
+
         [HttpGet]
         [Route("getAllJobsByEmployee/{Id}")]
         [Authorize]

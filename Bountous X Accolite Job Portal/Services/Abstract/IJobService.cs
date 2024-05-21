@@ -7,6 +7,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services.Abstract
     public interface IJobService
     {
         Task<AllJobResponseViewModel> GetAllJobs();
+        AllClosedJobResponseViewModel GetAllClosedJobs();
         AllJobResponseViewModel GetAllJobsByEmployeeId(Guid Emp);
         JobResponseViewModel GetJobById(Guid id);
         AllClosedJobResponseViewModel GetAllClosedJobsByEmployeeId(Guid Emp);
