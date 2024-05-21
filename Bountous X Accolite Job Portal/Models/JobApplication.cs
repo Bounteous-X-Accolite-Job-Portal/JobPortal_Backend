@@ -12,7 +12,7 @@ namespace Bountous_X_Accolite_Job_Portal.Models
         public virtual Job? Job { get; set; }
         public Guid? ClosedJobId { get; set; }
         public virtual ClosedJob? ClosedJob { get; set; }
-        public DateTime AppliedOn { get; set; }
+        public DateTime AppliedOn { get; set; } = DateTime.Now;
         public int? StatusId { get; set; }
         public virtual Status? Status { get; set; }
     }
