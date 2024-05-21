@@ -1,5 +1,5 @@
-﻿using Bountous_X_Accolite_Job_Portal.Models.ResumeViewModel;
-using Bountous_X_Accolite_Job_Portal.Models.ResumeViewModel.ResponseViewModels;
+﻿using Bountous_X_Accolite_Job_Portal.Models.ResumeModels;
+using Bountous_X_Accolite_Job_Portal.Models.ResumeModels.ResponseViewModels;
 
 namespace Bountous_X_Accolite_Job_Portal.Services.Abstract
 {

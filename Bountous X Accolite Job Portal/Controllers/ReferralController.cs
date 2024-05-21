@@ -1,6 +1,6 @@
 ﻿using Bountous_X_Accolite_Job_Portal.Helpers;
 using Bountous_X_Accolite_Job_Portal.Models;
-using Bountous_X_Accolite_Job_Portal.Models.DegreeViewModel.DegreeResponseViewModel;
+using Bountous_X_Accolite_Job_Portal.Models.DegreeModels.DegreeResponseViewModel;
 using Bountous_X_Accolite_Job_Portal.Models.ReferralViewModel;
 using Bountous_X_Accolite_Job_Portal.Models.ReferralViewModel.ResponseViewModels;
 using Bountous_X_Accolite_Job_Portal.Services;

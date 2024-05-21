@@ -140,5 +140,23 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             response.Employee = new EmployeeViewModels(employee);
             return response;
         }
+
+        public EmployeeResponseViewModel GetEmployeeById(Guid Id)
+        {
+            EmployeeResponseViewModel response = new EmployeeResponseViewModel();
+
+            var employee = _dbContext.Employees.Find(Id);
+            if(employee == null)
+            {
+                response.Status = 404;
+                response.Message = "Employee with this Id does not exist.";
+                return response;
+            }
+
+            response.Status = 200;
+            response.Message = "Successfully retrieved employee with this Id.";
+            response.Employee = new EmployeeViewModels(employee);
+            return response;
+        }
     }
 }

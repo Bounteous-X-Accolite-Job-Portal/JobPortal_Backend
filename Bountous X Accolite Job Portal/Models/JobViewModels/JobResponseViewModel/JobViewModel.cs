@@ -2,7 +2,7 @@
 {
     public class JobViewModel
     {
-        public Guid? JobId { get; set; }
+        public Guid JobId { get; set; }
         public string JobCode { get; set; }
         public string JobTitle { get; set; }
         public string JobDescription { get; set; }

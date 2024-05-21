@@ -1,6 +1,7 @@
 ﻿using Bountous_X_Accolite_Job_Portal.Data;
 
 using Bountous_X_Accolite_Job_Portal.Models;
+using Bountous_X_Accolite_Job_Portal.Models.ClosedJobViewModels;
 using Bountous_X_Accolite_Job_Portal.Models.JobViewModels;
 using Bountous_X_Accolite_Job_Portal.Models.JobViewModels.JobResponseViewModel;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
@@ -196,6 +197,42 @@ namespace Bountous_X_Accolite_Job_Portal.Services
                 response.Status = 200;
                 response.Message = "Job Successfully Found !";
                 response.job = new JobViewModel(job);
+            }
+            else
+            {
+                response.Status = 500;
+                response.Message = "Unable to Find Job !";
+            }
+            return response;
+        }
+
+        public AllClosedJobResponseViewModel GetAllClosedJobsByEmployeeId(Guid EmpId)
+        {
+            List<ClosedJob> list = _context.ClosedJobs.Where(e => e.EmployeeId == EmpId).ToList();
+            List<ClosedJobViewModel> jobList = new List<ClosedJobViewModel>();
+            foreach (ClosedJob job in list)
+                jobList.Add(new ClosedJobViewModel(job));
+
+            AllClosedJobResponseViewModel response = new AllClosedJobResponseViewModel();
+            response.Status = 200;
+            response.ClosedJobs = jobList;
+            if (list.Count > 0)
+                response.Message = "Successfully reterived Jobs for Given Employee !";
+            else
+                response.Message = "No Jobs Published By Employee !";
+
+            return response;
+        }
+
+        public ClosedJobResponseViewModel GetClosedJobById(Guid jobId)
+        {
+            ClosedJobResponseViewModel response = new ClosedJobResponseViewModel();
+            var job = _context.ClosedJobs.Find(jobId);
+            if (job != null)
+            {
+                response.Status = 200;
+                response.Message = "Job Successfully Found !";
+                response.ClosedJob = new ClosedJobViewModel(job);
             }
             else
             {

@@ -481,6 +481,9 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                     b.Property<Guid?>("EmployeeId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("FeedbackId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<Guid?>("InterViewerId")
                         .HasColumnType("uniqueidentifier");
 
@@ -501,6 +504,8 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                     b.HasIndex("ClosedJobApplicationId");
 
                     b.HasIndex("EmployeeId");
+
+                    b.HasIndex("FeedbackId");
 
                     b.HasIndex("InterViewerId");
 
@@ -525,17 +530,12 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("InterviewId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<int>("Rating")
                         .HasColumnType("int");
 
                     b.HasKey("FeedbackId");
 
                     b.HasIndex("EmployeeId");
-
-                    b.HasIndex("InterviewId");
 
                     b.ToTable("InterviewFeedbacks");
                 });
@@ -1329,6 +1329,10 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                         .WithMany()
                         .HasForeignKey("EmployeeId");
 
+                    b.HasOne("Bountous_X_Accolite_Job_Portal.Models.InterviewFeedback", "Feedback")
+                        .WithMany()
+                        .HasForeignKey("FeedbackId");
+
                     b.HasOne("Bountous_X_Accolite_Job_Portal.Models.Employee", "Interviewer")
                         .WithMany()
                         .HasForeignKey("InterViewerId");
@@ -1341,6 +1345,8 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
 
                     b.Navigation("Employee");
 
+                    b.Navigation("Feedback");
+
                     b.Navigation("Interviewer");
 
                     b.Navigation("JobApplication");
@@ -1352,13 +1358,7 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                         .WithMany()
                         .HasForeignKey("EmployeeId");
 
-                    b.HasOne("Bountous_X_Accolite_Job_Portal.Models.Interview", "Interview")
-                        .WithMany()
-                        .HasForeignKey("InterviewId");
-
                     b.Navigation("Employee");
-
-                    b.Navigation("Interview");
                 });
 
             modelBuilder.Entity("Bountous_X_Accolite_Job_Portal.Models.Job", b =>

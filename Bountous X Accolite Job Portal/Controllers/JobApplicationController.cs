@@ -1,5 +1,6 @@
 ﻿using Bountous_X_Accolite_Job_Portal.Helpers;
 using Bountous_X_Accolite_Job_Portal.Models.JobApplicationViewModel;
+using Bountous_X_Accolite_Job_Portal.Models.JobApplicationViewModel.ResponseViewModels;
 using Bountous_X_Accolite_Job_Portal.Models.JobViewModels.JobResponseViewModel;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
 using Microsoft.AspNetCore.Authorization;
@@ -27,7 +28,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
         public JobApplicationResponseViewModel GetJobApplicaionById(Guid Id)
         {
             JobApplicationResponseViewModel response = _jobApplicationService.GetJobApplicaionById(Id);
-            if(response.Application == null)
+            if (response.Application == null)
             {
                 return response;
             }
@@ -42,6 +43,46 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
 
+            return response;
+        }
+
+        [HttpGet]
+        [Route("applicants/{JobId}")]
+        public async Task<AllApplicantResponseViewModel> GetApplicantsByJobId(Guid JobId)
+        {
+            AllApplicantResponseViewModel response;
+
+            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            bool hasPrivilege = Convert.ToBoolean(User.FindFirstValue("HasPrivilege"));
+            if (!isEmployee || !hasPrivilege)
+            {
+                response = new AllApplicantResponseViewModel();
+                response.Status = 401;
+                response.Message = "You are either not loggedIn or not authorized to access applicants info.";
+                return response;
+            }
+
+            response = await _jobApplicationService.GetApplicantsByJobId(JobId);
+            return response;
+        }
+
+        [HttpGet]
+        [Route("applicants/closedJob/{ClosedJobId}")]
+        public async Task<AllApplicantResponseViewModel> GetApplicantsByClosedJobId(Guid ClosedJobId)
+        {
+            AllApplicantResponseViewModel response;
+
+            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            bool hasPrivilege = Convert.ToBoolean(User.FindFirstValue("HasPrivilege"));
+            if (!isEmployee || !hasPrivilege)
+            {
+                response = new AllApplicantResponseViewModel();
+                response.Status = 401;
+                response.Message = "You are either not loggedIn or not authorized to access applicants info.";
+                return response;
+            }
+
+            response = await _jobApplicationService.GetApplicantsByClosedJobId(ClosedJobId);
             return response;
         }
 
@@ -142,14 +183,14 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 response.Status = 403;
                 response.Message = "You are not loggedIn or you are not authorised to apply this job.";
             }
-        
+
             response = await _jobApplicationService.Apply(addjobapplication, candidateId);
             return response;
         }
 
         [HttpPut]
-        [Route("jobApplication/changeStatus/{ApplicationId}/{StatusId}")]
-        public async Task<JobApplicationResponseViewModel> ChangeJobApplicationStatus(Guid ApplicationId, int StatusId)
+        [Route("jobApplication/changeStatus/{ApplicationId}")]
+        public async Task<JobApplicationResponseViewModel> ChangeJobApplicationStatus(Guid ApplicationId, ChangeStatusViewModel changeStatus)
         {
             JobApplicationResponseViewModel response;
 
@@ -162,40 +203,9 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
 
-            JobApplicationResponseViewModel applicationResponse = GetJobApplicaionById(ApplicationId);
-            if(applicationResponse.Application == null)
-            {
-                return applicationResponse;
-            }
-
-            JobResponseViewModel jobResponse = _jobService.GetJobById((Guid)applicationResponse.Application.JobId);
-            if(jobResponse.job == null)
-            {
-                response = new JobApplicationResponseViewModel();
-                response.Status = jobResponse.Status;
-                response.Message = jobResponse.Message;
-                return response;
-            }
-
-            Guid employeeId = GetGuidFromString.Get(User.FindFirstValue("Id"));
-            if(employeeId != jobResponse.job.EmployeeId)
-            {
-                response = new JobApplicationResponseViewModel();
-                response.Status = 401;
-                response.Message = "You are not authorised to change status of this job.";
-                return response;
-            }
-
-            response = await _jobApplicationService.ChangeJobApplicationStatus(ApplicationId, StatusId);
-            if(response.Application == null)
-            {
-                return response;
-            }
-
-            response = new JobApplicationResponseViewModel();
-            response.Status = 200;
-            response.Message = "Successfully changed the status of given job.";
+            response = await _jobApplicationService.ChangeJobApplicationStatus(ApplicationId, changeStatus.statusId);
             return response;
         }
+        
     }
 }

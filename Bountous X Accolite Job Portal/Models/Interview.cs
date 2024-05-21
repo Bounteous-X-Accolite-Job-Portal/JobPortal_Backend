@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Bountous_X_Accolite_Job_Portal.Models.InterviewViewModel;
 
 namespace Bountous_X_Accolite_Job_Portal.Models
 {
@@ -17,6 +16,8 @@ namespace Bountous_X_Accolite_Job_Portal.Models
         public virtual Employee? Interviewer { get; set; }
         public string? Link {  get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
+        public Guid? FeedbackId { get; set; }
+        public virtual InterviewFeedback? Feedback { get; set; }
         public Guid? EmpId { get; set; }
         public virtual Employee? Employee { get; set; }
     }

@@ -22,6 +22,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
 
         [HttpGet]
         [Route("getAllEmployees")]
+        [Authorize]
         public AllEmployeesResponseViewModel GetAllEmployees()
         {
             AllEmployeesResponseViewModel response;
@@ -40,8 +41,29 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             return response;
         }
 
+        [HttpGet]
+        [Route("employee/{Id}")]
+        [Authorize]
+        public EmployeeResponseViewModel GetEmployeesById(Guid Id)
+        {
+            EmployeeResponseViewModel response;
+
+            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            if (!isEmployee)
+            {
+                response = new EmployeeResponseViewModel();
+                response.Status = 401;
+                response.Message = "You are not loggedIn or not authorised to do get info about employees.";
+                return response;
+            }
+
+            response = _employeeAuthService.GetEmployeeById(Id);
+            return response;
+        }
+
         [HttpPost]
         [Route("register")]
+        [Authorize]
         public async Task<EmployeeResponseViewModel> Register(EmployeeRegisterViewModel employee)
         {
             EmployeeResponseViewModel response;
@@ -54,14 +76,14 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             //    return response;
             //}
 
-            //var email = User.FindFirstValue("Name");
-            //if (email == null)
-            //{
-            //    response = new EmployeeResponseViewModel();
-            //    response.Status = 401;
-            //    response.Message = "You are not loggedIn or not authorised to do add other employees.";
-            //    return response;
-            //}
+            var email = User.FindFirstValue("Email");
+            if (email == null)
+            {
+                response = new EmployeeResponseViewModel();
+                response.Status = 401;
+                response.Message = "You are not loggedIn or not authorised to do add other employees.";
+                return response;
+            }
 
             //bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
             //var role = User.FindFirstValue("Role");

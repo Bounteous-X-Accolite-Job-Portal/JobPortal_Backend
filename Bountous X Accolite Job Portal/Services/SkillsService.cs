@@ -1,7 +1,7 @@
 ﻿using Bountous_X_Accolite_Job_Portal.Data;
 using Bountous_X_Accolite_Job_Portal.Models;
-using Bountous_X_Accolite_Job_Portal.Models.SkillsViewModel;
-using Bountous_X_Accolite_Job_Portal.Models.SkillsViewModel.ResponseViewModels;
+using Bountous_X_Accolite_Job_Portal.Models.SkillsModels;
+using Bountous_X_Accolite_Job_Portal.Models.SkillsModels.ResponseViewModels;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
 
 namespace Bountous_X_Accolite_Job_Portal.Services

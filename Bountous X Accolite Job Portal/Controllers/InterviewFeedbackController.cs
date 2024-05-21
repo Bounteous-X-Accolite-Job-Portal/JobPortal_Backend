@@ -1,6 +1,6 @@
 ﻿using Bountous_X_Accolite_Job_Portal.Helpers;
-using Bountous_X_Accolite_Job_Portal.Models.InterviewFeedbackViewModel;
-using Bountous_X_Accolite_Job_Portal.Models.InterviewFeedbackViewModel.InterviewFeedbackResponseViewModel;
+using Bountous_X_Accolite_Job_Portal.Models.InterviewFeedbackModels;
+using Bountous_X_Accolite_Job_Portal.Models.InterviewFeedbackModels.InterviewFeedbackResponseViewModel;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

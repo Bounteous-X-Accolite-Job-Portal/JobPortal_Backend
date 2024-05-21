@@ -1,4 +1,4 @@
-﻿using Bountous_X_Accolite_Job_Portal.Migrations;
+﻿
 
 namespace Bountous_X_Accolite_Job_Portal.Models.EMAIL
 {
