@@ -4662,19 +4662,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\vishal.s_INT1587\\.nuget\\packages\\": {}
+    "C:\\Users\\Ankit.G_INT1580\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\vishal.s_INT1587\\Desktop\\JobPortal_WebAPI\\Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj",
+      "projectUniqueName": "C:\\Assignments\\Bounteous-x-Accolite-Job-Portal\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj",
       "projectName": "Bountous X Accolite Job Portal",
-      "projectPath": "C:\\Users\\vishal.s_INT1587\\Desktop\\JobPortal_WebAPI\\Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj",
-      "packagesPath": "C:\\Users\\vishal.s_INT1587\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\vishal.s_INT1587\\Desktop\\JobPortal_WebAPI\\Bountous X Accolite Job Portal\\obj\\",
+      "projectPath": "C:\\Assignments\\Bounteous-x-Accolite-Job-Portal\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj",
+      "packagesPath": "C:\\Users\\Ankit.G_INT1580\\.nuget\\packages\\",
+      "outputPath": "C:\\Assignments\\Bounteous-x-Accolite-Job-Portal\\JobPortal_Backend\\Bountous X Accolite Job Portal\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\vishal.s_INT1587\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Ankit.G_INT1580\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [

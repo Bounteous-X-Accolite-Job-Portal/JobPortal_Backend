@@ -18,9 +18,9 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             int statusId = -1;
 
             List<Status> status = _dbContext.Status.ToList();
-            foreach(Status s in status)
+            foreach (Status s in status)
             {
-                if(String.Equals(s.StatusName.ToLower(), "referred"))
+                if (String.Equals(s.StatusName.ToLower(), "referred"))
                 {
                     statusId = s.StatusId;
                 }
@@ -37,7 +37,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
         public bool IsRejectedStatus(int StatusId)
         {
             var status = _dbContext.Status.Find(StatusId);
-            if(status == null)
+            if (status == null)
             {
                 return false;
             }

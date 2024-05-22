@@ -5,6 +5,8 @@ using Bountous_X_Accolite_Job_Portal.Services.Abstract;
 using Bountous_X_Accolite_Job_Portal.Models.JobApplicationViewModel.ResponseViewModels;
 using Bountous_X_Accolite_Job_Portal.Models.CandidateEducationViewModel.ResponseViewModels;
 using Bountous_X_Accolite_Job_Portal.Models.CandidateExperienceViewModel;
+using Bountous_X_Accolite_Job_Portal.Models.JobApplicationViewModel.JobApplicationResponse;
+using Bountous_X_Accolite_Job_Portal.Models.JobViewModels.JobResponseViewModel;
 
 namespace Bountous_X_Accolite_Job_Portal.Services
 {
@@ -97,7 +99,6 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             response.AllJobApplications = returnApplications;
             return response;
         }
-
         public AllJobApplicationResponseViewModel GetJobApplicationByJobId(Guid JobId)
         {
             AllJobApplicationResponseViewModel response = new AllJobApplicationResponseViewModel();
@@ -176,6 +177,16 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             return response;
         }
 
+        public Boolean IsCandidateApplicable(Guid JobId , Guid CandidateId)
+        {
+            AllJobApplicationResponseViewModel alljobsApplied  = GetJobApplicationByCandidateId(CandidateId);
+            foreach(JobApplicationViewModel jobApplication in alljobsApplied.AllJobApplications)
+            {
+                if (jobApplication.JobId == JobId)
+                    return false;
+            }
+            return true;
+        }
         public async Task<JobApplicationResponseViewModel> Apply(AddJobApplication application, Guid CandidateId)
         {
             JobApplicationResponseViewModel response;
@@ -357,6 +368,39 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             return response;
         }
 
+        public AllJobResponseViewModel GetJobsAppliedByCandidateId(Guid CandidateId)
+        {
+            AllJobResponseViewModel response = new AllJobResponseViewModel();
+            List<JobViewModel> appliedjobList = new List<JobViewModel>();
+            List<Job> jobs = _dbContext.Jobs.ToList();
+
+            HashSet<Guid?> appliedJobsId = new HashSet<Guid?>();
+
+            AllJobApplicationResponseViewModel candidateApplications = this.GetJobApplicationByCandidateId(CandidateId);
+            if (candidateApplications.Status != 200)
+            {
+                response.Status = 401;
+                response.Message = "Error in Fetching Job Applications !!";
+                return response;
+            }
+            foreach (JobApplicationViewModel application in candidateApplications.AllJobApplications)
+                appliedJobsId.Add(application.JobId);
+
+            foreach (Job job in jobs)
+            {
+                if (appliedJobsId.Contains(job.JobId))
+                    appliedjobList.Add(new JobViewModel(job));
+            }
+
+            response.Status = 200;
+            response.Message = "Successfully Reterived All Applied Jobs";
+            response.allJobs = appliedjobList;
+
+            return response;
+        }
+
+   
+
         public async Task<AllApplicantResponseViewModel> GetApplicantsByClosedJobId(Guid JobId)
         {
             AllApplicantResponseViewModel response = new AllApplicantResponseViewModel();
@@ -430,6 +474,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
 
             return response;
         }
+
     }
 }
 
