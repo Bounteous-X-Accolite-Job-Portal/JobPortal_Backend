@@ -22,21 +22,64 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
         }
 
         [HttpGet]
-        [Route("GetAllInterviewsForInterviewer/{EmployeeId}")]
-        public async Task<All_InterviewResponseViewModel> GetAllInterviewsForInterviewer(Guid EmployeeId)
+        [Route("GetAllInterviewsForInterviewer")]
+        [Authorize]
+        public async Task<All_InterviewResponseViewModel> GetAllInterviewsForInterviewer()
         {
             All_InterviewResponseViewModel response = new All_InterviewResponseViewModel();
 
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
             Guid employeeId = GetGuidFromString.Get(User.FindFirstValue("Id"));
-            if (!isEmployee || employeeId != EmployeeId)
+            if (!isEmployee)
             {
                 response.Status = 401;
                 response.Message = "Not Logged In / Not Authorized to See Interviewer Interviews !";
             }
             else
             {
-                response = _InterviewService.GetAllInterviewsForInterviewer(EmployeeId);
+                response = _InterviewService.GetAllInterviewsForInterviewer(employeeId);
+            }
+            return response;
+        }
+
+        [HttpGet]
+        [Route("getAllInterviewsByApplicationId/{ApplicationId}")]
+        [Authorize]
+        public async Task<All_InterviewResponseViewModel> GetAllInterviewsByApplicationId(Guid ApplicationId)
+        {
+            All_InterviewResponseViewModel response = new All_InterviewResponseViewModel();
+
+            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            bool hasPrivilege = Convert.ToBoolean(User.FindFirstValue("HasPrivilege"));
+            if (!isEmployee || !hasPrivilege)
+            {
+                response.Status = 401;
+                response.Message = "Not Logged In / Not Authorized to get all Interviewer by applicationId !";
+            }
+            else
+            {
+                response = _InterviewService.GetAllInterviewByApplicationId(ApplicationId);
+            }
+            return response;
+        }
+
+        [HttpGet]
+        [Route("getAllApplicantInterviewsByApplicationId/{ApplicationId}")]
+        [Authorize]
+        public async Task<AllApplicantInterviewResponseViewModel> GetAllApplicantInterviewsByApplicationId(Guid ApplicationId)
+        {
+            AllApplicantInterviewResponseViewModel response = new AllApplicantInterviewResponseViewModel();
+
+            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            bool hasPrivilege = Convert.ToBoolean(User.FindFirstValue("HasPrivilege"));
+            if (!isEmployee || !hasPrivilege)
+            {
+                response.Status = 401;
+                response.Message = "Not Logged In / Not Authorized to get all Interviewer by applicationId !";
+            }
+            else
+            {
+                response = await _InterviewService.GetAllApplicantInterviewByApplicantionId(ApplicationId);
             }
             return response;
         }

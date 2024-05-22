@@ -1,6 +1,7 @@
 ﻿using Bountous_X_Accolite_Job_Portal.Data;
 
 using Bountous_X_Accolite_Job_Portal.Models;
+using Bountous_X_Accolite_Job_Portal.Models.ClosedJobViewModels;
 using Bountous_X_Accolite_Job_Portal.Models.JobViewModels;
 using Bountous_X_Accolite_Job_Portal.Models.JobViewModels.JobResponseViewModel;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
@@ -14,6 +15,23 @@ namespace Bountous_X_Accolite_Job_Portal.Services
         public JobService(ApplicationDbContext context)
         {
             _context = context;
+        }
+
+        public AllClosedJobResponseViewModel GetAllClosedJobs()
+        {
+            List<ClosedJob> list = _context.ClosedJobs.ToList();
+
+            List<ClosedJobViewModel> closedJobs = new List<ClosedJobViewModel>();
+            foreach (var item in list)
+            {
+                closedJobs.Add(new ClosedJobViewModel(item));
+            }
+
+            AllClosedJobResponseViewModel response = new AllClosedJobResponseViewModel();
+            response.Status = 200;
+            response.Message = "Successfully retrived all closed jobs";
+            response.ClosedJobs = closedJobs;
+            return response;
         }
 
         public async Task<JobResponseViewModel> AddJob(CreateJobViewModel job, Guid EmpId)
@@ -124,32 +142,50 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             List<JobApplication> validApplications = new List<JobApplication>();
             foreach (JobApplication app in application)
             {
-                if (dic.ContainsKey((Guid)app.JobId))
+                if (app.JobId != null && dic.ContainsKey((Guid)app.JobId))
                 {
                     validApplications.Add(app);
                 }
             }
 
-            Dictionary<Guid, ClosedJob> closedDic = new Dictionary<Guid, ClosedJob>();
+            List<ClosedJobApplication> closedApplication = _context.ClosedJobApplications.Where(item => true).ToList();
+
+            List<ClosedJobApplication> validClosedApplications = new List<ClosedJobApplication>();
+            foreach (ClosedJobApplication app in closedApplication)
+            {
+                if (app.JobId != null && dic.ContainsKey((Guid)app.JobId))
+                {
+                    validClosedApplications.Add(app);
+                }
+            }
+
+            Dictionary<Guid, Guid> closedDic = new Dictionary<Guid, Guid>();
             foreach (KeyValuePair<Guid, Job> entry in dic)
             {
                 // do something with entry.Value or entry.Key
                 ClosedJob closedJob = new ClosedJob(entry.Value);
-                _context.ClosedJobs.Add(closedJob);
+                await _context.ClosedJobs.AddAsync(closedJob);
 
-                closedDic.Add(entry.Key, closedJob);
+                closedDic.Add(entry.Key, closedJob.ClosedJobId);
             }
 
             foreach(JobApplication app in validApplications)
             {
-                app.ClosedJobId = closedDic[(Guid)app.JobId].ClosedJobId;
+                app.ClosedJobId = closedDic[(Guid)app.JobId];
                 app.JobId = null;
                 _context.JobApplications.Update(app);
             }
 
+            foreach (ClosedJobApplication app in validClosedApplications)
+            {
+                app.ClosedJobId = closedDic[(Guid)app.JobId];
+                app.JobId = null;
+                _context.ClosedJobApplications.Update(app);
+            }
+
             foreach (KeyValuePair<Guid, Job> entry in dic)
             {
-                _context.Jobs.Remove(dic[(Guid)entry.Key]);
+                _context.Jobs.Remove(entry.Value);
             }
 
             await _context.SaveChangesAsync();
@@ -192,6 +228,42 @@ namespace Bountous_X_Accolite_Job_Portal.Services
                 response.Status = 200;
                 response.Message = "Job Successfully Found !";
                 response.job = new JobViewModel(job);
+            }
+            else
+            {
+                response.Status = 500;
+                response.Message = "Unable to Find Job !";
+            }
+            return response;
+        }
+
+        public AllClosedJobResponseViewModel GetAllClosedJobsByEmployeeId(Guid EmpId)
+        {
+            List<ClosedJob> list = _context.ClosedJobs.Where(e => e.EmployeeId == EmpId).ToList();
+            List<ClosedJobViewModel> jobList = new List<ClosedJobViewModel>();
+            foreach (ClosedJob job in list)
+                jobList.Add(new ClosedJobViewModel(job));
+
+            AllClosedJobResponseViewModel response = new AllClosedJobResponseViewModel();
+            response.Status = 200;
+            response.ClosedJobs = jobList;
+            if (list.Count > 0)
+                response.Message = "Successfully reterived Jobs for Given Employee !";
+            else
+                response.Message = "No Jobs Published By Employee !";
+
+            return response;
+        }
+
+        public ClosedJobResponseViewModel GetClosedJobById(Guid jobId)
+        {
+            ClosedJobResponseViewModel response = new ClosedJobResponseViewModel();
+            var job = _context.ClosedJobs.Find(jobId);
+            if (job != null)
+            {
+                response.Status = 200;
+                response.Message = "Job Successfully Found !";
+                response.ClosedJob = new ClosedJobViewModel(job);
             }
             else
             {

@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Bountous_X_Accolite_Job_Portal.Models.InterviewFeedbackViewModel;
+using Bountous_X_Accolite_Job_Portal.Models.InterviewFeedbackModels;
 
 namespace Bountous_X_Accolite_Job_Portal.Models
 {
@@ -7,8 +7,8 @@ namespace Bountous_X_Accolite_Job_Portal.Models
     {
         [Key]
         public Guid? FeedbackId { get; set; }
-        public Guid? InterviewId { get; set; }
-        public virtual Interview? Interview { get; set; }
+        //public Guid? InterviewId { get; set; }
+        //public virtual Interview? Interview { get; set; }
         public int Rating { get; set; }
         public string Feedback {  get; set; }
         public string? AdditionalLink { get; set; }
@@ -20,7 +20,7 @@ namespace Bountous_X_Accolite_Job_Portal.Models
         }
         public InterviewFeedback(CreateInterviewFeedbackViewModel feedback)
         {
-            InterviewId = feedback.InterviewId;
+            //InterviewId = feedback.InterviewId;
             Rating = feedback.Rating;
             Feedback = feedback.Feedback;
             AdditionalLink = feedback.AdditionalLink;

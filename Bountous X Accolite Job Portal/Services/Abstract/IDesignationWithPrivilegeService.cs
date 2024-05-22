@@ -8,5 +8,6 @@ namespace Bountous_X_Accolite_Job_Portal.Services.Abstract
         PrivilegeResponseViewModel GetPrivilegeWithId(int PrivilegeId);
         Task<PrivilegeResponseViewModel> AddPrivilege(AddPrivilegeViewModel addPrivilege, Guid EmpId);
         Task<PrivilegeResponseViewModel> RemovePrivilege(int PrivilegeId);
+        Task<PrivilegeResponseViewModel> GetPrivilegeByDesignationId(int DesignationId);
     }
 }

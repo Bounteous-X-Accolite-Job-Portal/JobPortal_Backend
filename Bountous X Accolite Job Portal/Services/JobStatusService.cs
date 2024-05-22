@@ -63,7 +63,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
 
             await _dbContext.Status.AddAsync(addJobStatus);
             await _dbContext.SaveChangesAsync();
-
+ 
             return true;
         }
 
@@ -72,7 +72,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             JobStatusResponseViewModel response = new JobStatusResponseViewModel();
 
             var status = _dbContext.Status.Find(statusId);
-            if (status == null)
+            if( status == null)
             {
                 response.Status = 404;
                 response.Message = "Status with this Id does not exist.";

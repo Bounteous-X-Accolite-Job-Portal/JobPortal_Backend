@@ -1,4 +1,5 @@
 ﻿using Bountous_X_Accolite_Job_Portal.Helpers;
+using Bountous_X_Accolite_Job_Portal.Models.ClosedJobViewModels;
 using Bountous_X_Accolite_Job_Portal.Models.JobViewModels;
 using Bountous_X_Accolite_Job_Portal.Models.JobViewModels.JobResponseViewModel;
 using Bountous_X_Accolite_Job_Portal.Services;
@@ -29,12 +30,26 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
         }
 
         [HttpGet]
+        [Route("getClosedJob/{Id}")]
+        public ClosedJobResponseViewModel GetClosedJobById(Guid Id)
+        {
+            return _job.GetClosedJobById(Id);
+        }
+
+        [HttpGet]
         [Route("getAllJobs")]
         public async Task<AllJobResponseViewModel> GetAllJobs()
         {
             return await _job.GetAllJobs();
         }
-        
+
+        [HttpGet]
+        [Route("getAllClosedJobs")]
+        public AllClosedJobResponseViewModel GetAllClosedJobs()
+        {
+            return _job.GetAllClosedJobs(); 
+        }
+
         [HttpGet]
         [Route("getAllJobsByEmployee/{Id}")]
         [Authorize]
@@ -50,6 +65,23 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             }
 
             return _job.GetAllJobsByEmployeeId(Id);
+        }
+
+        [HttpGet]
+        [Route("getAllClosedJobsByEmployee/{Id}")]
+        [Authorize]
+        public async Task<AllClosedJobResponseViewModel> GetAllClosedJobsByEmployeeId(Guid Id)
+        {
+            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            if (!isEmployee)
+            {
+                AllClosedJobResponseViewModel response = new AllClosedJobResponseViewModel();
+                response.Status = 401;
+                response.Message = "Not Logged IN / Not Authorized to Get Jobs By Employee Id !";
+                return response;
+            }
+
+            return _job.GetAllClosedJobsByEmployeeId(Id);
         }
 
         [HttpPost]

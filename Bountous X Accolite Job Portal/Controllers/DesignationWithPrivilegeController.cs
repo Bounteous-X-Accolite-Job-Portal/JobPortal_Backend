@@ -61,6 +61,26 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             return response;
         }
 
+        [HttpGet]
+        [Route("getPrivilege/designation/{DesignationId}")]
+        public async Task<PrivilegeResponseViewModel> GetPrivilegeByDesignationId(int DesignationId)
+        {
+            PrivilegeResponseViewModel response;
+
+            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            bool hasPrivilege = Convert.ToBoolean(User.FindFirstValue("HasPrivilege"));
+            if (!isEmployee || !hasPrivilege)
+            {
+                response = new PrivilegeResponseViewModel();
+                response.Status = 401;
+                response.Message = "You are not loggedIn or not authorised to get special privilege.";
+                return response;
+            }
+
+            response = await _designationWithPrivilegeService.GetPrivilegeByDesignationId(DesignationId);
+            return response;
+        }
+
         [HttpPost]
         [Route("addPrivilege")]
         public async Task<PrivilegeResponseViewModel> AddPrivilege(AddPrivilegeViewModel addPrivilege)

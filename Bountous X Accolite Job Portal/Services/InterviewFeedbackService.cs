@@ -1,7 +1,7 @@
 ﻿using Bountous_X_Accolite_Job_Portal.Data;
 using Bountous_X_Accolite_Job_Portal.Models;
-using Bountous_X_Accolite_Job_Portal.Models.InterviewFeedbackViewModel;
-using Bountous_X_Accolite_Job_Portal.Models.InterviewFeedbackViewModel.InterviewFeedbackResponseViewModel;
+using Bountous_X_Accolite_Job_Portal.Models.InterviewFeedbackModels;
+using Bountous_X_Accolite_Job_Portal.Models.InterviewFeedbackModels.InterviewFeedbackResponseViewModel;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
 
 namespace Bountous_X_Accolite_Job_Portal.Services
@@ -9,10 +9,11 @@ namespace Bountous_X_Accolite_Job_Portal.Services
     public class InterviewFeedbackService : I_InterviewFeedbackService
     {
         private readonly ApplicationDbContext _context;
-
-        public InterviewFeedbackService(ApplicationDbContext context)
+        private readonly I_InterviewService _interviewService;
+        public InterviewFeedbackService(ApplicationDbContext context, I_InterviewService interviewService)
         {
             _context = context;
+            _interviewService = interviewService;
         }
 
         public async Task<InterviewFeedbackResponseViewModel> AddInterviewFeedback(CreateInterviewFeedbackViewModel interviewFeedback , Guid Empid)
@@ -38,6 +39,16 @@ namespace Bountous_X_Accolite_Job_Portal.Services
 
             InterviewFeedback newInterviewFeedback = new InterviewFeedback(interviewFeedback);
             await _context.InterviewFeedbacks.AddAsync(newInterviewFeedback);
+
+            bool addedId = await _interviewService.UpdateFeedbackId((Guid)interviewFeedback.InterviewId, (Guid)newInterviewFeedback.FeedbackId);
+            if(addedId == false)
+            {
+                response = new InterviewFeedbackResponseViewModel();
+                response.Status = 500;
+                response.Message = "Internal server error, please try again !";
+                return response;
+            }
+
             await _context .SaveChangesAsync();
 
             if(newInterviewFeedback!=null)

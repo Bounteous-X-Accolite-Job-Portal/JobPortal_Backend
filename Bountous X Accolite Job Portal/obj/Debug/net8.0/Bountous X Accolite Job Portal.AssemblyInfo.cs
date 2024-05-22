@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Bountous X Accolite Job Portal")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+34c2c09b584ac2de46229bcd1c1a029a2fa1cfeb")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+5bce0edf210934736c6f2e6dbc0ab4d653408b7a")]
 [assembly: System.Reflection.AssemblyProductAttribute("Bountous X Accolite Job Portal")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Bountous X Accolite Job Portal")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
