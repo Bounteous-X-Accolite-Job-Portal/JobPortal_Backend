@@ -15,5 +15,9 @@ namespace Bountous_X_Accolite_Job_Portal.Services.Abstract
         AllJobApplicationResponseViewModel GetClosedJobApplicationByCandidateId(Guid CandidateId);
         Task<JobApplicationResponseViewModel> Apply(AddJobApplication jobApplication, Guid CandidateId);
         Task<JobApplicationResponseViewModel> ChangeJobApplicationStatus(Guid ApplicationId, int StatusId);
+        AllJobResponseViewModel GetJobsAppliedByCandidateId(Guid CandidateId);
+        Boolean IsCandidateApplicable(Guid JobId, Guid CandidateId);
+        Task<AllApplicantResponseViewModel> GetApplicantsByJobId(Guid JobId);
+        Task<AllApplicantResponseViewModel> GetApplicantsByClosedJobId(Guid JobId);
     }
 }

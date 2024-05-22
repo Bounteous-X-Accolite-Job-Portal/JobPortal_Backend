@@ -1,24 +1,7 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\Assignments\\Bounteous-x-Accolite-Job-Portal\\JobPortal_Backend\\",
-  "Documents": [
-    {
-      "AbsoluteMoniker": "D:0:0:{0FFFF4ED-1FD1-4AA5-B96D-A907C3FFB4F6}|Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj|c:\\assignments\\bounteous-x-accolite-job-portal\\jobportal_backend\\bountous x accolite job portal\\services\\jobapplicationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0FFFF4ED-1FD1-4AA5-B96D-A907C3FFB4F6}|Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj|solutionrelative:bountous x accolite job portal\\services\\jobapplicationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0FFFF4ED-1FD1-4AA5-B96D-A907C3FFB4F6}|Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj|c:\\assignments\\bounteous-x-accolite-job-portal\\jobportal_backend\\bountous x accolite job portal\\controllers\\jobapplicationcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0FFFF4ED-1FD1-4AA5-B96D-A907C3FFB4F6}|Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj|solutionrelative:bountous x accolite job portal\\controllers\\jobapplicationcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0FFFF4ED-1FD1-4AA5-B96D-A907C3FFB4F6}|Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj|c:\\assignments\\bounteous-x-accolite-job-portal\\jobportal_backend\\bountous x accolite job portal\\services\\abstract\\ijobapplicationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0FFFF4ED-1FD1-4AA5-B96D-A907C3FFB4F6}|Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj|solutionrelative:bountous x accolite job portal\\services\\abstract\\ijobapplicationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0FFFF4ED-1FD1-4AA5-B96D-A907C3FFB4F6}|Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj|c:\\assignments\\bounteous-x-accolite-job-portal\\jobportal_backend\\bountous x accolite job portal\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0FFFF4ED-1FD1-4AA5-B96D-A907C3FFB4F6}|Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj|solutionrelative:bountous x accolite job portal\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    }
-  ],
+  "Documents": [],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
@@ -26,7 +9,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 14,
+          "SelectedChildIndex": -1,
           "Children": [
             {
               "$type": "Bookmark",
@@ -83,58 +66,6 @@
             {
               "$type": "Bookmark",
               "Name": "ST:134:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "JobApplicationService.cs",
-              "DocumentMoniker": "C:\\Assignments\\Bounteous-x-Accolite-Job-Portal\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Services\\JobApplicationService.cs",
-              "RelativeDocumentMoniker": "Bountous X Accolite Job Portal\\Services\\JobApplicationService.cs",
-              "ToolTip": "C:\\Assignments\\Bounteous-x-Accolite-Job-Portal\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Services\\JobApplicationService.cs",
-              "RelativeToolTip": "Bountous X Accolite Job Portal\\Services\\JobApplicationService.cs",
-              "ViewState": "AQIAAI4AAAAAAAAAAAAcwAAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-22T10:49:19.131Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "IJobApplicationService.cs",
-              "DocumentMoniker": "C:\\Assignments\\Bounteous-x-Accolite-Job-Portal\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Services\\Abstract\\IJobApplicationService.cs",
-              "RelativeDocumentMoniker": "Bountous X Accolite Job Portal\\Services\\Abstract\\IJobApplicationService.cs",
-              "ToolTip": "C:\\Assignments\\Bounteous-x-Accolite-Job-Portal\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Services\\Abstract\\IJobApplicationService.cs",
-              "RelativeToolTip": "Bountous X Accolite Job Portal\\Services\\Abstract\\IJobApplicationService.cs",
-              "ViewState": "AQIAAAgAAAAAAAAAAAAxwAkAAAAFAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-22T10:48:27.25Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "JobApplicationController.cs",
-              "DocumentMoniker": "C:\\Assignments\\Bounteous-x-Accolite-Job-Portal\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Controllers\\JobApplicationController.cs",
-              "RelativeDocumentMoniker": "Bountous X Accolite Job Portal\\Controllers\\JobApplicationController.cs",
-              "ToolTip": "C:\\Assignments\\Bounteous-x-Accolite-Job-Portal\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Controllers\\JobApplicationController.cs",
-              "RelativeToolTip": "Bountous X Accolite Job Portal\\Controllers\\JobApplicationController.cs",
-              "ViewState": "AQIAAM0AAAAAAAAAAAAewNsAAAA1AAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-22T10:47:38.875Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Assignments\\Bounteous-x-Accolite-Job-Portal\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Program.cs",
-              "RelativeDocumentMoniker": "Bountous X Accolite Job Portal\\Program.cs",
-              "ToolTip": "C:\\Assignments\\Bounteous-x-Accolite-Job-Portal\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Program.cs",
-              "RelativeToolTip": "Bountous X Accolite Job Portal\\Program.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-22T10:47:09.621Z",
-              "EditorCaption": ""
             }
           ]
         }
