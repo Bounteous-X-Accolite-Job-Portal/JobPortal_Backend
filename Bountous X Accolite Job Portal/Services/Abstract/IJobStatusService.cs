@@ -7,7 +7,8 @@ namespace Bountous_X_Accolite_Job_Portal.Services.Abstract
         int GetInitialStatus();
         int getInitialReferralStatus();
         bool IsRejectedStatus(int StatusId);
-        public  Task<bool> AddStatus(AddJobStatusViewModel status, Guid empId);
-        
+        Task<bool> AddStatus(AddJobStatusViewModel status, Guid empId);
+        JobStatusResponseViewModel GetStatusById(int statusId);
+        AllStatusResponseViewModel GetAllStatus();
     }
 }

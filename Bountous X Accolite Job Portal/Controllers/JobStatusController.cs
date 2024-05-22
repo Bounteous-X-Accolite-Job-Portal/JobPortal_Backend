@@ -1,6 +1,5 @@
 ﻿using Bountous_X_Accolite_Job_Portal.Helpers;
 using Bountous_X_Accolite_Job_Portal.Models.JobStatusViewModel;
-using Bountous_X_Accolite_Job_Portal.Services;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -47,7 +46,20 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             return BadRequest("Could not register Status.");
         }
 
+        [HttpGet]
+        [Route("{Id}")]
+        public JobStatusResponseViewModel GetStatusById(int Id)
+        {
+            JobStatusResponseViewModel response = _jobStatusService.GetStatusById(Id);
+            return response;
+        }
 
-
+        [HttpGet]
+        [Route("getAllStatus")]
+        [Authorize]
+        public AllStatusResponseViewModel GetAllStatus()
+        {
+            return _jobStatusService.GetAllStatus();
+        }
     }
 }

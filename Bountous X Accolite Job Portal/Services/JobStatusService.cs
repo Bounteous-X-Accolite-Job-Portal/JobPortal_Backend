@@ -18,9 +18,9 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             int statusId = -1;
 
             List<Status> status = _dbContext.Status.ToList();
-            foreach(Status s in status)
+            foreach (Status s in status)
             {
-                if(String.Equals(s.StatusName.ToLower(), "referred"))
+                if (String.Equals(s.StatusName.ToLower(), "referred"))
                 {
                     statusId = s.StatusId;
                 }
@@ -37,7 +37,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
         public bool IsRejectedStatus(int StatusId)
         {
             var status = _dbContext.Status.Find(StatusId);
-            if(status == null)
+            if (status == null)
             {
                 return false;
             }
@@ -57,7 +57,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
                 return false;
             }
             Status addJobStatus = new Status();
-            addJobStatus.StatusName = addJobStatus.StatusName;
+            addJobStatus.StatusName = jobstatus.StatusName;
             addJobStatus.CreatedAt = DateTime.Now;
             addJobStatus.EmpId = empId;
 
@@ -67,6 +67,40 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             return true;
         }
 
-        
+        public JobStatusResponseViewModel GetStatusById(int statusId)
+        {
+            JobStatusResponseViewModel response = new JobStatusResponseViewModel();
+
+            var status = _dbContext.Status.Find(statusId);
+            if (status == null)
+            {
+                response.Status = 404;
+                response.Message = "Status with this Id does not exist.";
+                return response;
+            }
+
+            response.Status = 200;
+            response.Message = "Successfully retrieved status with this Id.";
+            response.StatusViewModel = new StatusViewModel(status);
+            return response;
+        }
+
+        public AllStatusResponseViewModel GetAllStatus()
+        {
+            AllStatusResponseViewModel response = new AllStatusResponseViewModel();
+
+            List<Status> l = _dbContext.Status.Where(ite => true).ToList();
+
+            List<StatusViewModel> list = new List<StatusViewModel>();
+            foreach (var item in l)
+            {
+                list.Add(new StatusViewModel(item));
+            }
+
+            response.Status = 200;
+            response.Message = "Successfully retrived all status.";
+            response.AllStatus = list;
+            return response;
+        }
     }
 }

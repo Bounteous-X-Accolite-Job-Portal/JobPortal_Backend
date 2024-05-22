@@ -65,5 +65,24 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             response.Candidate = new CandidateViewModel(candidate);
             return response;
         }
+
+        public CandidateResponseViewModel GetCandidateById(Guid CandidateId)
+        {
+            CandidateResponseViewModel response = new CandidateResponseViewModel();
+
+            var candidate = _dbContext.Candidates.Find(CandidateId);
+            if (candidate == null)
+            {
+                response.Status = 404;
+                response.Message = "Please enter a valid candidateId.";
+                return response;
+            }
+
+            response.Status = 200;
+            response.Message = "Successfully retrieved candidate with given Id.";
+            response.Candidate = new CandidateViewModel(candidate);
+            return response;
+        }
+
     }
 }
