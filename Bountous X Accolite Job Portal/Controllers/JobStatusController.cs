@@ -1,4 +1,6 @@
 ﻿using Bountous_X_Accolite_Job_Portal.Helpers;
+using Bountous_X_Accolite_Job_Portal.Models;
+using Bountous_X_Accolite_Job_Portal.Models.DegreeModels.DegreeResponseViewModel;
 using Bountous_X_Accolite_Job_Portal.Models.JobStatusViewModel;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
 using Microsoft.AspNetCore.Authorization;
@@ -22,11 +24,16 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
         [HttpPost]
         [Route("addJobStatus")]
         [Authorize]
-        public async Task<IActionResult> AddStatus(AddJobStatusViewModel addJobStatus)
+        public async Task<ResponseViewModel> AddStatus(AddJobStatusViewModel addJobStatus)
         {
+            ResponseViewModel response = new ResponseViewModel();
+
             if (!ModelState.IsValid)
             {
-                return BadRequest("Please Enter all details.");
+                response.Status = 402;
+                response.Message = "Error in Values of Status !!";
+
+                return response;
             }
 
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
@@ -34,16 +41,34 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             var role = User.FindFirstValue("Role");
             if (!isEmployee || role == null || !_designationService.HasPrivilege(role) || employeeId == Guid.Empty)
             {
-                return BadRequest(new { Message = "You are not authorized to add Status." });
+                response.Status = 403;
+                response.Message = "Not Authorized for Status !!";
+
+                return response;
             }
 
-            var isAdded = await _jobStatusService.AddStatus(addJobStatus, employeeId);
-            if (isAdded)
+            return await _jobStatusService.AddStatus(addJobStatus, employeeId);
+        }
+
+        [HttpDelete]
+        [Route("removeStatus/{id}")]
+        [Authorize]
+        public async Task<ResponseViewModel> deleteStatus(int id)
+        {
+            ResponseViewModel response = new ResponseViewModel();
+            
+            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            var role = User.FindFirstValue("Role");
+            if (!isEmployee || role == null || !_designationService.HasPrivilege(role))
             {
-                return Ok("Status successfully added.");
+                response = new ResponseViewModel();
+                response.Status = 401;
+                response.Message = "You are either not loggedIn or not authorized to remove Status.";
+                
+                return response;
             }
 
-            return BadRequest("Could not register Status.");
+            return await _jobStatusService.DeleteStatus(id);
         }
 
         [HttpGet]
