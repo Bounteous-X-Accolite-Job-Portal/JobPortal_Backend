@@ -15,10 +15,6 @@
       "RelativeMoniker": "D:0:0:{0FFFF4ED-1FD1-4AA5-B96D-A907C3FFB4F6}|Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj|solutionrelative:bountous x accolite job portal\\controllers\\employeeaccountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Assignments\\Bounteous-x-Accolite-Job-Portal\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Migrations\\20240524035638_localdb.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:Bountous X Accolite Job Portal\\Migrations\\20240524035638_localdb.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{0FFFF4ED-1FD1-4AA5-B96D-A907C3FFB4F6}|Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj|c:\\assignments\\bounteous-x-accolite-job-portal\\jobportal_backend\\bountous x accolite job portal\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{0FFFF4ED-1FD1-4AA5-B96D-A907C3FFB4F6}|Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj|solutionrelative:bountous x accolite job portal\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -33,6 +29,10 @@
     {
       "AbsoluteMoniker": "D:0:0:{0FFFF4ED-1FD1-4AA5-B96D-A907C3FFB4F6}|Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj|c:\\assignments\\bounteous-x-accolite-job-portal\\jobportal_backend\\bountous x accolite job portal\\services\\jobstatusservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{0FFFF4ED-1FD1-4AA5-B96D-A907C3FFB4F6}|Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj|solutionrelative:bountous x accolite job portal\\services\\jobstatusservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0FFFF4ED-1FD1-4AA5-B96D-A907C3FFB4F6}|Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj|c:\\assignments\\bounteous-x-accolite-job-portal\\jobportal_backend\\bountous x accolite job portal\\migrations\\20240524035638_localdb.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0FFFF4ED-1FD1-4AA5-B96D-A907C3FFB4F6}|Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj|solutionrelative:bountous x accolite job portal\\migrations\\20240524035638_localdb.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -123,8 +123,7 @@
               "RelativeToolTip": "Bountous X Accolite Job Portal\\Controllers\\AccountController.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-24T10:48:07.802Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-24T10:48:07.802Z"
             },
             {
               "$type": "Document",
@@ -136,12 +135,11 @@
               "RelativeToolTip": "Bountous X Accolite Job Portal\\Controllers\\EmployeeAccountController.cs",
               "ViewState": "AQIAABQAAAAAAAAAAAAYwEUAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-24T04:01:36.033Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-24T04:01:36.033Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 7,
               "Title": "20240524035638_localdb.cs",
               "DocumentMoniker": "C:\\Assignments\\Bounteous-x-Accolite-Job-Portal\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Migrations\\20240524035638_localdb.cs",
               "RelativeDocumentMoniker": "Bountous X Accolite Job Portal\\Migrations\\20240524035638_localdb.cs",
@@ -149,12 +147,11 @@
               "RelativeToolTip": "Bountous X Accolite Job Portal\\Migrations\\20240524035638_localdb.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-24T03:56:39.183Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-24T03:56:39.183Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 3,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Assignments\\Bounteous-x-Accolite-Job-Portal\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Program.cs",
               "RelativeDocumentMoniker": "Bountous X Accolite Job Portal\\Program.cs",
@@ -162,12 +159,11 @@
               "RelativeToolTip": "Bountous X Accolite Job Portal\\Program.cs",
               "ViewState": "AQIAAA8AAAAAAAAAAAAAABYAAACbAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-24T03:55:26.513Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-24T03:55:26.513Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 4,
               "Title": "appsettings.json",
               "DocumentMoniker": "C:\\Assignments\\Bounteous-x-Accolite-Job-Portal\\JobPortal_Backend\\Bountous X Accolite Job Portal\\appsettings.json",
               "RelativeDocumentMoniker": "Bountous X Accolite Job Portal\\appsettings.json",
@@ -175,12 +171,11 @@
               "RelativeToolTip": "Bountous X Accolite Job Portal\\appsettings.json",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAkAAAAYAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2024-05-24T03:52:29.872Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-24T03:52:29.872Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 6,
               "Title": "JobStatusService.cs",
               "DocumentMoniker": "C:\\Assignments\\Bounteous-x-Accolite-Job-Portal\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Services\\JobStatusService.cs",
               "RelativeDocumentMoniker": "Bountous X Accolite Job Portal\\Services\\JobStatusService.cs",
@@ -188,12 +183,11 @@
               "RelativeToolTip": "Bountous X Accolite Job Portal\\Services\\JobStatusService.cs",
               "ViewState": "AQIAAGkAAAAAAAAAAAAhwDYAAABBAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-23T10:58:37.616Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-23T10:58:37.616Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 5,
               "Title": "JobStatusController.cs",
               "DocumentMoniker": "C:\\Assignments\\Bounteous-x-Accolite-Job-Portal\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Controllers\\JobStatusController.cs",
               "RelativeDocumentMoniker": "Bountous X Accolite Job Portal\\Controllers\\JobStatusController.cs",
@@ -201,8 +195,7 @@
               "RelativeToolTip": "Bountous X Accolite Job Portal\\Controllers\\JobStatusController.cs",
               "ViewState": "AQIAAB8AAAAAAAAAAAAowCcAAAAMAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-23T10:45:34.128Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-23T10:45:34.128Z"
             }
           ]
         }
