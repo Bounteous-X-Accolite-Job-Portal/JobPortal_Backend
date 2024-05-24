@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="..\buildMultiTargeting\Bountous X Accolite Job Portal.props" />
-</Project>
