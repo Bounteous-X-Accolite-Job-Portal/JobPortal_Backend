@@ -18,9 +18,9 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             int statusId = -1;
 
             List<Status> status = _dbContext.Status.ToList();
-            foreach(Status s in status)
+            foreach (Status s in status)
             {
-                if(String.Equals(s.StatusName.ToLower(), "referred"))
+                if (String.Equals(s.StatusName.ToLower(), "referred"))
                 {
                     statusId = s.StatusId;
                 }
@@ -51,7 +51,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
         public bool IsRejectedStatus(int StatusId)
         {
             var status = _dbContext.Status.Find(StatusId);
-            if(status == null)
+            if (status == null)
             {
                 return false;
             }
@@ -64,11 +64,14 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             return false;
         }
 
-        public async Task<bool> AddStatus(AddJobStatusViewModel jobstatus, Guid empId)
+        public async Task<ResponseViewModel> AddStatus(AddJobStatusViewModel jobstatus, Guid empId)
         {
+            ResponseViewModel response = new ResponseViewModel();
             if (jobstatus == null || jobstatus.StatusName == null)
             {
-                return false;
+                response.Status = 400;
+                response.Message = "Invalid !!";
+                return response;
             }
             Status addJobStatus = new Status();
             addJobStatus.StatusName = jobstatus.StatusName;
@@ -77,8 +80,10 @@ namespace Bountous_X_Accolite_Job_Portal.Services
 
             await _dbContext.Status.AddAsync(addJobStatus);
             await _dbContext.SaveChangesAsync();
- 
-            return true;
+
+            response.Status = 200;
+            response.Message = "Status Added Successfully !!";
+            return response;
         }
 
         public JobStatusResponseViewModel GetStatusById(int statusId)
@@ -114,6 +119,27 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             response.Status = 200;
             response.Message = "Successfully retrived all status.";
             response.AllStatus = list;
+            return response;
+        }
+
+        public async Task<ResponseViewModel> DeleteStatus(int statusId)
+        {
+            ResponseViewModel response = new ResponseViewModel();
+
+            var status = _dbContext.Status.Find(statusId);
+            if (status == null)
+            {
+                response.Status = 404;
+                response.Message = "Status with this Id does not exist";
+                return response;
+            }
+
+            _dbContext.Status.Remove(status);
+            await _dbContext.SaveChangesAsync();
+
+            response.Status = 200;
+            response.Message = "Successfully removed this Status !!.";
+
             return response;
         }
     }

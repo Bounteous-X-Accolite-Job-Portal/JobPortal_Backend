@@ -1,4 +1,5 @@
-﻿using Bountous_X_Accolite_Job_Portal.Helpers;
+﻿using Azure;
+using Bountous_X_Accolite_Job_Portal.Helpers;
 using Bountous_X_Accolite_Job_Portal.Models.DesignationViewModel;
 using Bountous_X_Accolite_Job_Portal.Models.DesignationViewModel.ResponseViewModels;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
@@ -60,6 +61,25 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
 
             response = await _designationService.AddDesignation(addDesignation, employeeId);
             return response;
+        }
+
+        [HttpDelete]
+        [Route("removeDesignation/{Id}")]
+        public async Task<DesignationResponseViewModel> RemoveDesignationById(int Id)
+        {
+            DesignationResponseViewModel response;
+
+            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            bool hasPrivilege = Convert.ToBoolean(User.FindFirstValue("HasPrivilege"));
+            if (!isEmployee || !hasPrivilege)
+            {
+                response = new DesignationResponseViewModel();
+                response.Status = 403;
+                response.Message = "You are not authorized to delete Designation.";
+                return response;
+            }
+
+            return await _designationService.RemoveDesignation(Id);
         }
     }
 }

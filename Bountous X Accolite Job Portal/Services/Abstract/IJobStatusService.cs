@@ -1,4 +1,5 @@
-﻿using Bountous_X_Accolite_Job_Portal.Models.JobStatusViewModel;
+﻿using Bountous_X_Accolite_Job_Portal.Models;
+using Bountous_X_Accolite_Job_Portal.Models.JobStatusViewModel;
 
 namespace Bountous_X_Accolite_Job_Portal.Services.Abstract
 {
@@ -8,8 +9,10 @@ namespace Bountous_X_Accolite_Job_Portal.Services.Abstract
         int getInitialSuccesstatus();
         int getInitialReferralStatus();
         bool IsRejectedStatus(int StatusId);
-        Task<bool> AddStatus(AddJobStatusViewModel status, Guid empId);
+        Task<ResponseViewModel> AddStatus(AddJobStatusViewModel status, Guid empId);
+        Task<ResponseViewModel> DeleteStatus(int statusId);
         JobStatusResponseViewModel GetStatusById(int statusId); 
         AllStatusResponseViewModel GetAllStatus();
+        
     }
 }

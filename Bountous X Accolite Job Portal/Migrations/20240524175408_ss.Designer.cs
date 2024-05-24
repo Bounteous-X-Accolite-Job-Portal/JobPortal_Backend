@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Bountous_X_Accolite_Job_Portal.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240524113648_successl")]
-    partial class successl
+    [Migration("20240524175408_ss")]
+    partial class ss
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -646,7 +646,7 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
 
                     b.HasIndex("StatusId");
 
-                    b.ToTable("JobApplication");
+                    b.ToTable("JobApplications");
                 });
 
             modelBuilder.Entity("Bountous_X_Accolite_Job_Portal.Models.JobCategory", b =>
@@ -926,6 +926,30 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                     b.HasIndex("EmployeeId");
 
                     b.ToTable("Status");
+                });
+
+            modelBuilder.Entity("Bountous_X_Accolite_Job_Portal.Models.SuccessfulJobApplication", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("ApplicationId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("CandidateId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("JobApplicationApplicationId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CandidateId");
+
+                    b.HasIndex("JobApplicationApplicationId");
+
+                    b.ToTable("SuccessfulJobs");
                 });
 
             modelBuilder.Entity("Bountous_X_Accolite_Job_Portal.Models.User", b =>
@@ -1533,6 +1557,21 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                         .HasForeignKey("EmployeeId");
 
                     b.Navigation("Employee");
+                });
+
+            modelBuilder.Entity("Bountous_X_Accolite_Job_Portal.Models.SuccessfulJobApplication", b =>
+                {
+                    b.HasOne("Bountous_X_Accolite_Job_Portal.Models.Candidate", "Candidate")
+                        .WithMany()
+                        .HasForeignKey("CandidateId");
+
+                    b.HasOne("Bountous_X_Accolite_Job_Portal.Models.JobApplication", "JobApplication")
+                        .WithMany()
+                        .HasForeignKey("JobApplicationApplicationId");
+
+                    b.Navigation("Candidate");
+
+                    b.Navigation("JobApplication");
                 });
 
             modelBuilder.Entity("Bountous_X_Accolite_Job_Portal.Models.User", b =>

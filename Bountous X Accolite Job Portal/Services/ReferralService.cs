@@ -112,7 +112,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             response.Status = 200;
             response.Message = "Successfully referred!";
             response.Referral = new ReferralViewModel(referral);
-            return response;
+            return response;    
         }
 
         public AllReferralResponseViewModel GetAllReferralsOfLoggedInEmployee(Guid EmpId)

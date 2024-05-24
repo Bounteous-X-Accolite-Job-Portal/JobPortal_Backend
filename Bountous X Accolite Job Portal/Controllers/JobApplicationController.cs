@@ -1,14 +1,11 @@
 ﻿using Bountous_X_Accolite_Job_Portal.Helpers;
 using Bountous_X_Accolite_Job_Portal.Models.JobApplicationViewModel;
-using Bountous_X_Accolite_Job_Portal.Models.JobApplicationViewModel.JobApplicationResponse;
 using Bountous_X_Accolite_Job_Portal.Models.JobApplicationViewModel.ResponseViewModels;
+using Bountous_X_Accolite_Job_Portal.Models.JobApplicationViewModel.JobApplicationResponse;
 using Bountous_X_Accolite_Job_Portal.Models.JobViewModels.JobResponseViewModel;
-using Bountous_X_Accolite_Job_Portal.Services;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using System.Net;
 using System.Security.Claims;
 
 namespace Bountous_X_Accolite_Job_Portal.Controllers
@@ -22,12 +19,11 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
         private readonly IJobApplicationService _jobApplicationService;
         private readonly IJobService _jobService;
         private readonly IDesignationService _designationService;
-       
         public ApplicationController(IJobApplicationService applicationService, IJobService jobService, IDesignationService designationService)
         {
             _jobApplicationService = applicationService;
             _jobService = jobService;
-           _designationService = designationService;
+            _designationService = designationService;
         }
 
         [HttpGet]
@@ -273,6 +269,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             response = await _jobApplicationService.ChangeJobApplicationStatus(ApplicationId, changeStatus.statusId);
             return response;
         }
+
         [HttpGet]
         [Route("jobApplication/successfulApplication")]
         public IActionResult GetAllApplicationsWithSuccess()
@@ -290,9 +287,9 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
 
             return Ok(successApplications);
         }
-    
-}
-    }
 
+    }
+}
+    
 
 

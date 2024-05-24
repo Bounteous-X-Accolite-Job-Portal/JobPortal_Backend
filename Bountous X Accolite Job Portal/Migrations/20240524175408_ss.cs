@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Bountous_X_Accolite_Job_Portal.Migrations
 {
     /// <inheritdoc />
-    public partial class done : Migration
+    public partial class ss : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -862,6 +862,30 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                         principalColumn: "ApplicationId");
                 });
 
+            migrationBuilder.CreateTable(
+                name: "SuccessfulJobs",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CandidateId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    ApplicationId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    JobApplicationApplicationId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SuccessfulJobs", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SuccessfulJobs_Candidates_CandidateId",
+                        column: x => x.CandidateId,
+                        principalTable: "Candidates",
+                        principalColumn: "CandidateId");
+                    table.ForeignKey(
+                        name: "FK_SuccessfulJobs_JobApplications_JobApplicationApplicationId",
+                        column: x => x.JobApplicationApplicationId,
+                        principalTable: "JobApplications",
+                        principalColumn: "ApplicationId");
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -1167,6 +1191,16 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                 name: "IX_Status_EmployeeId",
                 table: "Status",
                 column: "EmployeeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SuccessfulJobs_CandidateId",
+                table: "SuccessfulJobs",
+                column: "CandidateId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SuccessfulJobs_JobApplicationApplicationId",
+                table: "SuccessfulJobs",
+                column: "JobApplicationApplicationId");
         }
 
         /// <inheritdoc />
@@ -1210,6 +1244,9 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
 
             migrationBuilder.DropTable(
                 name: "SocialMedia");
+
+            migrationBuilder.DropTable(
+                name: "SuccessfulJobs");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

@@ -9,6 +9,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services.Abstract
         bool HasSpecialPrivilege(string role);
         Task<DesignationResponseViewModel> GetDesignationById(int Id);
         AllDesignationResponseViewModel GetAllDesignation();
+        Task<DesignationResponseViewModel> RemoveDesignation(int Id);
         Task<DesignationResponseViewModel> AddDesignation(AddDesignationViewModel designation, Guid empId);
     }
 }

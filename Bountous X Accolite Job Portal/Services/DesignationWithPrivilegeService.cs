@@ -8,9 +8,12 @@ namespace Bountous_X_Accolite_Job_Portal.Services
     public class DesignationWithPrivilegeService : IDesignationWithPrivilegeService
     {
         private readonly ApplicationDbContext _dbContext;
-        public DesignationWithPrivilegeService(ApplicationDbContext dbContext)
+        private readonly IDesignationService _designationService;
+        public DesignationWithPrivilegeService(ApplicationDbContext dbContext, IDesignationService designationService)
         {
             _dbContext = dbContext;
+            _designationService = designationService;
+
         }
 
         public AllPrivilegeResponseViewModel GetAllPrivileges()
@@ -97,6 +100,32 @@ namespace Bountous_X_Accolite_Job_Portal.Services
 
             response.Status = 200;
             response.Message = "Successfully removed privilege with given Id.";
+            response.DesignationWithPrivilege = new PrivilegeViewModel(privilege);
+            return response;
+        }
+
+        public async Task<PrivilegeResponseViewModel> GetPrivilegeByDesignationId(int DesignationId)
+        {
+            PrivilegeResponseViewModel response = new PrivilegeResponseViewModel();
+
+            var designation = await _designationService.GetDesignationById(DesignationId);
+            if(designation.Designation == null)
+            {
+                response.Status = designation.Status;
+                response.Message = designation.Message;
+                return response;
+            }
+
+            var privilege = _dbContext.DesignationWhichHasPrivileges.Where(item => item.DesignationId == DesignationId).FirstOrDefault();
+            if(privilege == null)
+            {
+                response.Status = 404;
+                response.Message = "This designation does not have privilege.";
+                return response;
+            }
+
+            response.Status = 200;
+            response.Message = "Successfully retrieved privilege with this designationId.";
             response.DesignationWithPrivilege = new PrivilegeViewModel(privilege);
             return response;
         }
