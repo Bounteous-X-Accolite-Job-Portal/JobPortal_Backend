@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Bountous_X_Accolite_Job_Portal.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240520095050_adds")]
-    partial class adds
+    [Migration("20240524113648_successl")]
+    partial class successl
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -646,7 +646,7 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
 
                     b.HasIndex("StatusId");
 
-                    b.ToTable("JobApplications");
+                    b.ToTable("JobApplication");
                 });
 
             modelBuilder.Entity("Bountous_X_Accolite_Job_Portal.Models.JobCategory", b =>

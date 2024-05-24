@@ -5,7 +5,7 @@
 namespace Bountous_X_Accolite_Job_Portal.Migrations
 {
     /// <inheritdoc />
-    public partial class adding : Migration
+    public partial class dones : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

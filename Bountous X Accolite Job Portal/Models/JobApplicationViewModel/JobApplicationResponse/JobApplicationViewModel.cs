@@ -1,6 +1,6 @@
 ﻿using static System.Net.Mime.MediaTypeNames;
 
-namespace Bountous_X_Accolite_Job_Portal.Models.JobApplicationViewModel
+namespace Bountous_X_Accolite_Job_Portal.Models.JobApplicationViewModel.JobApplicationResponse
 {
     public class JobApplicationViewModel
     {
@@ -8,8 +8,8 @@ namespace Bountous_X_Accolite_Job_Portal.Models.JobApplicationViewModel
         public Guid? CandidateId { get; set; }
 
         public DateTime AppliedOn { get; set; } = DateTime.Now;
-  
-        public int? StatusId { get;  set; }
+
+        public int? StatusId { get; set; }
         public Guid? JobId { get; set; }
         public Guid? ClosedJobId { get; set; }
 

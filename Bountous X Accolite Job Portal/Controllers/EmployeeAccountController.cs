@@ -63,7 +63,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
 
         [HttpPost]
         [Route("register")]
-        [Authorize]
+        //[Authorize]
         public async Task<EmployeeResponseViewModel> Register(EmployeeRegisterViewModel employee)
         {
             EmployeeResponseViewModel response;
@@ -76,14 +76,14 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             //    return response;
             //}
 
-            var email = User.FindFirstValue("Email");
-            if (email == null)
-            {
-                response = new EmployeeResponseViewModel();
-                response.Status = 401;
-                response.Message = "You are not loggedIn or not authorised to do add other employees.";
-                return response;
-            }
+            //var email = User.FindFirstValue("Email");
+            //if (email == null)
+            //{
+            //    response = new EmployeeResponseViewModel();
+            //    response.Status = 401;
+            //    response.Message = "You are not loggedIn or not authorised to do add other employees.";
+            //    return response;
+            //}
 
             //bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
             //var role = User.FindFirstValue("Role");
