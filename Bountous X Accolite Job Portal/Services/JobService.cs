@@ -5,21 +5,36 @@ using Bountous_X_Accolite_Job_Portal.Models.ClosedJobViewModels;
 using Bountous_X_Accolite_Job_Portal.Models.JobViewModels;
 using Bountous_X_Accolite_Job_Portal.Models.JobViewModels.JobResponseViewModel;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
+using Microsoft.Extensions.Caching.Distributed;
+using System.Text.Json;
 
 namespace Bountous_X_Accolite_Job_Portal.Services
 {
     public class JobService : IJobService
     {
         private readonly ApplicationDbContext _context;
-
-        public JobService(ApplicationDbContext context)
+        private readonly IDistributedCache _cache;
+        public JobService(ApplicationDbContext context, IDistributedCache cache)
         {
             _context = context;
+            _cache = cache; 
         }
 
-        public AllClosedJobResponseViewModel GetAllClosedJobs()
+        public async Task<AllClosedJobResponseViewModel> GetAllClosedJobs()
         {
-            List<ClosedJob> list = _context.ClosedJobs.ToList();
+            string key = $"allClosedJobs";
+            string? allClosedJobsFromCache = await _cache.GetStringAsync(key);
+
+            List<ClosedJob> list;
+            if (string.IsNullOrEmpty(allClosedJobsFromCache))
+            {
+                list = _context.ClosedJobs.ToList();
+                await _cache.SetStringAsync(key, JsonSerializer.Serialize(list));
+            }
+            else
+            {
+                list = JsonSerializer.Deserialize<List<ClosedJob>>(allClosedJobsFromCache);
+            }
 
             List<ClosedJobViewModel> closedJobs = new List<ClosedJobViewModel>();
             foreach (var item in list)
@@ -62,6 +77,9 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             }
             else
             {
+                await _cache.RemoveAsync($"allJobs");
+                await _cache.RemoveAsync($"getAllJobsByEmployeeId-{EmpId}");
+
                 response.Status = 200;
                 response.Message = "Successfully Added New Job !!";
                 response.job = new JobViewModel(newJob);
@@ -77,6 +95,10 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             {
                 _context.Jobs.Remove(job);
                 await _context.SaveChangesAsync();
+
+                await _cache.RemoveAsync($"allJobs");
+                await _cache.RemoveAsync($"getAllJobsByEmployeeId-{job.EmployeeId}");
+
                 response.Status = 200;
                 response.Message = "Job Successfully Deleted !";
             }
@@ -107,7 +129,10 @@ namespace Bountous_X_Accolite_Job_Portal.Services
 
                 _context.Jobs.Update(dbjob);
                 await _context.SaveChangesAsync();
-                
+
+                await _cache.RemoveAsync($"allJobs");
+                await _cache.RemoveAsync($"getAllJobsByEmployeeId-{dbjob.EmployeeId}");
+
                 response.Status = 200;
                 response.Message = "Job Successfully Updated !";
             }
@@ -121,7 +146,20 @@ namespace Bountous_X_Accolite_Job_Portal.Services
 
         public async Task<AllJobResponseViewModel> GetAllJobs()
         {
-            List<Job> list = _context.Jobs.ToList();
+            string key = $"allJobs";
+            string? allJobsFromCache = await _cache.GetStringAsync(key);
+
+            List<Job> list;
+            if (string.IsNullOrEmpty(allJobsFromCache))
+            {
+                list = _context.Jobs.ToList();
+                await _cache.SetStringAsync(key, JsonSerializer.Serialize(list));
+            }
+            else
+            {
+                list = JsonSerializer.Deserialize<List<Job>>(allJobsFromCache);
+            }
+
             List<JobViewModel> jobList = new List<JobViewModel>();
 
             Dictionary<Guid, Job> dic = new Dictionary<Guid, Job>();
@@ -137,58 +175,100 @@ namespace Bountous_X_Accolite_Job_Portal.Services
                 }
             }
 
-            List<JobApplication> application = _context.JobApplications.Where(item => true).ToList();
-
-            List<JobApplication> validApplications = new List<JobApplication>();
-            foreach (JobApplication app in application)
+            if (dic.Count > 0)
             {
-                if (app.JobId != null && dic.ContainsKey((Guid)app.JobId))
+                key = $"allJobApplications";
+                string? allJobApplicationsFromCache = await _cache.GetStringAsync(key);
+
+                List<JobApplication> application;
+                if (string.IsNullOrEmpty(allJobApplicationsFromCache))
                 {
-                    validApplications.Add(app);
+                    application = _context.JobApplications.Where(item => true).ToList();
+                    await _cache.SetStringAsync(key, JsonSerializer.Serialize(application));
                 }
-            }
-
-            List<ClosedJobApplication> closedApplication = _context.ClosedJobApplications.Where(item => true).ToList();
-
-            List<ClosedJobApplication> validClosedApplications = new List<ClosedJobApplication>();
-            foreach (ClosedJobApplication app in closedApplication)
-            {
-                if (app.JobId != null && dic.ContainsKey((Guid)app.JobId))
+                else
                 {
-                    validClosedApplications.Add(app);
+                    application = JsonSerializer.Deserialize<List<JobApplication>>(allJobApplicationsFromCache);
                 }
+
+                List<JobApplication> validApplications = new List<JobApplication>();
+                foreach (JobApplication app in application)
+                {
+                    if (app.JobId != null && dic.ContainsKey((Guid)app.JobId))
+                    {
+                        validApplications.Add(app);
+                    }
+                }
+
+                if(validApplications.Count > 0)
+                {
+                    await _cache.RemoveAsync($"allJobApplications");
+                }
+
+                key = $"allClosedJobApplications";
+                string? allClosedJobApplicationsFromCache = await _cache.GetStringAsync(key);
+
+                List<ClosedJobApplication> closedApplication;
+                if (string.IsNullOrEmpty(allClosedJobApplicationsFromCache))
+                {
+                    closedApplication = _context.ClosedJobApplications.Where(item => true).ToList();
+                    await _cache.SetStringAsync(key, JsonSerializer.Serialize(closedApplication));
+                }
+                else
+                {
+                    closedApplication = JsonSerializer.Deserialize<List<ClosedJobApplication>>(allClosedJobApplicationsFromCache);
+                }
+
+                List<ClosedJobApplication> validClosedApplications = new List<ClosedJobApplication>();
+                foreach (ClosedJobApplication app in closedApplication)
+                {
+                    if (app.JobId != null && dic.ContainsKey((Guid)app.JobId))
+                    {
+                        validClosedApplications.Add(app);
+                    }
+                }
+
+                if( validClosedApplications.Count > 0)
+                {
+                    await _cache.RemoveAsync($"allClosedJobApplications");
+                }
+
+                Dictionary<Guid, Guid> closedDic = new Dictionary<Guid, Guid>();
+                foreach (KeyValuePair<Guid, Job> entry in dic)
+                {
+                    // do something with entry.Value or entry.Key
+                    ClosedJob closedJob = new ClosedJob(entry.Value);
+                    await _context.ClosedJobs.AddAsync(closedJob);
+
+                    closedDic.Add(entry.Key, closedJob.ClosedJobId);
+
+                    _cache.RemoveAsync($"getAllClosedJobsByEmployeeId-{entry.Value.EmployeeId}");
+                }
+
+                foreach (JobApplication app in validApplications)
+                {
+                    app.ClosedJobId = closedDic[(Guid)app.JobId];
+                    app.JobId = null;
+                    _context.JobApplications.Update(app);
+                }
+
+                foreach (ClosedJobApplication app in validClosedApplications)
+                {
+                    app.ClosedJobId = closedDic[(Guid)app.JobId];
+                    app.JobId = null;
+                    _context.ClosedJobApplications.Update(app);
+                }
+
+                foreach (KeyValuePair<Guid, Job> entry in dic)
+                {
+                    await _cache.RemoveAsync($"getJobById-{entry.Key}");
+                    _context.Jobs.Remove(entry.Value);
+                }
+
+                await _cache.RemoveAsync($"allJobs");
+                await _cache.RemoveAsync($"allClosedJobs");
+                await _context.SaveChangesAsync();
             }
-
-            Dictionary<Guid, Guid> closedDic = new Dictionary<Guid, Guid>();
-            foreach (KeyValuePair<Guid, Job> entry in dic)
-            {
-                // do something with entry.Value or entry.Key
-                ClosedJob closedJob = new ClosedJob(entry.Value);
-                await _context.ClosedJobs.AddAsync(closedJob);
-
-                closedDic.Add(entry.Key, closedJob.ClosedJobId);
-            }
-
-            foreach(JobApplication app in validApplications)
-            {
-                app.ClosedJobId = closedDic[(Guid)app.JobId];
-                app.JobId = null;
-                _context.JobApplications.Update(app);
-            }
-
-            foreach (ClosedJobApplication app in validClosedApplications)
-            {
-                app.ClosedJobId = closedDic[(Guid)app.JobId];
-                app.JobId = null;
-                _context.ClosedJobApplications.Update(app);
-            }
-
-            foreach (KeyValuePair<Guid, Job> entry in dic)
-            {
-                _context.Jobs.Remove(entry.Value);
-            }
-
-            await _context.SaveChangesAsync();
 
             AllJobResponseViewModel response = new AllJobResponseViewModel();
             response.Status = 200;
@@ -201,9 +281,22 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             return response;
         }
 
-        public AllJobResponseViewModel GetAllJobsByEmployeeId(Guid EmpId)
+        public async Task<AllJobResponseViewModel> GetAllJobsByEmployeeId(Guid EmpId)
         {
-            List<Job> list = _context.Jobs.Where(e => e.EmployeeId==EmpId).ToList() ;
+            string key = $"getAllJobsByEmployeeId-{EmpId}";
+            string? allJobsByEmployeeIdFromCache = await _cache.GetStringAsync(key);
+
+            List<Job> list;
+            if (string.IsNullOrEmpty(allJobsByEmployeeIdFromCache))
+            {
+                list = _context.Jobs.Where(e => e.EmployeeId == EmpId).ToList();
+                await _cache.SetStringAsync(key, JsonSerializer.Serialize(list));
+            }
+            else
+            {
+                list = JsonSerializer.Deserialize<List<Job>>(allJobsByEmployeeIdFromCache);
+            }
+
             List<JobViewModel> jobList = new List<JobViewModel>();
             foreach (Job job in list)
                 jobList.Add(new JobViewModel(job));
@@ -219,27 +312,53 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             return response;
         }
 
-        public JobResponseViewModel GetJobById(Guid jobId)
+        public async Task<JobResponseViewModel> GetJobById(Guid jobId)
         {
             JobResponseViewModel response = new JobResponseViewModel();
-            var job = _context.Jobs.Find(jobId);
-            if (job != null)
+
+            string key = $"getJobById-{jobId}";
+            string? getJobByIdFromCache = await _cache.GetStringAsync(key);
+
+            Job? job;
+            if (string.IsNullOrEmpty(getJobByIdFromCache))
             {
-                response.Status = 200;
-                response.Message = "Job Successfully Found !";
-                response.job = new JobViewModel(job);
+                job = _context.Jobs.Find(jobId);
+                if(job == null)
+                {
+                    response.Status = 404;
+                    response.Message = "Unable to Find Job !";
+                    return response;
+                }
+
+                await _cache.SetStringAsync(key, JsonSerializer.Serialize(job));
             }
             else
             {
-                response.Status = 500;
-                response.Message = "Unable to Find Job !";
+                job = JsonSerializer.Deserialize<Job>(getJobByIdFromCache);
             }
+
+            response.Status = 200;
+            response.Message = "Job Successfully Found !";
+            response.job = new JobViewModel(job);
             return response;
         }
 
-        public AllClosedJobResponseViewModel GetAllClosedJobsByEmployeeId(Guid EmpId)
+        public async Task<AllClosedJobResponseViewModel> GetAllClosedJobsByEmployeeId(Guid EmpId)
         {
-            List<ClosedJob> list = _context.ClosedJobs.Where(e => e.EmployeeId == EmpId).ToList();
+            string key = $"getAllClosedJobsByEmployeeId-{EmpId}";
+            string? allClosedJobsByEmployeeId = await _cache.GetStringAsync(key);
+
+            List<ClosedJob> list;
+            if (string.IsNullOrEmpty(allClosedJobsByEmployeeId))
+            {
+                list = _context.ClosedJobs.Where(e => e.EmployeeId == EmpId).ToList();
+                await _cache.SetStringAsync(key, JsonSerializer.Serialize(list));
+            }
+            else
+            {
+                list = JsonSerializer.Deserialize<List<ClosedJob>>(allClosedJobsByEmployeeId);
+            }
+
             List<ClosedJobViewModel> jobList = new List<ClosedJobViewModel>();
             foreach (ClosedJob job in list)
                 jobList.Add(new ClosedJobViewModel(job));
@@ -255,21 +374,34 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             return response;
         }
 
-        public ClosedJobResponseViewModel GetClosedJobById(Guid jobId)
+        public async Task<ClosedJobResponseViewModel> GetClosedJobById(Guid jobId)
         {
             ClosedJobResponseViewModel response = new ClosedJobResponseViewModel();
-            var job = _context.ClosedJobs.Find(jobId);
-            if (job != null)
+
+            string key = $"getClosedJobById-{jobId}";
+            string? getClosedJobByIdFromCache = await _cache.GetStringAsync(key);
+
+            ClosedJob? closedJob;
+            if (string.IsNullOrEmpty(getClosedJobByIdFromCache))
             {
-                response.Status = 200;
-                response.Message = "Job Successfully Found !";
-                response.ClosedJob = new ClosedJobViewModel(job);
+                closedJob = _context.ClosedJobs.Find(jobId);
+                if (closedJob == null)
+                {
+                    response.Status = 404;
+                    response.Message = "Unable to Find Closed Job !";
+                    return response;
+                }
+
+                await _cache.SetStringAsync(key, JsonSerializer.Serialize(closedJob));
             }
             else
             {
-                response.Status = 500;
-                response.Message = "Unable to Find Job !";
+                closedJob = JsonSerializer.Deserialize<ClosedJob>(getClosedJobByIdFromCache);
             }
+
+            response.Status = 200;
+            response.Message = "Job Successfully Found !";
+            response.ClosedJob = new ClosedJobViewModel(closedJob);
             return response;
         }
     }

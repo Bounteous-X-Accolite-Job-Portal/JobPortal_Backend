@@ -35,7 +35,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
 
-            response = _candidateEducationService.GetAllEducationOfACandidate(CandidateId);
+            response = await _candidateEducationService.GetAllEducationOfACandidate(CandidateId);
             return response;
         }
 
@@ -43,7 +43,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
         [Route("getDetails/{Id}")]
         public async Task<CandidateEducationResponseViewModel> GetEducationById(Guid Id)
         {
-            CandidateEducationResponseViewModel response = _candidateEducationService.GetEducationById(Id);
+            CandidateEducationResponseViewModel response = await _candidateEducationService.GetEducationById((Guid)Id);
             if (response.CandidateEducation == null)
             {
                 return response;
@@ -113,7 +113,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
 
-            CandidateEducationResponseViewModel education = _candidateEducationService.GetEducationById(updateEducation.EducationId);
+            CandidateEducationResponseViewModel education = await _candidateEducationService.GetEducationById((Guid)updateEducation.EducationId);
             if (education.CandidateEducation == null)
             {
                 return education;
@@ -147,7 +147,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
 
-            CandidateEducationResponseViewModel education = _candidateEducationService.GetEducationById(Id);
+            CandidateEducationResponseViewModel education = await _candidateEducationService.GetEducationById(Id);
             if(education.CandidateEducation == null)
             {
                 return education;

@@ -35,7 +35,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
 
-            response = _candidateExperienceService.GetAllExperienceOfACandidate(CandidateId);
+            response = await _candidateExperienceService.GetAllExperienceOfACandidate(CandidateId);
             return response;
         }
 
@@ -43,7 +43,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
         [Route("getExperience/{Id}")]
         public async Task<CandidateExperienceResponseViewModel> GetExperienceById(Guid Id)
         {
-            CandidateExperienceResponseViewModel response = _candidateExperienceService.GetExperienceById(Id);
+            CandidateExperienceResponseViewModel response = await _candidateExperienceService.GetExperienceById(Id);
             if (response.Experience == null)
             {
                 return response;
@@ -113,7 +113,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
 
-            CandidateExperienceResponseViewModel experience = _candidateExperienceService.GetExperienceById(updateExperience.ExperienceId);
+            CandidateExperienceResponseViewModel experience = await _candidateExperienceService.GetExperienceById(updateExperience.ExperienceId);
             if (experience.Experience == null)
             {
                 return experience;
@@ -147,7 +147,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
 
-            CandidateExperienceResponseViewModel experience = _candidateExperienceService.GetExperienceById(Id);
+            CandidateExperienceResponseViewModel experience = await _candidateExperienceService.GetExperienceById(Id);
             if (experience.Experience == null)
             {
                 return experience;

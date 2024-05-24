@@ -12,11 +12,9 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
     public class JobStatusController : Controller
     {
         private readonly IJobStatusService _jobStatusService;
-        private readonly IDesignationService _designationService;
-        public JobStatusController(IJobStatusService jobStatusService, IDesignationService designationService)
+        public JobStatusController(IJobStatusService jobStatusService)
         {
             _jobStatusService = jobStatusService;
-            _designationService = designationService;
         }
 
         [HttpPost]
@@ -30,9 +28,9 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             }
 
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            bool hasPrivilege = Convert.ToBoolean(User.FindFirstValue("HasPrivilege"));
             Guid employeeId = GetGuidFromString.Get(User.FindFirstValue("Id"));
-            var role = User.FindFirstValue("Role");
-            if (!isEmployee || role == null || !_designationService.HasPrivilege(role) || employeeId == Guid.Empty)
+            if (!isEmployee || !hasPrivilege || employeeId == Guid.Empty)
             {
                 return BadRequest(new { Message = "You are not authorized to add Status." });
             }
@@ -48,18 +46,18 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
 
         [HttpGet]
         [Route("{Id}")]
-        public JobStatusResponseViewModel GetStatusById(int Id)
+        public async Task<JobStatusResponseViewModel> GetStatusById(int Id)
         {
-            JobStatusResponseViewModel response = _jobStatusService.GetStatusById(Id);
+            JobStatusResponseViewModel response = await _jobStatusService.GetStatusById(Id);
             return response;
         }
 
         [HttpGet]
         [Route("getAllStatus")]
         [Authorize]
-        public AllStatusResponseViewModel GetAllStatus()
+        public async Task<AllStatusResponseViewModel> GetAllStatus()
         {
-            return _jobStatusService.GetAllStatus();
+            return await _jobStatusService.GetAllStatus();
         }
     }
 }

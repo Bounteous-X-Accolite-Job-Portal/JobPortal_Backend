@@ -13,25 +13,23 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
     public class JobCategoryController : ControllerBase
     {
         private readonly IJobCategoryService _jobCategory;
-        private readonly IDesignationService _designationService;
-        public JobCategoryController(IJobCategoryService jobCategory, IDesignationService designationService)
+        public JobCategoryController(IJobCategoryService jobCategory)
         {
             _jobCategory = jobCategory;
-            _designationService = designationService;
         }
 
         [HttpGet]
         [Route("getAllJobCategory")]
-        public AllJobCategoryResponseViewModel GetAllJobCategory()
+        public async Task<AllJobCategoryResponseViewModel> GetAllJobCategory()
         {
-            return _jobCategory.GetAllJobCategory();
+            return await _jobCategory.GetAllJobCategory();
         }
 
         [HttpGet]
         [Route("getJobCategory/{Id}")]
-        public JobCategoryResponseViewModel GetJobCategoryById(Guid Id)
+        public async Task<JobCategoryResponseViewModel> GetJobCategoryById(Guid Id)
         {
-            return _jobCategory.GetJobCategoryById(Id); 
+            return await _jobCategory.GetJobCategoryById(Id); 
         }
 
         [HttpPost]
@@ -48,9 +46,9 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             }
 
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            bool hasPrivilege = Convert.ToBoolean(User.FindFirstValue("HasPrivilege"));
             Guid employeeId = GetGuidFromString.Get(User.FindFirstValue("Id"));
-            var role = User.FindFirstValue("Role");
-            if (!isEmployee || role == null || !_designationService.HasPrivilege(role) || employeeId == Guid.Empty)
+            if (!isEmployee || !hasPrivilege || employeeId == Guid.Empty)
             {
                 response.Status = 403;
                 response.Message = "Not Logged IN / Not Authorized to Add Category";
@@ -75,8 +73,8 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             }
 
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
-            var role = User.FindFirstValue("Role");
-            if (!isEmployee || role == null || !_designationService.HasPrivilege(role))
+            bool hasPrivilege = Convert.ToBoolean(User.FindFirstValue("HasPrivilege"));
+            if (!isEmployee || !hasPrivilege)
             {
                 response.Status = 401;
                 response.Message = "Not Logged IN / Not Authorized to Edit Category";
@@ -95,8 +93,8 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             JobCategoryResponseViewModel response = new JobCategoryResponseViewModel();
 
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
-            var role = User.FindFirstValue("Role");
-            if (!isEmployee || role == null || !_designationService.HasPrivilege(role))
+            bool hasPrivilege = Convert.ToBoolean(User.FindFirstValue("HasPrivilege"));
+            if (!isEmployee || !hasPrivilege)
             {
                 response.Status = 401;
                 response.Message = "Not Logged IN / Not Authorized to Delete Category";

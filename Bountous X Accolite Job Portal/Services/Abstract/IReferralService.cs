@@ -5,7 +5,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services.Abstract
 {
     public interface IReferralService
     {
-        AllReferralResponseViewModel GetAllReferralsOfLoggedInEmployee(Guid EmpId);
+        Task<AllReferralResponseViewModel> GetAllReferralsOfLoggedInEmployee(Guid EmpId);
         Task<ReferralResponseViewModel> Refer(AddReferralViewModel addReferral, Guid EmpId);
     }
 }

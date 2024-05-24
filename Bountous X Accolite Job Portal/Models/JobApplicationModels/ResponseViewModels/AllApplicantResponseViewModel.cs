@@ -1,4 +1,4 @@
-﻿namespace Bountous_X_Accolite_Job_Portal.Models.JobApplicationViewModel.ResponseViewModels
+﻿namespace Bountous_X_Accolite_Job_Portal.Models.JobApplicationModels.ResponseViewModels
 {
     public class AllApplicantResponseViewModel : ResponseViewModel
     {

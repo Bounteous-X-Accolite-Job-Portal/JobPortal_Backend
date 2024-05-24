@@ -5,6 +5,8 @@ using Bountous_X_Accolite_Job_Portal.Models.AuthenticationViewModel.CandidateVie
 using Bountous_X_Accolite_Job_Portal.Models.ReferralViewModel;
 using Bountous_X_Accolite_Job_Portal.Models.ReferralViewModel.ResponseViewModels;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
+using Microsoft.Extensions.Caching.Distributed;
+using System.Text.Json;
 
 namespace Bountous_X_Accolite_Job_Portal.Services
 {
@@ -13,11 +15,13 @@ namespace Bountous_X_Accolite_Job_Portal.Services
         private readonly ApplicationDbContext _dbContext;
         private readonly ICandidateAccountService _candidateAccountService;
         private readonly IJobStatusService _jobStatusService;
-        public ReferralService(ApplicationDbContext dbContext, ICandidateAccountService candidateAccountService, IJobStatusService jobStatusService)
+        private readonly IDistributedCache _cache;
+        public ReferralService(ApplicationDbContext dbContext, ICandidateAccountService candidateAccountService, IJobStatusService jobStatusService, IDistributedCache cache)
         {
             _dbContext = dbContext;
             _candidateAccountService = candidateAccountService;
             _jobStatusService = jobStatusService;
+            _cache = cache;
         }
 
         public async Task<ReferralResponseViewModel> Refer(AddReferralViewModel addReferral, Guid EmpId)
@@ -25,7 +29,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             ReferralResponseViewModel response;
             Guid candidateId = Guid.Empty;
 
-            int referralStatusId = _jobStatusService.getInitialReferralStatus();
+            int referralStatusId = await _jobStatusService.getInitialReferralStatus();
             if(referralStatusId == -1)
             {
                 response = new ReferralResponseViewModel();
@@ -68,6 +72,8 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             await _dbContext.Referrals.AddAsync(referral);
             await _dbContext.SaveChangesAsync();
 
+            await _cache.RemoveAsync($"getAllReferralsByEmployeeId-{EmpId}");
+
             response = new ReferralResponseViewModel();
             response.Status = 200;
             response.Message = "Successfully referred!";
@@ -75,11 +81,23 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             return response;
         }
 
-        public AllReferralResponseViewModel GetAllReferralsOfLoggedInEmployee(Guid EmpId)
+        public async Task<AllReferralResponseViewModel> GetAllReferralsOfLoggedInEmployee(Guid EmpId)
         {
             AllReferralResponseViewModel response = new AllReferralResponseViewModel();
 
-            List<Referral> referrals = _dbContext.Referrals.Where(item => item.EmpId == EmpId).ToList();
+            string key = $"getAllReferralsByEmployeeId-{EmpId}";
+            string? getAllReferralsByEmployeeIdFromCache = await _cache.GetStringAsync(key);
+
+            List<Referral> referrals;
+            if (string.IsNullOrEmpty(getAllReferralsByEmployeeIdFromCache))
+            {
+                referrals = _dbContext.Referrals.Where(item => item.EmpId == EmpId).ToList();
+                await _cache.SetStringAsync(key, JsonSerializer.Serialize(referrals));
+            }
+            else
+            {
+                referrals = JsonSerializer.Deserialize<List<Referral>>(getAllReferralsByEmployeeIdFromCache);
+            }
 
             List<ReferralViewModel> allReferrals = new List<ReferralViewModel>();
             foreach(Referral referral in referrals)

@@ -2,7 +2,6 @@
 using Bountous_X_Accolite_Job_Portal.Models.ClosedJobViewModels;
 using Bountous_X_Accolite_Job_Portal.Models.JobViewModels;
 using Bountous_X_Accolite_Job_Portal.Models.JobViewModels.JobResponseViewModel;
-using Bountous_X_Accolite_Job_Portal.Services;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -15,25 +14,23 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
     public class JobController : ControllerBase
     {
         private readonly IJobService _job;
-        private readonly IDesignationService _designationService;
-        public JobController(IJobService job, IDesignationService designationService)
+        public JobController(IJobService job)
         {
             _job = job;
-            _designationService = designationService;
         }
 
         [HttpGet]
         [Route("getJob/{Id}")]
-        public JobResponseViewModel GetJobById(Guid Id)
+        public async Task<JobResponseViewModel> GetJobById(Guid Id)
         {
-            return _job.GetJobById(Id);
+            return await _job.GetJobById(Id);
         }
 
         [HttpGet]
         [Route("getClosedJob/{Id}")]
-        public ClosedJobResponseViewModel GetClosedJobById(Guid Id)
+        public async Task<ClosedJobResponseViewModel> GetClosedJobById(Guid Id)
         {
-            return _job.GetClosedJobById(Id);
+            return await _job.GetClosedJobById(Id);
         }
 
         [HttpGet]
@@ -45,9 +42,9 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
 
         [HttpGet]
         [Route("getAllClosedJobs")]
-        public AllClosedJobResponseViewModel GetAllClosedJobs()
+        public async Task<AllClosedJobResponseViewModel> GetAllClosedJobs()
         {
-            return _job.GetAllClosedJobs(); 
+            return await _job.GetAllClosedJobs(); 
         }
 
         [HttpGet]
@@ -64,7 +61,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
 
-            return _job.GetAllJobsByEmployeeId(Id);
+            return await _job.GetAllJobsByEmployeeId(Id);
         }
 
         [HttpGet]
@@ -81,7 +78,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
 
-            return _job.GetAllClosedJobsByEmployeeId(Id);
+            return await _job.GetAllClosedJobsByEmployeeId(Id);
         }
 
         [HttpPost]
@@ -98,9 +95,9 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             }
 
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            bool hasPrivilege = Convert.ToBoolean(User.FindFirstValue("HasPrivilege"));
             Guid employeeId = GetGuidFromString.Get(User.FindFirstValue("Id"));
-            var role = User.FindFirstValue("Role");
-            if (!isEmployee || role == null || !_designationService.HasPrivilege(role) || employeeId == Guid.Empty)
+            if (!isEmployee || !hasPrivilege || employeeId == Guid.Empty)
             {
                 response.Status = 401;
                 response.Message = "Not Logged IN / Not Authorized to Add Job";
@@ -133,7 +130,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
 
-            var checkJob = GetJobById(job.JobId).job;
+            var checkJob = (await GetJobById(job.JobId)).job;
             if(checkJob == null || checkJob.EmployeeId != employeeId)
             {
                 response.Status = 403;
@@ -161,7 +158,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
 
-            var checkJob = GetJobById(JobId).job;
+            var checkJob = (await GetJobById(JobId)).job;
             if (checkJob == null || checkJob.EmployeeId != employeeId)
             {
                 response.Status = 403;

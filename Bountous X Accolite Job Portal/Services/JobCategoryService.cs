@@ -3,21 +3,36 @@ using Bountous_X_Accolite_Job_Portal.Models;
 using Bountous_X_Accolite_Job_Portal.Models.JobCategoryViewModel;
 using Bountous_X_Accolite_Job_Portal.Models.JobCategoryViewModel.JobCategoryResponseViewModel;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
+using Microsoft.Extensions.Caching.Distributed;
+using System.Text.Json;
 
 namespace Bountous_X_Accolite_Job_Portal.Services
 {
     public class JobCategoryService : IJobCategoryService
     {
         private readonly ApplicationDbContext _context;
-
-        public JobCategoryService(ApplicationDbContext context)
+        private readonly IDistributedCache _cache;
+        public JobCategoryService(ApplicationDbContext context, IDistributedCache cache)
         {
             _context = context;
+            _cache = cache;
         }
 
-        public AllJobCategoryResponseViewModel GetAllJobCategory()
+        public async Task<AllJobCategoryResponseViewModel> GetAllJobCategory()
         {
-            List<JobCategory> list = _context.JobCategory.ToList();
+            string key = $"allJobCategory";
+            string? allJobCategoryFromCache = await _cache.GetStringAsync(key);
+
+            List<JobCategory> list;
+            if (string.IsNullOrEmpty(allJobCategoryFromCache))
+            {
+                list = _context.JobCategory.ToList();
+                await _cache.SetStringAsync(key, JsonSerializer.Serialize(list));
+            }
+            else
+            {
+                list = JsonSerializer.Deserialize<List<JobCategory>>(allJobCategoryFromCache);
+            }
 
             List<JobCategoryViewModel> categoryList = new List<JobCategoryViewModel>();
             foreach (JobCategory category in list)
@@ -32,16 +47,29 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             return response;
         }
 
-        public JobCategoryResponseViewModel GetJobCategoryById(Guid categoryId)
+        public async Task<JobCategoryResponseViewModel> GetJobCategoryById(Guid categoryId)
         {
             JobCategoryResponseViewModel response = new JobCategoryResponseViewModel();
 
-            var category = _context.JobCategory.Find(categoryId);
-            if (category == null)
+            string key = $"getJobCategoryById-{categoryId}";
+            string? getJobCategoryFromCache = await _cache.GetStringAsync(key);
+
+            JobCategory category;
+            if (string.IsNullOrEmpty(getJobCategoryFromCache))
             {
-                response.Status = 404;
-                response.Message = "Unable to Find Category !";
-                return response;
+                category = _context.JobCategory.Find(categoryId);
+                if (category == null)
+                {
+                    response.Status = 404;
+                    response.Message = "Unable to Find Category !";
+                    return response;
+                }
+
+                await _cache.SetStringAsync(key, JsonSerializer.Serialize(category));
+            }
+            else
+            {
+                category = JsonSerializer.Deserialize<JobCategory>(getJobCategoryFromCache);
             }
 
             response.Status = 200;
@@ -68,7 +96,9 @@ namespace Bountous_X_Accolite_Job_Portal.Services
                 response.Message = "Unable to Add New Category";
                 return response;
             }
-            
+
+            await _cache.RemoveAsync($"allJobCategory");
+
             response.Status = 200;
             response.Message = "Successfully Added New Category !!";
             response.JobCategory = new JobCategoryViewModel(newCategory);
@@ -79,25 +109,40 @@ namespace Bountous_X_Accolite_Job_Portal.Services
         {
             JobCategoryResponseViewModel response = new JobCategoryResponseViewModel();
 
-            var dbcategory = _context.JobCategory.Find(category.CategoryId);
-            if (dbcategory != null)
+            string key = $"getJobCategoryById-{category.CategoryId}";
+            string? getJobCategoryFromCache = await _cache.GetStringAsync(key);
+
+            JobCategory dbcategory;
+            if (string.IsNullOrEmpty(getJobCategoryFromCache))
             {
-                dbcategory.CategoryName = category.CategoryName;
-                dbcategory.CategoryCode = category.CategoryCode;
-                dbcategory.Description = category.Description;
+                dbcategory = _context.JobCategory.Find(category.CategoryId);
+                if (dbcategory == null)
+                {
+                    response.Status = 404;
+                    response.Message = "Unable to Find Category !";
+                    return response;
+                }
 
-                _context.JobCategory.Update(dbcategory);
-                await _context.SaveChangesAsync();
-
-                response.Status = 200;
-                response.Message = "Category Successfully Updated";
-                response.JobCategory = new JobCategoryViewModel(dbcategory);
+                await _cache.SetStringAsync(key, JsonSerializer.Serialize(dbcategory));
             }
             else
             {
-                response.Status = 404;
-                response.Message = "Unable to Find Category !";
+                dbcategory = JsonSerializer.Deserialize<JobCategory>(getJobCategoryFromCache);
             }
+
+            dbcategory.CategoryName = category.CategoryName;
+            dbcategory.CategoryCode = category.CategoryCode;
+            dbcategory.Description = category.Description;
+
+            _context.JobCategory.Update(dbcategory);
+            await _context.SaveChangesAsync();
+
+            await _cache.RemoveAsync($"allJobCategory");
+            await _cache.RemoveAsync($"getJobCategoryById-{category.CategoryId}");
+
+            response.Status = 200;
+            response.Message = "Category Successfully Updated";
+            response.JobCategory = new JobCategoryViewModel(dbcategory);
             return response;
         }
 
@@ -105,20 +150,35 @@ namespace Bountous_X_Accolite_Job_Portal.Services
         {
             JobCategoryResponseViewModel response = new JobCategoryResponseViewModel();
 
-            var category = _context.JobCategory.Find(categoryId);
-            if (category != null)
-            {
-                _context.JobCategory.Remove(category);
-                await _context.SaveChangesAsync();
+            string key = $"getJobCategoryById-{categoryId}";
+            string? getJobCategoryFromCache = await _cache.GetStringAsync(key);
 
-                response.Status = 200;
-                response.Message = "Category Successfully Deleted !";
+            JobCategory category;
+            if (string.IsNullOrEmpty(getJobCategoryFromCache))
+            {
+                category = _context.JobCategory.Find(categoryId);
+                if (category == null)
+                {
+                    response.Status = 404;
+                    response.Message = "Unable to Find Category !";
+                    return response;
+                }
+
+                await _cache.SetStringAsync(key, JsonSerializer.Serialize(category));
             }
             else
             {
-                response.Status = 404;
-                response.Message = "Unable to Delete Category !";
+                category = JsonSerializer.Deserialize<JobCategory>(getJobCategoryFromCache);
             }
+
+            _context.JobCategory.Remove(category);
+            await _context.SaveChangesAsync();
+
+            await _cache.RemoveAsync($"allJobCategory");
+            await _cache.RemoveAsync($"getJobCategoryById-{categoryId}");
+
+            response.Status = 200;
+            response.Message = "Category Successfully Deleted !";
             return response;
         }
     }

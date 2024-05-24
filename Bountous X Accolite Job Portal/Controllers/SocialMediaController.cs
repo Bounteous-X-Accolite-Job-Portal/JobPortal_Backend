@@ -35,7 +35,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
 
-            response = _socialMediaService.GetSocialMediaOfACandidate(CandidateId);
+            response = await _socialMediaService.GetSocialMediaOfACandidate(CandidateId);
             return response;
         }
 
@@ -43,7 +43,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
         [Route("socialMediaDetails/{Id}")]
         public async Task<SocialMediaResponseViewModel> GetSocialMediaDetailsById(Guid Id)
         {
-            SocialMediaResponseViewModel response = _socialMediaService.GetSocialMediaById(Id);
+            SocialMediaResponseViewModel response = await _socialMediaService.GetSocialMediaById(Id);
             if (response.SocialMedia == null)
             {
                 return response;
@@ -114,7 +114,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
 
-            SocialMediaResponseViewModel socialMedia = _socialMediaService.GetSocialMediaById(updateSocialMedia.SocialMediaId);
+            SocialMediaResponseViewModel socialMedia = await _socialMediaService.GetSocialMediaById(updateSocialMedia.SocialMediaId);
             if (socialMedia.SocialMedia == null)
             {
                 return socialMedia;
@@ -148,7 +148,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
 
-            SocialMediaResponseViewModel socialMedia = _socialMediaService.GetSocialMediaById(Id);
+            SocialMediaResponseViewModel socialMedia = await _socialMediaService.GetSocialMediaById(Id);
             if (socialMedia.SocialMedia == null)
             {
                 return socialMedia;

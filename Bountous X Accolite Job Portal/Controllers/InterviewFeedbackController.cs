@@ -35,7 +35,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             }
             else
             {
-                response = _InterviewFeedbackService.GetAllInterviewFeedbacksByAEmployee(EmployeeId);
+                response = await _InterviewFeedbackService.GetAllInterviewFeedbacksByAEmployee(EmployeeId);
             }
 
             return response;
@@ -55,7 +55,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             }
             else
             {
-                response = _InterviewFeedbackService.GetInterviewFeedbackById(Id);
+                response = await _InterviewFeedbackService.GetInterviewFeedbackById(Id);
             }
             return response;
         }

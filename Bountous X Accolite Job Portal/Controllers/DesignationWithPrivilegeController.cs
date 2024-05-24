@@ -23,13 +23,13 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
 
         [HttpGet]
         [Route("getAllPrivileges")]
-        public AllPrivilegeResponseViewModel GetAllPrivileges()
+        public async Task<AllPrivilegeResponseViewModel> GetAllPrivileges()
         {
             AllPrivilegeResponseViewModel response;
 
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
-            var role = User.FindFirstValue("Role");
-            if (!isEmployee || role == null || !_designationService.HasSpecialPrivilege(role))
+            bool hasPrivilege = Convert.ToBoolean(User.FindFirstValue("HasPrivilege"));
+            if (!isEmployee || !hasPrivilege)
             {
                 response = new AllPrivilegeResponseViewModel();
                 response.Status = 401;
@@ -37,19 +37,19 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
 
-            response = _designationWithPrivilegeService.GetAllPrivileges();
+            response = await _designationWithPrivilegeService.GetAllPrivileges();
             return response;
         }
 
         [HttpGet]
         [Route("getPrivilege/{Id}")]
-        public PrivilegeResponseViewModel GetPrivilegeById(int Id)
+        public async Task<PrivilegeResponseViewModel> GetPrivilegeById(int Id)
         {
             PrivilegeResponseViewModel response;
 
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
-            var role = User.FindFirstValue("Role");
-            if (!isEmployee || role == null || !_designationService.HasSpecialPrivilege(role))
+            bool hasPrivilege = Convert.ToBoolean(User.FindFirstValue("HasPrivilege"));
+            if (!isEmployee || !hasPrivilege)
             {
                 response = new PrivilegeResponseViewModel();
                 response.Status = 401;
@@ -57,7 +57,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
 
-            response = _designationWithPrivilegeService.GetPrivilegeWithId(Id);
+            response = await _designationWithPrivilegeService.GetPrivilegeWithId(Id);
             return response;
         }
 
@@ -88,8 +88,8 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             PrivilegeResponseViewModel response;
 
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
-            var role = User.FindFirstValue("Role");
-            if (!isEmployee || role == null || !_designationService.HasSpecialPrivilege(role))
+            bool hasPrivilege = Convert.ToBoolean(User.FindFirstValue("HasPrivilege"));
+            if (!isEmployee || !hasPrivilege)
             {
                 response = new PrivilegeResponseViewModel();
                 response.Status = 401;
@@ -118,8 +118,8 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             PrivilegeResponseViewModel response;
 
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
-            var role = User.FindFirstValue("Role");
-            if (!isEmployee || role == null || !_designationService.HasSpecialPrivilege(role))
+            bool hasPrivilege = Convert.ToBoolean(User.FindFirstValue("HasPrivilege"));
+            if (!isEmployee || !hasPrivilege)
             {
                 response = new PrivilegeResponseViewModel();
                 response.Status = 401;

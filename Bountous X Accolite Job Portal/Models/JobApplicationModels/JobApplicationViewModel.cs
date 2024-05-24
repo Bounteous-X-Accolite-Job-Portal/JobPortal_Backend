@@ -1,6 +1,5 @@
-﻿using static System.Net.Mime.MediaTypeNames;
-
-namespace Bountous_X_Accolite_Job_Portal.Models.JobApplicationViewModel
+﻿
+namespace Bountous_X_Accolite_Job_Portal.Models.JobApplicationModels
 {
     public class JobApplicationViewModel
     {

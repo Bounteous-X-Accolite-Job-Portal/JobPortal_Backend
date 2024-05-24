@@ -3,16 +3,12 @@ using Bountous_X_Accolite_Job_Portal.Models.AuthenticationViewModel.CandidateVie
 using Bountous_X_Accolite_Job_Portal.Models;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
 using Microsoft.AspNetCore.Identity;
-using Org.BouncyCastle.Asn1.Ocsp;
-using System;
-using Microsoft.AspNetCore.Mvc;
 using Bountous_X_Accolite_Job_Portal.Models.EMAIL;
-using Azure.Core;
 using MimeKit.Text;
 using MimeKit;
-using static Org.BouncyCastle.Math.EC.ECCurve;
 using MailKit.Net.Smtp;
-
+using Microsoft.Extensions.Caching.Distributed;
+using System.Text.Json;
 
 namespace Bountous_X_Accolite_Job_Portal.Services
 {
@@ -22,28 +18,39 @@ namespace Bountous_X_Accolite_Job_Portal.Services
         private readonly ApplicationDbContext _dbContext;
         private readonly IEmailService _emailService;
         private readonly IConfiguration _config;
-
-
-
-        public CandidateAccountServices(UserManager<User> userManager, ApplicationDbContext applicationDbContext, IEmailService emailService, IConfiguration configuration)
-
+        private readonly IDistributedCache _cache;
+        public CandidateAccountServices(UserManager<User> userManager, ApplicationDbContext applicationDbContext, IEmailService emailService, IConfiguration configuration, IDistributedCache cache)
         {
             _userManager = userManager;
             _dbContext = applicationDbContext;
             _emailService = emailService;
             _config = configuration;
+            _cache = cache;
         }
 
-        public CandidateResponseViewModel GetCandidateById(Guid CandidateId)
+        public async Task<CandidateResponseViewModel> GetCandidateById(Guid CandidateId)
         {
             CandidateResponseViewModel response = new CandidateResponseViewModel();
 
-            var candidate = _dbContext.Candidates.Find(CandidateId);
-            if(candidate == null)
+            string key = $"getCandidateById-{CandidateId}";
+            string? getCandidateByIdFromCache = await _cache.GetStringAsync(key);
+
+            Candidate candidate;
+            if (string.IsNullOrEmpty(getCandidateByIdFromCache))
             {
-                response.Status = 404;
-                response.Message = "Please enter a valid candidateId.";
-                return response;
+                candidate = _dbContext.Candidates.Find(CandidateId);
+                if (candidate == null)
+                {
+                    response.Status = 404;
+                    response.Message = "Please enter a valid candidateId.";
+                    return response;
+                }
+
+                await _cache.SetStringAsync(key, JsonSerializer.Serialize(candidate));
+            }
+            else
+            {
+                candidate = JsonSerializer.Deserialize<Candidate>(getCandidateByIdFromCache);
             }
 
             response.Status = 200;
@@ -56,14 +63,27 @@ namespace Bountous_X_Accolite_Job_Portal.Services
         {
             CandidateResponseViewModel response = new CandidateResponseViewModel();
 
-            var checkUserWhetherExist = _dbContext.Users.Where(item => item.Email == registerUser.Email).ToList();
-            if (checkUserWhetherExist.Count != 0)
-            {
-                response.Status = 409;
-                response.Message = "This email is already registered with us. Please login.";
-                return response;
-            }
+            string key = $"getUserByEmail-{registerUser.Email}";
+            string? getUserByEmailFromCache = await _cache.GetStringAsync(key);
 
+            User checkUserWhetherExist;
+            if (string.IsNullOrEmpty(getUserByEmailFromCache))
+            {
+                checkUserWhetherExist = _dbContext.Users.Where(item => item.Email == registerUser.Email).FirstOrDefault();
+                if (checkUserWhetherExist != null)
+                {
+                    response.Status = 409;
+                    response.Message = "This email is already registered with us. Please Login.";
+                    return response;
+                }
+
+                await _cache.SetStringAsync(key, JsonSerializer.Serialize(checkUserWhetherExist));
+            }
+            else
+            {
+                checkUserWhetherExist = JsonSerializer.Deserialize<User>(getUserByEmailFromCache);
+            }
+            
             var candidate = new Candidate();
             candidate.FirstName = registerUser.FirstName;
             candidate.LastName = registerUser.LastName;
@@ -94,15 +114,6 @@ namespace Bountous_X_Accolite_Job_Portal.Services
                 response.Message = "Unable to create User, please try again.";
                 return response;
             }
-
-            //ConfirmEMail
-
-            //var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-            ////onsole.WriteLine(token);
-            //_dbContext.Update(user);
-            //await _dbContext.SaveChangesAsync();
-
-
 
             response.Status = 200;
             response.Message = "Successfully created Candidate.";
@@ -141,10 +152,51 @@ namespace Bountous_X_Accolite_Job_Portal.Services
                     smtp.Dispose();
                 }
             }
-
-
-
         }
 
+        public async Task<CandidateResponseViewModel> UpdateCandidateProfile(UpdateCandidateViewModel updatedCandidate)
+        {
+            CandidateResponseViewModel response = new CandidateResponseViewModel();
+
+            string key = $"getCandidateById-{updatedCandidate.CandidateId}";
+            string? getCandidateByIdFromCache = await _cache.GetStringAsync(key);
+
+            Candidate candidate;
+            if (string.IsNullOrEmpty(getCandidateByIdFromCache))
+            {
+                candidate = _dbContext.Candidates.Find(updatedCandidate.CandidateId);
+                if (candidate == null)
+                {
+                    response.Status = 404;
+                    response.Message = "Please enter a valid candidateId.";
+                    return response;
+                }
+
+                await _cache.SetStringAsync(key, JsonSerializer.Serialize(candidate));
+            }
+            else
+            {
+                candidate = JsonSerializer.Deserialize<Candidate>(getCandidateByIdFromCache);
+            }
+
+            candidate.FirstName = updatedCandidate.FirstName;
+            candidate.LastName = updatedCandidate.LastName;
+            candidate.Phone = updatedCandidate.Phone;
+            candidate.AddressLine1 = updatedCandidate.AddressLine1;
+            candidate.City = updatedCandidate.City;
+            candidate.State = updatedCandidate.State;
+            candidate.Country = updatedCandidate.Country;
+            candidate.ZipCode = updatedCandidate.ZipCode;
+
+            _dbContext.Candidates.Update(candidate);
+            await _dbContext.SaveChangesAsync();
+
+            await _cache.RemoveAsync($"getCandidateById-{candidate.CandidateId}");
+
+            response.Status = 200;
+            response.Message = "Successfully updated the candidate.";
+            response.Candidate = new CandidateViewModel(candidate);
+            return response;
+        }
     }
 }

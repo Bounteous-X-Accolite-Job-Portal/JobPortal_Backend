@@ -5,10 +5,10 @@ namespace Bountous_X_Accolite_Job_Portal.Services.Abstract
     public interface IJobStatusService
     {
         int GetInitialStatus();
-        int getInitialReferralStatus();
-        bool IsRejectedStatus(int StatusId);
+        Task<int> getInitialReferralStatus();
+        Task<bool> IsRejectedStatus(int StatusId);
         Task<bool> AddStatus(AddJobStatusViewModel status, Guid empId);
-        JobStatusResponseViewModel GetStatusById(int statusId); 
-        AllStatusResponseViewModel GetAllStatus();
+        Task<JobStatusResponseViewModel> GetStatusById(int statusId); 
+        Task<AllStatusResponseViewModel> GetAllStatus();
     }
 }

@@ -5,8 +5,8 @@ namespace Bountous_X_Accolite_Job_Portal.Services.Abstract
 {
     public interface IDegreeService
     {
-        List<DegreeViewModel> GetAllDegree();
-        DegreeResponseViewModel GetDegree(Guid id);
+        Task<List<DegreeViewModel>> GetAllDegree();
+        Task<DegreeResponseViewModel> GetDegree(Guid id);
         Task<DegreeResponseViewModel> AddDegree(AddDegreeViewModel degree, Guid EmpId);
         Task<DegreeResponseViewModel> UpdateDegree(UpdateDegreeViewModel updateDegree);
         Task<DegreeResponseViewModel> RemoveDegree(Guid id);

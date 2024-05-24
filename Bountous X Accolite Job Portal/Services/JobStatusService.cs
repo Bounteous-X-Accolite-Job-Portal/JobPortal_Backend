@@ -2,22 +2,39 @@
 using Bountous_X_Accolite_Job_Portal.Models;
 using Bountous_X_Accolite_Job_Portal.Models.JobStatusViewModel;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
+using Microsoft.Extensions.Caching.Distributed;
+using System.Text.Json;
 
 namespace Bountous_X_Accolite_Job_Portal.Services
 {
     public class JobStatusService : IJobStatusService
     {
         private readonly ApplicationDbContext _dbContext;
-        public JobStatusService(ApplicationDbContext applicationDbContext)
+        private readonly IDistributedCache _cache;
+        public JobStatusService(ApplicationDbContext applicationDbContext, IDistributedCache cache)
         {
             _dbContext = applicationDbContext;
+            _cache = cache;
         }
 
-        public int getInitialReferralStatus()
+        public async Task<int> getInitialReferralStatus()
         {
             int statusId = -1;
 
-            List<Status> status = _dbContext.Status.ToList();
+            string key = $"allStatus";
+            string? allStatusFromCache = await _cache.GetStringAsync(key);
+
+            List<Status> status;
+            if (string.IsNullOrEmpty(allStatusFromCache))
+            {
+                status = _dbContext.Status.ToList();
+                await _cache.SetStringAsync(key, JsonSerializer.Serialize(status));
+            }
+            else
+            {
+                status = JsonSerializer.Deserialize<List<Status>>(allStatusFromCache);
+            }
+
             foreach(Status s in status)
             {
                 if(String.Equals(s.StatusName.ToLower(), "referred"))
@@ -34,12 +51,25 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             return 1;
         }
 
-        public bool IsRejectedStatus(int StatusId)
+        public async Task<bool> IsRejectedStatus(int StatusId)
         {
-            var status = _dbContext.Status.Find(StatusId);
-            if(status == null)
+            string key = $"getStatusById-{StatusId}";
+            string? getStatusFromCache = await _cache.GetStringAsync(key);
+
+            Status status;
+            if (string.IsNullOrEmpty(getStatusFromCache))
             {
-                return false;
+                status = _dbContext.Status.Find(StatusId);
+                if(status == null)
+                {
+                    return false;
+                }
+
+                await _cache.SetStringAsync(key, JsonSerializer.Serialize(status));
+            }
+            else
+            {
+                status = JsonSerializer.Deserialize<Status>(getStatusFromCache);
             }
 
             if (String.Equals(status.StatusName.ToLower(), "rejected"))
@@ -63,20 +93,35 @@ namespace Bountous_X_Accolite_Job_Portal.Services
 
             await _dbContext.Status.AddAsync(addJobStatus);
             await _dbContext.SaveChangesAsync();
+
+            await _cache.RemoveAsync($"allStatus");
  
             return true;
         }
 
-        public JobStatusResponseViewModel GetStatusById(int statusId)
+        public async Task<JobStatusResponseViewModel> GetStatusById(int statusId)
         {
             JobStatusResponseViewModel response = new JobStatusResponseViewModel();
 
-            var status = _dbContext.Status.Find(statusId);
-            if( status == null)
+            string key = $"getStatusById-{statusId}";
+            string? getStatusFromCache = await _cache.GetStringAsync(key);
+
+            Status status;
+            if (string.IsNullOrEmpty(getStatusFromCache))
             {
-                response.Status = 404;
-                response.Message = "Status with this Id does not exist.";
-                return response;
+                status = _dbContext.Status.Find(statusId);
+                if (status == null)
+                {
+                    response.Status = 404;
+                    response.Message = "Status with this Id does not exist.";
+                    return response;
+                }
+
+                await _cache.SetStringAsync(key, JsonSerializer.Serialize(status));
+            }
+            else
+            {
+                status = JsonSerializer.Deserialize<Status>(getStatusFromCache);
             }
 
             response.Status = 200;
@@ -85,11 +130,23 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             return response;
         }
 
-        public AllStatusResponseViewModel GetAllStatus()
+        public async Task<AllStatusResponseViewModel> GetAllStatus()
         {
             AllStatusResponseViewModel response = new AllStatusResponseViewModel();
 
-            List<Status> l = _dbContext.Status.Where(ite => true).ToList();
+            string key = $"allStatus";
+            string? allStatusFromCache = await _cache.GetStringAsync(key);
+
+            List<Status> l;
+            if (string.IsNullOrEmpty(allStatusFromCache))
+            {
+                l = _dbContext.Status.Where(ite => true).ToList();
+                await _cache.SetStringAsync(key, JsonSerializer.Serialize(l));
+            }
+            else
+            {
+                l = JsonSerializer.Deserialize<List<Status>>(allStatusFromCache);
+            }
 
             List<StatusViewModel> list = new List<StatusViewModel>();
             foreach (var item in l)

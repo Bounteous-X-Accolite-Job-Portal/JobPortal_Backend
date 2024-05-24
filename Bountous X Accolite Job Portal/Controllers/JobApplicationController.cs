@@ -1,7 +1,6 @@
 ﻿using Bountous_X_Accolite_Job_Portal.Helpers;
-using Bountous_X_Accolite_Job_Portal.Models.JobApplicationViewModel;
-using Bountous_X_Accolite_Job_Portal.Models.JobApplicationViewModel.ResponseViewModels;
-using Bountous_X_Accolite_Job_Portal.Models.JobViewModels.JobResponseViewModel;
+using Bountous_X_Accolite_Job_Portal.Models.JobApplicationModels;
+using Bountous_X_Accolite_Job_Portal.Models.JobApplicationModels.ResponseViewModels;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -25,9 +24,9 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
 
         [HttpGet]
         [Route("jobApplication/{Id}")]
-        public JobApplicationResponseViewModel GetJobApplicaionById(Guid Id)
+        public async Task<JobApplicationResponseViewModel> GetJobApplicaionById(Guid Id)
         {
-            JobApplicationResponseViewModel response = _jobApplicationService.GetJobApplicaionById(Id);
+            JobApplicationResponseViewModel response = await _jobApplicationService.GetJobApplicaionById(Id);
             if(response.Application == null)
             {
                 return response;
@@ -88,7 +87,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
 
         [HttpGet]
         [Route("jobApplication/candidate/{Id}")]
-        public AllJobApplicationResponseViewModel GetJobApplicationByCandidateId(Guid Id)
+        public async Task<AllJobApplicationResponseViewModel> GetJobApplicationByCandidateId(Guid Id)
         {
             AllJobApplicationResponseViewModel response;
 
@@ -102,13 +101,13 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
 
-            response = _jobApplicationService.GetJobApplicationByCandidateId(Id);
+            response = await _jobApplicationService.GetJobApplicationByCandidateId(Id);
             return response;
         }
 
         [HttpGet]
         [Route("jobApplication/job/{Id}")]
-        public AllJobApplicationResponseViewModel GetJobApplicationByJobId(Guid Id)
+        public async Task<AllJobApplicationResponseViewModel> GetJobApplicationByJobId(Guid Id)
         {
             AllJobApplicationResponseViewModel response;
 
@@ -121,12 +120,12 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
 
-            return _jobApplicationService.GetJobApplicationByJobId(Id);
+            return await _jobApplicationService.GetJobApplicationByJobId(Id);
         }
 
         [HttpGet]
         [Route("jobApplication/closedJob/{Id}")]
-        public AllJobApplicationResponseViewModel GetJobApplicationByClosedJobId(Guid Id)
+        public async Task<AllJobApplicationResponseViewModel> GetJobApplicationByClosedJobId(Guid Id)
         {
             AllJobApplicationResponseViewModel response;
 
@@ -139,12 +138,12 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
 
-            return _jobApplicationService.GetJobApplicationByClosedJobId(Id);
+            return await _jobApplicationService.GetJobApplicationByClosedJobId(Id);
         }
 
         [HttpGet]
         [Route("closedJobApplication/candidate/{Id}")]
-        public AllJobApplicationResponseViewModel GetClosedJobApplicationByCandidateId(Guid Id)
+        public async Task<AllJobApplicationResponseViewModel> GetClosedJobApplicationByCandidateId(Guid Id)
         {
             AllJobApplicationResponseViewModel response;
 
@@ -158,7 +157,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
 
-            response = _jobApplicationService.GetClosedJobApplicationByCandidateId(Id);
+            response = await _jobApplicationService.GetClosedJobApplicationByCandidateId(Id);
             return response;
         }
 

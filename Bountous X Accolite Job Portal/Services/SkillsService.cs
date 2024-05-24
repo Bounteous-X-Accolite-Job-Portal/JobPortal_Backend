@@ -3,26 +3,45 @@ using Bountous_X_Accolite_Job_Portal.Models;
 using Bountous_X_Accolite_Job_Portal.Models.SkillsModels;
 using Bountous_X_Accolite_Job_Portal.Models.SkillsModels.ResponseViewModels;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
+using Microsoft.Extensions.Caching.Distributed;
+using System.Text.Json;
 
 namespace Bountous_X_Accolite_Job_Portal.Services
 {
     public class SkillsService : ISkillsService
     {
         private readonly ApplicationDbContext _dbContext;
-        public SkillsService(ApplicationDbContext dbContext)
+        private readonly IDistributedCache _cache;
+        private readonly ICandidateAccountService _candidateAccountService;
+        public SkillsService(ApplicationDbContext dbContext, IDistributedCache cache, ICandidateAccountService candidateAccountService)
         {
             _dbContext = dbContext;
+            _cache = cache;
+            _candidateAccountService = candidateAccountService;
         }
-        public SkillsResponseViewModel GetSkillsById(Guid Id)
+        public async Task<SkillsResponseViewModel> GetSkillsById(Guid Id)
         {
             SkillsResponseViewModel response = new SkillsResponseViewModel();
 
-            var skills = _dbContext.Skills.Find(Id);
-            if (skills == null)
+            string key = $"getSkillsById-{Id}";
+            string? getSkillsByIdFromCache = await _cache.GetStringAsync(key);
+
+            Skills skills;
+            if (string.IsNullOrEmpty(getSkillsByIdFromCache))
             {
-                response.Status = 404;
-                response.Message = "Skills with this Id does not exist";
-                return response;
+                skills = _dbContext.Skills.Find(Id);
+                if (skills == null)
+                {
+                    response.Status = 404;
+                    response.Message = "Skills with this Id does not exist";
+                    return response;
+                }
+
+                await _cache.SetStringAsync(key, JsonSerializer.Serialize(skills));
+            }
+            else
+            {
+                skills = JsonSerializer.Deserialize<Skills>(getSkillsByIdFromCache);
             }
 
             response.Status = 200;
@@ -31,24 +50,37 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             return response;
         }
 
-        public SkillsResponseViewModel GetSkillsOfACandidate(Guid CandidateId)
+        public async Task<SkillsResponseViewModel> GetSkillsOfACandidate(Guid CandidateId)
         {
             SkillsResponseViewModel response = new SkillsResponseViewModel();
 
-            var candidate = _dbContext.Candidates.Find(CandidateId);
-            if (candidate == null)
+            var candidate = await _candidateAccountService.GetCandidateById(CandidateId);
+            if (candidate.Candidate == null)
             {
                 response.Status = 404;
                 response.Message = "Candidate with this Id does not exist";
                 return response;
             }
 
-            var skills = _dbContext.Skills.Where(item => item.CandidateId == CandidateId).FirstOrDefault();
-            if (skills == null)
+            string key = $"getSkillsByCandidateId-{CandidateId}";
+            string? getSkillsByCandidateIdFromCache = await _cache.GetStringAsync(key);
+
+            Skills skills;
+            if (string.IsNullOrEmpty(getSkillsByCandidateIdFromCache))
             {
-                response.Status = 404;
-                response.Message = "Skills of this candidate does not exist.";
-                return response;
+                skills = _dbContext.Skills.Where(item => item.CandidateId == CandidateId).FirstOrDefault();
+                if (skills == null)
+                {
+                    response.Status = 404;
+                    response.Message = "Skills of this candidate does not exist.";
+                    return response;
+                }
+
+                await _cache.SetStringAsync(key, JsonSerializer.Serialize(skills));
+            }
+            else
+            {
+                skills = JsonSerializer.Deserialize<Skills>(getSkillsByCandidateIdFromCache);
             }
 
             response.Status = 200;
@@ -86,18 +118,34 @@ namespace Bountous_X_Accolite_Job_Portal.Services
         {
             SkillsResponseViewModel response = new SkillsResponseViewModel();
 
-            var skills = _dbContext.Skills.Find(updateSkills.SkillsId);
-            if (skills == null)
+            string key = $"getSkillsById-{updateSkills.SkillsId}";
+            string? getSkillsByIdFromCache = await _cache.GetStringAsync(key);
+
+            Skills skills;
+            if (string.IsNullOrEmpty(getSkillsByIdFromCache))
             {
-                response.Status = 404;
-                response.Message = "Skills with this Id does not exist";
-                return response;
+                skills = _dbContext.Skills.Find(updateSkills.SkillsId);
+                if (skills == null)
+                {
+                    response.Status = 404;
+                    response.Message = "Skills with this Id does not exist";
+                    return response;
+                }
+
+                await _cache.SetStringAsync(key, JsonSerializer.Serialize(skills));
+            }
+            else
+            {
+                skills = JsonSerializer.Deserialize<Skills>(getSkillsByIdFromCache);
             }
 
             skills.CandidateSkills = updateSkills.CandidateSkills;
 
             _dbContext.Skills.Update(skills);
             await _dbContext.SaveChangesAsync();
+
+            await _cache.RemoveAsync($"getSkillsById-{updateSkills.SkillsId}");
+            await _cache.RemoveAsync($"getSkillsByCandidateId-{skills.CandidateId}");
 
             response.Status = 200;
             response.Message = "Successfully updated that candidate experience.";
@@ -109,16 +157,32 @@ namespace Bountous_X_Accolite_Job_Portal.Services
         {
             SkillsResponseViewModel response = new SkillsResponseViewModel();
 
-            var skills = _dbContext.Skills.Find(Id);
-            if (skills == null)
+            string key = $"getSkillsById-{Id}";
+            string? getSkillsByIdFromCache = await _cache.GetStringAsync(key);
+
+            Skills skills;
+            if (string.IsNullOrEmpty(getSkillsByIdFromCache))
             {
-                response.Status = 404;
-                response.Message = "Skills with this Id does not exist";
-                return response;
+                skills = _dbContext.Skills.Find(Id);
+                if (skills == null)
+                {
+                    response.Status = 404;
+                    response.Message = "Skills with this Id does not exist";
+                    return response;
+                }
+
+                await _cache.SetStringAsync(key, JsonSerializer.Serialize(skills));
+            }
+            else
+            {
+                skills = JsonSerializer.Deserialize<Skills>(getSkillsByIdFromCache);
             }
 
             _dbContext.Skills.Remove(skills);
             await _dbContext.SaveChangesAsync();
+
+            await _cache.RemoveAsync($"getSkillsById-{Id}");
+            await _cache.RemoveAsync($"getSkillsByCandidateId-{skills.CandidateId}");
 
             response.Status = 200;
             response.Message = "Successfully removed that resume.";

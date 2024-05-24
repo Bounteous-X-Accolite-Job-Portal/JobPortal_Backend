@@ -14,11 +14,9 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
     public class InterviewController : ControllerBase
     {
         private readonly I_InterviewService _InterviewService;
-        private readonly IDesignationService _designationService;
-        public InterviewController(I_InterviewService interviewService, IDesignationService designationService)
+        public InterviewController(I_InterviewService interviewService)
         {
             _InterviewService = interviewService;
-            _designationService = designationService;
         }
 
         [HttpGet]
@@ -37,7 +35,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             }
             else
             {
-                response = _InterviewService.GetAllInterviewsForInterviewer(employeeId);
+                response = await _InterviewService.GetAllInterviewsForInterviewer(employeeId);
             }
             return response;
         }
@@ -58,7 +56,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             }
             else
             {
-                response = _InterviewService.GetAllInterviewByApplicationId(ApplicationId);
+                response = await _InterviewService.GetAllInterviewByApplicationId(ApplicationId);
             }
             return response;
         }
@@ -86,9 +84,9 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
 
         [HttpGet]
         [Route("getInterviewById/{Id}")]
-        public InterviewResponseViewModel GetInterviewById(Guid Id)
+        public async Task<InterviewResponseViewModel> GetInterviewById(Guid Id)
         {
-            return _InterviewService.GetInterviewById(Id);
+            return await _InterviewService.GetInterviewById(Id);
         }
 
         [HttpPost]
@@ -105,9 +103,9 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             }
 
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            bool hasPrivilege = Convert.ToBoolean(User.FindFirstValue("HasPrivilege"));
             Guid employeeId = GetGuidFromString.Get(User.FindFirstValue("Id"));
-            var role = User.FindFirstValue("Role");
-            if (!isEmployee || role == null || !_designationService.HasPrivilege(role))
+            if (!isEmployee || !hasPrivilege)
             {
                 response = new InterviewResponseViewModel();
                 response.Status = 401;
@@ -125,7 +123,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
         {
             InterviewResponseViewModel response;
 
-            InterviewResponseViewModel res = GetInterviewById(Id);
+            InterviewResponseViewModel res = await GetInterviewById(Id);
             if(res.Interview == null)
             {
                 response = new InterviewResponseViewModel();
@@ -161,7 +159,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
 
-            InterviewResponseViewModel res = GetInterviewById(interview.InterviewId);
+            InterviewResponseViewModel res = await GetInterviewById(interview.InterviewId);
             if (res.Interview == null)
             {
                 response = new InterviewResponseViewModel();

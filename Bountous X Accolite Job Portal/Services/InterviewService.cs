@@ -4,6 +4,8 @@ using Bountous_X_Accolite_Job_Portal.Models.InterviewFeedbackModels.InterviewFee
 using Bountous_X_Accolite_Job_Portal.Models.InterviewViewModel;
 using Bountous_X_Accolite_Job_Portal.Models.InterviewViewModel.InterviewResponseViewModel;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
+using Microsoft.Extensions.Caching.Distributed;
+using System.Text.Json;
 
 namespace Bountous_X_Accolite_Job_Portal.Services
 {
@@ -11,29 +13,35 @@ namespace Bountous_X_Accolite_Job_Portal.Services
     {
         private readonly ApplicationDbContext _context;
         private readonly IEmployeeAccountService _employeeAccountService;
+        private readonly IJobApplicationService _jobApplicationService;
+        private readonly IDistributedCache _cache;
         public InterviewService(
             ApplicationDbContext context, 
-            IEmployeeAccountService employeeAccountService
+            IEmployeeAccountService employeeAccountService,
+            IDistributedCache cache,
+            IJobApplicationService jobApplicationService
         )
         {
             _context = context;
             _employeeAccountService = employeeAccountService;
+            _cache = cache; 
+            _jobApplicationService = jobApplicationService;
         }
 
         public async Task<InterviewResponseViewModel> AddInterview(CreateInterviewViewModel interview , Guid EmpId)
         {
             InterviewResponseViewModel response = new InterviewResponseViewModel();
 
-            var application = _context.JobApplications.Find(interview.ApplicationId);
-            if(application == null)
+            var application = await _jobApplicationService.GetJobApplicaionById((Guid)interview.ApplicationId);
+            if(application.Application == null)
             {
                 response.Status = 404;
                 response.Message = "The application does not exist.";
                 return response;
             }
 
-            var interviewer = _context.Employees.Find(interview.InterViewerId);
-            if (interviewer == null)
+            var interviewer = await _employeeAccountService.GetEmployeeById((Guid)interview.InterViewerId); 
+            if (interviewer.Employee == null)
             {
                 response.Status = 404;
                 response.Message = "The application does not exist.";
@@ -58,6 +66,10 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             }
             else
             {
+                await _cache.RemoveAsync($"allInterviews");
+                await _cache.RemoveAsync($"getAllInterviewsByApplicationId-{interview.ApplicationId}");
+                await _cache.RemoveAsync($"getAllInterviewsByInterviewerId-{interview.InterViewerId}");
+
                 response.Status = 200;
                 response.Message = "Interview Scheduled Successfully !!";
                 response.Interview = new InterviewViewModel(newInterview);
@@ -69,20 +81,37 @@ namespace Bountous_X_Accolite_Job_Portal.Services
         {
             InterviewResponseViewModel response = new InterviewResponseViewModel();
 
-            var interview = _context.Interviews.Find(Id);
-            if(interview != null)
-            {
-                 _context.Interviews.Remove(interview);
-                await _context.SaveChangesAsync();
+            string key = $"getInterviewById-{Id}";
+            string? getInterviewByIdFromCache = await _cache.GetStringAsync(key);
 
-                response.Status = 200;
-                response.Message = "Interview Successfully Removed !";
+            Interview interview;
+            if (string.IsNullOrEmpty(getInterviewByIdFromCache))
+            {
+                interview = _context.Interviews.Find(Id);
+                if (interview == null)
+                {
+                    response.Status = 500;
+                    response.Message = "Not Able to Found Interview you are trying to remove";
+                    return response;
+                }
+
+                await _cache.SetStringAsync(key, JsonSerializer.Serialize(interview));
             }
             else
             {
-                response.Status = 500;
-                response.Message = "Unable to Remove Interview !";
+                interview = JsonSerializer.Deserialize<Interview>(getInterviewByIdFromCache);
             }
+
+            _context.Interviews.Remove(interview);
+            await _context.SaveChangesAsync();
+
+            await _cache.RemoveAsync($"allInterviews");
+            await _cache.RemoveAsync($"getAllInterviewsByApplicationId-{interview.ApplicationId}");
+            await _cache.RemoveAsync($"getInterviewById-{interview.InterviewId}");
+            await _cache.RemoveAsync($"getAllInterviewsByInterviewerId-{interview.InterViewerId}");
+
+            response.Status = 200;
+            response.Message = "Interview Successfully Removed !";
             return response;
         }
 
@@ -90,7 +119,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
         {
             InterviewResponseViewModel response = new InterviewResponseViewModel();
 
-            var application = _context.JobApplications.Find(interview.ApplicationId);
+            var application = _jobApplicationService.GetJobApplicaionById((Guid)interview.ApplicationId);
             if (application == null)
             {
                 response.Status = 404;
@@ -98,7 +127,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
                 return response;
             }
 
-            var interviewer = _context.Employees.Find(interview.InterViewerId);
+            var interviewer = _employeeAccountService.GetEmployeeById((Guid)interview.InterViewerId);
             if (interviewer == null)
             {
                 response.Status = 404;
@@ -106,47 +135,62 @@ namespace Bountous_X_Accolite_Job_Portal.Services
                 return response;
             }
 
-            var dbinterview = _context.Interviews.Find(interview.InterviewId);
-            if(dbinterview != null)
+            string key = $"getInterviewById-{interview.InterviewId}";
+            string? getInterviewByIdFromCache = await _cache.GetStringAsync(key);
+
+            Interview dbinterview;
+            if (string.IsNullOrEmpty(getInterviewByIdFromCache))
             {
-                dbinterview.InterviewDate = interview.InterviewDate;
-                dbinterview.InterviewTime = interview.InterviewTime;
-                dbinterview.InterViewerId = interview.InterViewerId; 
-                dbinterview.Link = interview.Link;
-                dbinterview.FeedbackId = interview.FeedbackId;
+                dbinterview = _context.Interviews.Find(interview.InterviewId);
+                if (dbinterview == null)
+                {
+                    response.Status = 500;
+                    response.Message = "Not Able to Found Interview you are trying to update";
+                    return response;
+                }
 
-                _context.Interviews.Update(dbinterview);
-                await _context.SaveChangesAsync();
-
-                response.Status = 200;
-                response.Message = "Interview Successfully Updated !";
-                response.Interview = new InterviewViewModel(dbinterview);
+                await _cache.SetStringAsync(key, JsonSerializer.Serialize(dbinterview));
             }
             else
             {
-                response.Status = 404;
-                response.Message = "Unable to Update Interview !";
+                dbinterview = JsonSerializer.Deserialize<Interview>(getInterviewByIdFromCache);
             }
+
+            dbinterview.InterviewDate = interview.InterviewDate;
+            dbinterview.InterviewTime = interview.InterviewTime;
+            dbinterview.InterViewerId = interview.InterViewerId;
+            dbinterview.Link = interview.Link;
+            dbinterview.FeedbackId = interview.FeedbackId;
+
+            _context.Interviews.Update(dbinterview);
+            await _context.SaveChangesAsync();
+
+            await _cache.RemoveAsync($"allInterviews");
+            await _cache.RemoveAsync($"getAllInterviewsByApplicationId-{dbinterview.ApplicationId}");
+            await _cache.RemoveAsync($"getInterviewById-{dbinterview.InterviewId}");
+            await _cache.RemoveAsync($"getAllInterviewsByInterviewerId-{dbinterview.InterViewerId}");
+
+            response.Status = 200;
+            response.Message = "Interview Successfully Updated !";
+            response.Interview = new InterviewViewModel(dbinterview);
             return response;
         }
 
-        public async void ChangeInterviewApplicationToClosedApplication(Guid ApplicationId, Guid ClosedApplicationId)
+        public async Task<All_InterviewResponseViewModel> GetAllInterviews()
         {
-            List<Interview> list = _context.Interviews.Where(item => item.ApplicationId == ApplicationId).ToList();
-            foreach(Interview interview in list)
+            string key = $"allInterviews";
+            string? getAllInterviewsFromCache = await _cache.GetStringAsync(key);
+
+            List<Interview> list;
+            if (string.IsNullOrEmpty(getAllInterviewsFromCache))
             {
-                interview.ApplicationId = null;
-                interview.ClosedJobApplicationId = ClosedApplicationId;
-
-                _context.Interviews.Update(interview);
+                list = _context.Interviews.ToList();
+                await _cache.SetStringAsync(key, JsonSerializer.Serialize(list));
             }
-
-            await _context.SaveChangesAsync();
-        }
-
-        public All_InterviewResponseViewModel GetAllInterviews()
-        {
-            List<Interview> list = _context.Interviews.ToList();
+            else
+            {
+                list = JsonSerializer.Deserialize<List<Interview>>(getAllInterviewsFromCache);
+            }
 
             List<InterviewViewModel> interviewList = new List<InterviewViewModel>();
             foreach (Interview interview in list)
@@ -159,9 +203,21 @@ namespace Bountous_X_Accolite_Job_Portal.Services
 
             return response;
         }
-        public All_InterviewResponseViewModel GetAllInterviewsForInterviewer(Guid InterViewerId)
+        public async Task<All_InterviewResponseViewModel> GetAllInterviewsForInterviewer(Guid InterViewerId)
         {
-            List<Interview> list = _context.Interviews.Where( e => e.InterViewerId==InterViewerId).ToList();
+            string key = $"getAllInterviewsByInterviewerId-{InterViewerId}";
+            string? getAllInterviewsByInterviewerIdFromCache = await _cache.GetStringAsync(key);
+
+            List<Interview> list;
+            if (string.IsNullOrEmpty(getAllInterviewsByInterviewerIdFromCache))
+            {
+                list = _context.Interviews.Where(e => e.InterViewerId == InterViewerId).ToList();
+                await _cache.SetStringAsync(key, JsonSerializer.Serialize(list));
+            }
+            else
+            {
+                list = JsonSerializer.Deserialize<List<Interview>>(getAllInterviewsByInterviewerIdFromCache);
+            }
 
             List<InterviewViewModel> interviewList = new List<InterviewViewModel>();
             foreach (Interview interview in list)
@@ -178,52 +234,95 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             return response;
         }
 
-        public InterviewResponseViewModel GetInterviewById(Guid Id)
+        public async Task<InterviewResponseViewModel> GetInterviewById(Guid Id)
         {
             InterviewResponseViewModel response = new InterviewResponseViewModel();
-            var dbinterview = _context.Interviews.Find(Id);
-            if (dbinterview != null)
+
+            string key = $"getInterviewById-{Id}";
+            string? getInterviewByIdFromCache = await _cache.GetStringAsync(key);
+
+            Interview dbinterview;
+            if (string.IsNullOrEmpty(getInterviewByIdFromCache))
             {
-                response.Status = 200;
-                response.Message = "Successfully Found Interview";
-                response.Interview = new InterviewViewModel(dbinterview);
+                dbinterview = _context.Interviews.Find(Id);
+                if (dbinterview == null)
+                {
+                    response.Status = 500;
+                    response.Message = "Not Able to Found Interview";
+                    return response;
+                }
+
+                await _cache.SetStringAsync(key, JsonSerializer.Serialize(dbinterview));
             }
             else
             {
-                response.Status = 500;
-                response.Message = "Not Able to Found Interview";
+                dbinterview = JsonSerializer.Deserialize<Interview>(getInterviewByIdFromCache);
             }
+
+            response.Status = 200;
+            response.Message = "Successfully Found Interview";
+            response.Interview = new InterviewViewModel(dbinterview);
             return response;
         }
    
         public async Task<bool> UpdateFeedbackId(Guid InterviewId, Guid FeedbackId)
         {
-            var interview = _context.Interviews.Find(InterviewId);
-            if(interview == null)
+            string key = $"getInterviewById-{InterviewId}";
+            string? getInterviewByIdFromCache = await _cache.GetStringAsync(key);
+
+            Interview interview;
+            if (string.IsNullOrEmpty(getInterviewByIdFromCache))
             {
-                return false;
+                interview = _context.Interviews.Find(InterviewId);
+                if (interview == null)
+                {
+                    return false;
+                }
+
+                await _cache.SetStringAsync(key, JsonSerializer.Serialize(interview));
+            }
+            else
+            {
+                interview = JsonSerializer.Deserialize<Interview>(getInterviewByIdFromCache);
             }
 
             interview.FeedbackId = FeedbackId;
             _context.Interviews.Update(interview);
             await _context.SaveChangesAsync();
 
+            await _cache.RemoveAsync($"allInterviews");
+            await _cache.RemoveAsync($"getInterviewById-{InterviewId}");
+            await _cache.RemoveAsync($"getAllInterviewsByApplicationId-{interview.ApplicationId}");
+            await _cache.RemoveAsync($"getAllInterviewsByInterviewerId-{interview.InterViewerId}");
+
             return true;
         }
 
-        public All_InterviewResponseViewModel GetAllInterviewByApplicationId(Guid ApplicationId)
+        public async Task<All_InterviewResponseViewModel> GetAllInterviewByApplicationId(Guid ApplicationId)
         {
             All_InterviewResponseViewModel response = new All_InterviewResponseViewModel();
 
-            var application = _context.JobApplications.Find(ApplicationId);
-            if (application == null)
+            var application = await _jobApplicationService.GetJobApplicaionById(ApplicationId);
+            if (application.Application == null)
             {
                 response.Status = 404;
                 response.Message = "Application with this Id does not exist.";
                 return response;
             }
 
-            List<Interview> interviews = _context.Interviews.Where(item => item.ApplicationId == ApplicationId).ToList();
+            string key = $"getAllInterviewsByApplicationId-{ApplicationId}";
+            string? getAllInterviewsByApplicationIdFromCache = await _cache.GetStringAsync(key);
+
+            List<Interview> interviews;
+            if (string.IsNullOrEmpty(getAllInterviewsByApplicationIdFromCache))
+            {
+                interviews = _context.Interviews.Where(item => item.ApplicationId == ApplicationId).ToList();
+                await _cache.SetStringAsync(key, JsonSerializer.Serialize(interviews));
+            }
+            else
+            {
+                interviews = JsonSerializer.Deserialize<List<Interview>>(getAllInterviewsByApplicationIdFromCache);
+            }
 
             List<InterviewViewModel> allInterview = new List<InterviewViewModel>();
             foreach (var item in interviews)
@@ -241,7 +340,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
         {
             AllApplicantInterviewResponseViewModel response = new AllApplicantInterviewResponseViewModel();
 
-            var allInterviews = GetAllInterviewByApplicationId(ApplicationId);
+            var allInterviews = await GetAllInterviewByApplicationId(ApplicationId);
             if(allInterviews.Status != 200)
             {
                 response.Status = allInterviews.Status;
@@ -255,13 +354,29 @@ namespace Bountous_X_Accolite_Job_Portal.Services
 
             foreach (var item in allInterviews.allInterviews)
             {
-                var interviewer = _employeeAccountService.GetEmployeeById((Guid)item.InterViewerId);
-                var feedback = _context.InterviewFeedbacks.Find(item.FeedbackId);
+                var interviewer = await _employeeAccountService.GetEmployeeById((Guid)item.InterViewerId);
+
+                string key = $"getInterviewFeedbackById-{item.FeedbackId}";
+                string? getInterviewFeedbackByIdFromCache = await _cache.GetStringAsync(key);
+
+                InterviewFeedback feedback;
+                if (string.IsNullOrEmpty(getInterviewFeedbackByIdFromCache))
+                {
+                    feedback = _context.InterviewFeedbacks.Find(item.FeedbackId);
+                    if (feedback != null)
+                    {
+                        await _cache.SetStringAsync(key, JsonSerializer.Serialize(feedback));
+                    }
+                }
+                else
+                {
+                    feedback = JsonSerializer.Deserialize<InterviewFeedback>(getInterviewFeedbackByIdFromCache);
+                }
 
                 ApplicantInterviewViewModel interview = new ApplicantInterviewViewModel();
                 interview.Interview = item;
                 interview.Interviewer = interviewer.Employee;
-                interview.Feedback = feedback == null ? null : new InterviewFeedbackViewModel(feedback);
+                interview.Feedback = (feedback == null ? null : new InterviewFeedbackViewModel(feedback));
 
                 response.AllInterviews.Add(interview);
             }

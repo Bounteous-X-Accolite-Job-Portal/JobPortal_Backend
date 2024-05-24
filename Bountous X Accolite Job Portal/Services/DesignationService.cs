@@ -3,16 +3,20 @@ using Bountous_X_Accolite_Job_Portal.Models;
 using Bountous_X_Accolite_Job_Portal.Models.DesignationViewModel;
 using Bountous_X_Accolite_Job_Portal.Models.DesignationViewModel.ResponseViewModels;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
+using Microsoft.Extensions.Caching.Distributed;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Bountous_X_Accolite_Job_Portal.Services
 {
     public class DesignationService : IDesignationService
     {
         private readonly ApplicationDbContext _dbContext;
-
-        public DesignationService(ApplicationDbContext applicationDbContext)
+        private readonly IDistributedCache _cache;
+        public DesignationService(ApplicationDbContext applicationDbContext, IDistributedCache cache)
         {
             _dbContext = applicationDbContext;
+            _cache = cache;
         }
 
         public bool HasSpecialPrivilege(string role)
@@ -25,33 +29,96 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             return false;
         }
 
-        public bool HasPrivilege(string role)
+        public async Task<bool> HasPrivilege(int designationId)
         {
-            var designation = _dbContext.Designations.Where(item => String.Equals(item.DesignationName.ToLower(), role.ToLower())).FirstOrDefault();
-            if(designation == null)
-            {
-                return false;
-            }
+            string key = $"getPrivilegeByDesignationId-{designationId}";
+            string? getPrivilegeByDesignationIdFromCache = await _cache.GetStringAsync(key);
 
-            var check = _dbContext.DesignationWhichHasPrivileges.Where(item => item.DesignationId == designation.DesignationId).FirstOrDefault();
-            if(check == null)
+            DesignationWhichHasPrivilege check;
+            if (string.IsNullOrEmpty(getPrivilegeByDesignationIdFromCache))
             {
-                return false;
+                check = _dbContext.DesignationWhichHasPrivileges.Where(item => item.DesignationId == designationId).FirstOrDefault();
+                if (check == null)
+                {
+                    return false;
+                }
+
+                await _cache.SetStringAsync(key, JsonSerializer.Serialize(check, new JsonSerializerOptions { ReferenceHandler = ReferenceHandler.Preserve }));
+            }
+            else
+            {
+                check = JsonSerializer.Deserialize<DesignationWhichHasPrivilege>(getPrivilegeByDesignationIdFromCache, new JsonSerializerOptions { ReferenceHandler = ReferenceHandler.Preserve });
             }
 
             return true;
         }
 
+        //public async Task<bool> HasPrivilege(string role)
+        //{
+        //    string key = $"getDesignationByRole-{role}";
+        //    string? getDesignationByRoleFromCache = await _cache.GetStringAsync(key);
+
+        //    Designation designation;
+        //    if (string.IsNullOrEmpty(getDesignationByRoleFromCache))
+        //    {
+        //        designation = _dbContext.Designations.Where(item => String.Equals(item.DesignationName.ToLower(), role.ToLower())).FirstOrDefault();
+        //        if(designation == null)
+        //        {
+        //            return false;
+        //        }
+
+        //        await _cache.SetStringAsync(key, JsonSerializer.Serialize(designation, new JsonSerializerOptions { ReferenceHandler = ReferenceHandler.Preserve }));
+        //    }
+        //    else
+        //    {
+        //        designation = JsonSerializer.Deserialize<Designation>(getDesignationByRoleFromCache, new JsonSerializerOptions { ReferenceHandler = ReferenceHandler.Preserve });
+        //    }
+
+        //    key = $"getPrivilegeByDesignationId-{designation.DesignationId}";
+        //    string? getPrivilegeByDesignationIdFromCache = await _cache.GetStringAsync(key);
+
+        //    DesignationWhichHasPrivilege check;
+        //    if (string.IsNullOrEmpty(getPrivilegeByDesignationIdFromCache))
+        //    {
+        //        check = _dbContext.DesignationWhichHasPrivileges.Where(item => item.DesignationId == designation.DesignationId).FirstOrDefault();
+        //        if (check == null)
+        //        {
+        //            return false;
+        //        }
+
+        //        await _cache.SetStringAsync(key, JsonSerializer.Serialize(check, new JsonSerializerOptions { ReferenceHandler = ReferenceHandler.Preserve }));
+        //    }
+        //    else
+        //    {
+        //        check = JsonSerializer.Deserialize<DesignationWhichHasPrivilege>(getPrivilegeByDesignationIdFromCache, new JsonSerializerOptions { ReferenceHandler = ReferenceHandler.Preserve });
+        //    }
+
+        //    return true;
+        //}
+
         public async Task<DesignationResponseViewModel> GetDesignationById(int Id)
         {
             DesignationResponseViewModel response = new DesignationResponseViewModel();
 
-            var designation = _dbContext.Designations.Find(Id);
-            if(designation == null)
+            string key = $"getDesignationById-{Id}";
+            string? getDesignationByIdFromCache = await _cache.GetStringAsync(key);
+
+            Designation designation;
+            if (string.IsNullOrEmpty(getDesignationByIdFromCache))
             {
-                response.Status = 404;
-                response.Message = "Desigation with this Id does not exist.";
-                return response;
+                designation = _dbContext.Designations.Find(Id);
+                if (designation == null)
+                {
+                    response.Status = 404;
+                    response.Message = "Desigation with this Id does not exist.";
+                    return response;
+                }
+
+                await _cache.SetStringAsync(key, JsonSerializer.Serialize(designation, new JsonSerializerOptions { ReferenceHandler = ReferenceHandler.Preserve }));
+            }
+            else
+            {
+                designation = JsonSerializer.Deserialize<Designation>(getDesignationByIdFromCache, new JsonSerializerOptions { ReferenceHandler = ReferenceHandler.Preserve });
             }
 
             response.Status = 200;
@@ -78,15 +145,29 @@ namespace Bountous_X_Accolite_Job_Portal.Services
                 return response;
             }
 
+            await _cache.RemoveAsync($"allDesignations");
+
             response.Status = 200;
             response.Message = "Successfully add designation.";
             response.Designation = new DesignationViewModel(addDesignation);
             return response;
         }
 
-        public AllDesignationResponseViewModel GetAllDesignation()
+        public async Task<AllDesignationResponseViewModel> GetAllDesignation()
         {
-            List<Designation> list = _dbContext.Designations.ToList();
+            string key = $"allDesignations";
+            string? getAllDesignationsFromCache = await _cache.GetStringAsync(key);
+
+            List<Designation> list;
+            if (string.IsNullOrEmpty(getAllDesignationsFromCache))
+            {
+                list = _dbContext.Designations.ToList();
+                await _cache.SetStringAsync(key, JsonSerializer.Serialize(list));
+            }
+            else
+            {
+                list = JsonSerializer.Deserialize<List<Designation>>(getAllDesignationsFromCache);
+            }
 
             List<DesignationViewModel> designations = new List<DesignationViewModel>();
             foreach (var item in list)
@@ -108,25 +189,56 @@ namespace Bountous_X_Accolite_Job_Portal.Services
         {
             DesignationResponseViewModel response = new DesignationResponseViewModel();
 
-            var designation = _dbContext.Designations.Find(Id);
-            if(designation == null)
+            string key = $"getDesignationById-{Id}";
+            string? getDesignationByIdFromCache = await _cache.GetStringAsync(key);
+
+            Designation designation;
+            if (string.IsNullOrEmpty(getDesignationByIdFromCache))
             {
-                response.Status = 404;
-                response.Message = "Designation with this Id does not exist.";
-                return response;
+                designation = _dbContext.Designations.Find(Id);
+                if (designation == null)
+                {
+                    response.Status = 404;
+                    response.Message = "Desigation with this Id does not exist.";
+                    return response;
+                }
+
+                await _cache.SetStringAsync(key, JsonSerializer.Serialize(designation));
+            }
+            else
+            {
+                designation = JsonSerializer.Deserialize<Designation>(getDesignationByIdFromCache);
             }
 
-            List<Employee> list = _dbContext.Employees.Where(item => item.DesignationId == Id).ToList();
+            key = $"getEmployeesByDesignationId-{Id}";
+            string? getEmployeesByDesignationIdFromCache = await _cache.GetStringAsync(key);
 
-            if(list.Count != 0)
+            List<Employee> list;
+            if (string.IsNullOrEmpty(getEmployeesByDesignationIdFromCache))
             {
-                response.Status = 409;
-                response.Message = "Employees with this designationId is present in the system.";
-                return response;
+                list = _dbContext.Employees.Where(item => item.DesignationId == Id).ToList();
+                if (list.Count != 0)
+                {
+                    response.Status = 409;
+                    response.Message = "Employees with this designationId is present in the system.";
+                    return response;
+                }
+
+                await _cache.SetStringAsync(key, JsonSerializer.Serialize(list));
+            }
+            else
+            {
+                list = JsonSerializer.Deserialize<List<Employee>>(getEmployeesByDesignationIdFromCache);
             }
 
             _dbContext.Designations.Remove(designation);
             await _dbContext.SaveChangesAsync();
+
+            await _cache.RemoveAsync($"allDesignations");
+            await _cache.RemoveAsync($"getDesignationById-{designation.DesignationId}");
+            await _cache.RemoveAsync($"getDesignationByRole-{designation.DesignationName}");
+            await _cache.RemoveAsync($"getPrivilegeByDesignationId-{designation.DesignationId}");
+            await _cache.RemoveAsync($"getEmployeesByDesignationId-{designation.DesignationId}");
 
             response.Status = 200;
             response.Message = "Successfully removed the designation.";

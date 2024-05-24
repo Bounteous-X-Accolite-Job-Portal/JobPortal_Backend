@@ -3,27 +3,46 @@ using Bountous_X_Accolite_Job_Portal.Models;
 using Bountous_X_Accolite_Job_Portal.Models.ResumeModels;
 using Bountous_X_Accolite_Job_Portal.Models.ResumeModels.ResponseViewModels;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
+using Microsoft.Extensions.Caching.Distributed;
+using System.Text.Json;
 
 namespace Bountous_X_Accolite_Job_Portal.Services
 {
     public class ResumeService : IResumeService
     {
         private readonly ApplicationDbContext _dbContext;
-        public ResumeService(ApplicationDbContext dbContext)
+        private readonly IDistributedCache _cache;
+        private readonly ICandidateAccountService _candidateAccountService;
+        public ResumeService(ApplicationDbContext dbContext, IDistributedCache cache, ICandidateAccountService candidateAccountService)
         {
             _dbContext = dbContext;
+            _cache = cache;
+            _candidateAccountService = candidateAccountService;
         }
 
-        public ResumeResponseViewModel GetResumeById(Guid Id)
+        public async Task<ResumeResponseViewModel> GetResumeById(Guid Id)
         {
             ResumeResponseViewModel response = new ResumeResponseViewModel();
 
-            var resume = _dbContext.Resumes.Find(Id);
-            if (resume == null)
+            string key = $"getResumeById-{Id}";
+            string? getResumeByIdFromCache = await _cache.GetStringAsync(key);
+
+            Resume resume;
+            if (string.IsNullOrEmpty(getResumeByIdFromCache))
             {
-                response.Status = 404;
-                response.Message = "Resume with this Id does not exist";
-                return response;
+                resume = _dbContext.Resumes.Find(Id);
+                if (resume == null)
+                {
+                    response.Status = 404;
+                    response.Message = "Resume with this Id does not exist";
+                    return response;
+                }
+
+                await _cache.SetStringAsync(key, JsonSerializer.Serialize(resume));
+            }
+            else
+            {
+                resume = JsonSerializer.Deserialize<Resume>(getResumeByIdFromCache);
             }
 
             response.Status = 200;
@@ -32,24 +51,37 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             return response;
         }
 
-        public ResumeResponseViewModel GetResumeOfACandidate(Guid CandidateId)
+        public async Task<ResumeResponseViewModel> GetResumeOfACandidate(Guid CandidateId)
         {
             ResumeResponseViewModel response = new ResumeResponseViewModel();
 
-            var candidate = _dbContext.Candidates.Find(CandidateId);
-            if (candidate == null)
+            var candidate = await _candidateAccountService.GetCandidateById(CandidateId);
+            if (candidate.Candidate == null)
             {
                 response.Status = 404;
                 response.Message = "Candidate with this Id does not exist";
                 return response;
             }
 
-            var resume = _dbContext.Resumes.Where(item => item.CandidateId == CandidateId).FirstOrDefault();
-            if(resume == null)
+            string key = $"getResumeByCandidateId-{CandidateId}";
+            string? getResumeByCandidateIdFromCache = await _cache.GetStringAsync(key);
+
+            Resume resume;
+            if (string.IsNullOrEmpty(getResumeByCandidateIdFromCache))
             {
-                response.Status = 404;
-                response.Message = "Resume of this candidate does not exist.";
-                return response;
+                resume = _dbContext.Resumes.Where(item => item.CandidateId == CandidateId).FirstOrDefault();
+                if (resume == null)
+                {
+                    response.Status = 404;
+                    response.Message = "Resume of this candidate does not exist.";
+                    return response;
+                }
+
+                await _cache.SetStringAsync(key, JsonSerializer.Serialize(resume));
+            }
+            else
+            {
+                resume = JsonSerializer.Deserialize<Resume>(getResumeByCandidateIdFromCache);
             }
 
             response.Status = 200;
@@ -88,16 +120,32 @@ namespace Bountous_X_Accolite_Job_Portal.Services
         {
             ResumeResponseViewModel response = new ResumeResponseViewModel();
 
-            var resume = _dbContext.Resumes.Find(Id);
-            if (resume == null)
+            string key = $"getResumeById-{Id}";
+            string? getResumeByIdFromCache = await _cache.GetStringAsync(key);
+
+            Resume resume;
+            if (string.IsNullOrEmpty(getResumeByIdFromCache))
             {
-                response.Status = 404;
-                response.Message = "Resume with this Id does not exist";
-                return response;
+                resume = _dbContext.Resumes.Find(Id);
+                if (resume == null)
+                {
+                    response.Status = 404;
+                    response.Message = "Resume with this Id does not exist";
+                    return response;
+                }
+
+                await _cache.SetStringAsync(key, JsonSerializer.Serialize(resume));
+            }
+            else
+            {
+                resume = JsonSerializer.Deserialize<Resume>(getResumeByIdFromCache);
             }
 
             _dbContext.Resumes.Remove(resume);
             await _dbContext.SaveChangesAsync();
+
+            await _cache.RemoveAsync($"getResumeById-{Id}");
+            await _cache.RemoveAsync($"getResumeByCandidateId-{resume.CandidateId}");
 
             response.Status = 200;
             response.Message = "Successfully removed that resume.";

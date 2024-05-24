@@ -1,5 +1,4 @@
-﻿using Azure;
-using Bountous_X_Accolite_Job_Portal.Helpers;
+﻿using Bountous_X_Accolite_Job_Portal.Helpers;
 using Bountous_X_Accolite_Job_Portal.Models.DesignationViewModel;
 using Bountous_X_Accolite_Job_Portal.Models.DesignationViewModel.ResponseViewModels;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
@@ -22,9 +21,9 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
 
         [HttpGet]
         [Route("getAllDesignations")]
-        public AllDesignationResponseViewModel GetAllDesignations()
+        public async Task<AllDesignationResponseViewModel> GetAllDesignations()
         {
-            return _designationService.GetAllDesignation();
+            return await _designationService.GetAllDesignation();
         }
 
         [HttpGet]
@@ -49,9 +48,9 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             }
 
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            bool hasPrivilege = Convert.ToBoolean(User.FindFirstValue("HasPrivilege"));
             Guid employeeId = GetGuidFromString.Get(User.FindFirstValue("Id"));
-            var role = User.FindFirstValue("Role");
-            if (!isEmployee || role == null || !_designationService.HasPrivilege(role))
+            if (!isEmployee || !hasPrivilege)
             {
                 response = new DesignationResponseViewModel();
                 response.Status = 403;

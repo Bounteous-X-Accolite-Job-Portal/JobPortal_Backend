@@ -1,4 +1,5 @@
-﻿using Bountous_X_Accolite_Job_Portal.Data;
+﻿using Azure;
+using Bountous_X_Accolite_Job_Portal.Data;
 using Bountous_X_Accolite_Job_Portal.Helpers;
 using Bountous_X_Accolite_Job_Portal.Models;
 using Bountous_X_Accolite_Job_Portal.Models.AuthenticationViewModel.CandidateViewModels;
@@ -32,7 +33,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
 
         [HttpGet]
         [Route("{Id}")]
-        public CandidateResponseViewModel GetCandidateById(Guid Id)
+        public async Task<CandidateResponseViewModel> GetCandidateById(Guid Id)
         {
             CandidateResponseViewModel response;
 
@@ -46,7 +47,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
 
-            response = _candidateAccountService.GetCandidateById(Id);
+            response = await _candidateAccountService.GetCandidateById(Id);
             return response;
         }
 
@@ -79,6 +80,34 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             return response;
         }
 
+        [HttpPut]
+        [Route("updateCandidateProfile")]
+        public async Task<CandidateResponseViewModel> UpdateCandidateProfile(UpdateCandidateViewModel updatedCandidate)
+        {
+            CandidateResponseViewModel response;
+
+            if (!ModelState.IsValid)
+            {
+                response = new CandidateResponseViewModel();
+                response.Status = 404;
+                response.Message = "Please fill all the details.";
+                return response;
+            }
+
+            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            Guid candidateId = GetGuidFromString.Get(User.FindFirstValue("Id"));
+            if (!isEmployee && candidateId != updatedCandidate.CandidateId)
+            {
+                response = new CandidateResponseViewModel();
+                response.Status = 401;
+                response.Message = "You are either not loggedIn or not authorized to update candidate details.";
+                return response;
+            }
+
+            response = await _candidateAccountService.UpdateCandidateProfile(updatedCandidate);
+            return response;
+        }
+
 
         [HttpPost("ConfirmEmail")]
         public async Task<IActionResult> SendEmail(string email, IConfiguration _config)
@@ -106,14 +135,12 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
 
                     _authContext.Entry(user).State = EntityState.Modified;
                     await _authContext.SaveChangesAsync();
-                    
-
-
                 }
             return Ok();
 
         }
-            [HttpPost("confirm")]
+
+        [HttpPost("confirm")]
         public async Task<IActionResult> ConfirmEmail(ConfirmPasswordDTO confirm)
         {
             var newToken = confirm.EmailToken.Replace(" ", "+");

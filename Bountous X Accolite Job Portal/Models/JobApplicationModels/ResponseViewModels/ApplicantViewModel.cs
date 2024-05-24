@@ -6,7 +6,7 @@ using Bountous_X_Accolite_Job_Portal.Models.ResumeModels;
 using Bountous_X_Accolite_Job_Portal.Models.SkillsModels;
 
 
-namespace Bountous_X_Accolite_Job_Portal.Models.JobApplicationViewModel.ResponseViewModels
+namespace Bountous_X_Accolite_Job_Portal.Models.JobApplicationModels.ResponseViewModels
 {
     public class ApplicantViewModel
     {
