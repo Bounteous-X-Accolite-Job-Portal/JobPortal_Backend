@@ -1,10 +1,12 @@
 ﻿using Bountous_X_Accolite_Job_Portal.Helpers;
+using Bountous_X_Accolite_Job_Portal.Models;
 using Bountous_X_Accolite_Job_Portal.Models.DegreeModels.DegreeResponseViewModel;
 using Bountous_X_Accolite_Job_Portal.Models.ReferralViewModel;
 using Bountous_X_Accolite_Job_Portal.Models.ReferralViewModel.ResponseViewModels;
 using Bountous_X_Accolite_Job_Portal.Services;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -15,9 +17,11 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
     public class ReferralController : ControllerBase
     {
         private readonly IReferralService _referralService;
-        public ReferralController(IReferralService referralService)
+        private readonly UserManager<User> _userManager;
+        public ReferralController(IReferralService referralService,UserManager<User> userManager)
         {
             _referralService = referralService;
+            _userManager = userManager;
         }
 
         [HttpPost]
@@ -67,5 +71,6 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             response = _referralService.GetAllReferralsOfLoggedInEmployee(employeeId);
             return response;
         }
+        
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Bountous_X_Accolite_Job_Portal.Models.JobStatusViewModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace Bountous_X_Accolite_Job_Portal.Models
 {
@@ -11,6 +12,8 @@ namespace Bountous_X_Accolite_Job_Portal.Models
         public DateTime? CreatedAt { get; set; } = DateTime.Now;
 
         public Guid? EmpId { get; set; }
-        public Employee? Employee { get; set; }  
+        public Employee? Employee { get; set; }
+
+      
     }
 }

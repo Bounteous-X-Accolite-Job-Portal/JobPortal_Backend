@@ -12,16 +12,18 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-   // [Authorize]
+    // [Authorize]
     public class ApplicationController : ControllerBase
     {
 
         private readonly IJobApplicationService _jobApplicationService;
         private readonly IJobService _jobService;
-        public ApplicationController(IJobApplicationService applicationService, IJobService jobService)
+        private readonly IDesignationService _designationService;
+        public ApplicationController(IJobApplicationService applicationService, IJobService jobService, IDesignationService designationService)
         {
             _jobApplicationService = applicationService;
             _jobService = jobService;
+            _designationService = designationService;
         }
 
         [HttpGet]
@@ -29,7 +31,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
         public JobApplicationResponseViewModel GetJobApplicaionById(Guid Id)
         {
             JobApplicationResponseViewModel response = _jobApplicationService.GetJobApplicaionById(Id);
-            if(response.Application == null)
+            if (response.Application == null)
             {
                 return response;
             }
@@ -121,7 +123,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
             Guid candidateId = GetGuidFromString.Get(User.FindFirstValue("Id"));
-            if(candidateId == Guid.Empty)
+            if (candidateId == Guid.Empty)
             {
                 response.Status = 401;
                 response.Message = "Candidate Not Logged In !";
@@ -130,7 +132,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             }
 
             Boolean result = _jobApplicationService.IsCandidateApplicable(JobId, candidateId);
-            if(result)
+            if (result)
             {
                 response.Status = 200;
                 response.Message = "Candidate is Applicable to apply for this job !";
@@ -244,7 +246,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 response.Message = "You are not loggedIn or you are not authorised to apply this job.";
                 return response;
             }
-        
+
             response = await _jobApplicationService.Apply(addjobapplication, candidateId);
             return response;
         }
@@ -267,5 +269,27 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             response = await _jobApplicationService.ChangeJobApplicationStatus(ApplicationId, changeStatus.statusId);
             return response;
         }
+
+        [HttpGet]
+        [Route("jobApplication/successfulApplication")]
+        public IActionResult GetAllApplicationsWithSuccess()
+        {
+
+            var successApplications = _jobApplicationService.GetAllApplicationsWithSuccess();
+            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            Guid employeeId = GetGuidFromString.Get(User.FindFirstValue("Id"));
+            var role = User.FindFirstValue("Role");
+
+            if (successApplications.Count == 0 && role == null || !_designationService.HasSpecialPrivilege(role))
+            {
+                return NotFound("No successful applications found.");
+            }
+
+            return Ok(successApplications);
+        }
+
     }
 }
+    
+
+

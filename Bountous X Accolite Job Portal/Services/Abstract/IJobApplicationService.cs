@@ -3,6 +3,7 @@ using Bountous_X_Accolite_Job_Portal.Models.JobApplicationViewModel;
 using Bountous_X_Accolite_Job_Portal.Models.JobApplicationViewModel.ResponseViewModels;
 using Bountous_X_Accolite_Job_Portal.Models.JobApplicationViewModel.JobApplicationResponse;
 using Bountous_X_Accolite_Job_Portal.Models.JobViewModels.JobResponseViewModel;
+using Bountous_X_Accolite_Job_Portal.Models;
 
 namespace Bountous_X_Accolite_Job_Portal.Services.Abstract
 {
@@ -19,5 +20,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services.Abstract
         Boolean IsCandidateApplicable(Guid JobId, Guid CandidateId);
         Task<AllApplicantResponseViewModel> GetApplicantsByJobId(Guid JobId);
         Task<AllApplicantResponseViewModel> GetApplicantsByClosedJobId(Guid JobId);
+
+        List<SuccessfulJobApplication> GetAllApplicationsWithSuccess();
     }
 }

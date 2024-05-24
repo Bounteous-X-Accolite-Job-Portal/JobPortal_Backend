@@ -79,12 +79,6 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             return response;
         }
 
-        [HttpGet]
-        [Route("getAllStatus")]
-        [Authorize]
-        public AllStatusResponseViewModel GetAllStatus()
-        {
-            return _jobStatusService.GetAllStatus();
-        }
+
     }
 }

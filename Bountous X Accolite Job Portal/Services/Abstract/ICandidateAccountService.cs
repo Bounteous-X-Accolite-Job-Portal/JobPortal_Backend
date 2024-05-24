@@ -7,6 +7,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services.Abstract
     {
         CandidateResponseViewModel GetCandidateById(Guid CandidateId);
         Task<CandidateResponseViewModel> Register(CandidateRegisterViewModel registerUser);
-        void SendConfirmEmail(EmailData email);
+        
+        //void SendEmail(EmailData request);
     }
 }

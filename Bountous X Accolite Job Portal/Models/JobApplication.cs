@@ -4,6 +4,7 @@ namespace Bountous_X_Accolite_Job_Portal.Models
 {
     public class JobApplication
     {
+
         [Key]
         public Guid ApplicationId { get; set; }
         public Guid? CandidateId { get; set; }

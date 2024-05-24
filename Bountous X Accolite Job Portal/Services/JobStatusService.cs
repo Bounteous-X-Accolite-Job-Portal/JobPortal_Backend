@@ -28,7 +28,21 @@ namespace Bountous_X_Accolite_Job_Portal.Services
 
             return statusId;
         }
+        public int getInitialSuccesstatus()
+        {
+            int statusId = 0;
 
+            List<Status> status = _dbContext.Status.ToList();
+            foreach (Status s in status)
+            {
+                if (String.Equals(s.StatusName.ToLower(), "success"))
+                {
+                    statusId = s.StatusId;
+                }
+            }
+
+            return statusId;
+        }
         public int GetInitialStatus()
         {
             return 1;

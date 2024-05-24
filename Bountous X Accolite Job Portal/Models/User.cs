@@ -18,6 +18,8 @@ namespace Bountous_X_Accolite_Job_Portal.Models
 
         public string? ChangePasswordToken {  get; set; }
         public DateTime? ChangePasswordExpiry {  get; set; }
-        
+        public string? ReferalToken { get; internal set; }
+
+        public string? AutoPassword {  get; set; }
     }
 }

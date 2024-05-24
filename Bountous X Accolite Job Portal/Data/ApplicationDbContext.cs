@@ -1,4 +1,5 @@
 ﻿using Bountous_X_Accolite_Job_Portal.Models;
+using Bountous_X_Accolite_Job_Portal.Models.JobApplicationViewModel.JobApplicationResponse;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection.Metadata;
@@ -36,6 +37,9 @@ namespace Bountous_X_Accolite_Job_Portal.Data
         public DbSet<ClosedJobApplication> ClosedJobApplications { get; set; }
         public DbSet<ClosedJob> ClosedJobs { get; set; }
         public DbSet<Referral> Referrals { get; set; }
+        public DbSet<SuccessfulJobApplication> SuccessfulJobs { get; set; } 
+
+       
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
