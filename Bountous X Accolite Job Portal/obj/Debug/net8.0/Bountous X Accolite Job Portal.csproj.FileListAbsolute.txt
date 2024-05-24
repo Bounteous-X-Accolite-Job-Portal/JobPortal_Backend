@@ -1,13 +1,5 @@
-C:\Assignments\Bounteous-x-Accolite-Job-Portal\JobPortal_Backend\Bountous X Accolite Job Portal\obj\Debug\net8.0\Bountous X Accolite Job Portal.csproj.AssemblyReference.cache
-C:\Assignments\Bounteous-x-Accolite-Job-Portal\JobPortal_Backend\Bountous X Accolite Job Portal\obj\Debug\net8.0\Bountous X Accolite Job Portal.GeneratedMSBuildEditorConfig.editorconfig
-C:\Assignments\Bounteous-x-Accolite-Job-Portal\JobPortal_Backend\Bountous X Accolite Job Portal\obj\Debug\net8.0\Bountous X Accolite Job Portal.AssemblyInfoInputs.cache
-C:\Assignments\Bounteous-x-Accolite-Job-Portal\JobPortal_Backend\Bountous X Accolite Job Portal\obj\Debug\net8.0\Bountous X Accolite Job Portal.AssemblyInfo.cs
-C:\Assignments\Bounteous-x-Accolite-Job-Portal\JobPortal_Backend\Bountous X Accolite Job Portal\obj\Debug\net8.0\Bountous X Accolite Job Portal.csproj.CoreCompileInputs.cache
-C:\Assignments\Bounteous-x-Accolite-Job-Portal\JobPortal_Backend\Bountous X Accolite Job Portal\obj\Debug\net8.0\Bountous X Accolite Job Portal.MvcApplicationPartsAssemblyInfo.cs
-C:\Assignments\Bounteous-x-Accolite-Job-Portal\JobPortal_Backend\Bountous X Accolite Job Portal\obj\Debug\net8.0\Bountous X Accolite Job Portal.MvcApplicationPartsAssemblyInfo.cache
-C:\Assignments\Bounteous-x-Accolite-Job-Portal\JobPortal_Backend\Bountous X Accolite Job Portal\obj\Debug\net8.0\Bountous X Accolite Job Portal.sourcelink.json
-C:\Assignments\Bounteous-x-Accolite-Job-Portal\JobPortal_Backend\Bountous X Accolite Job Portal\bin\Debug\net8.0\appsettings.Development.json
 C:\Assignments\Bounteous-x-Accolite-Job-Portal\JobPortal_Backend\Bountous X Accolite Job Portal\bin\Debug\net8.0\appsettings.json
+C:\Assignments\Bounteous-x-Accolite-Job-Portal\JobPortal_Backend\Bountous X Accolite Job Portal\bin\Debug\net8.0\appsettings.Development.json
 C:\Assignments\Bounteous-x-Accolite-Job-Portal\JobPortal_Backend\Bountous X Accolite Job Portal\bin\Debug\net8.0\Bountous X Accolite Job Portal.exe
 C:\Assignments\Bounteous-x-Accolite-Job-Portal\JobPortal_Backend\Bountous X Accolite Job Portal\bin\Debug\net8.0\Bountous X Accolite Job Portal.deps.json
 C:\Assignments\Bounteous-x-Accolite-Job-Portal\JobPortal_Backend\Bountous X Accolite Job Portal\bin\Debug\net8.0\Bountous X Accolite Job Portal.runtimeconfig.json
@@ -132,6 +124,14 @@ C:\Assignments\Bounteous-x-Accolite-Job-Portal\JobPortal_Backend\Bountous X Acco
 C:\Assignments\Bounteous-x-Accolite-Job-Portal\JobPortal_Backend\Bountous X Accolite Job Portal\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Runtime.Caching.dll
 C:\Assignments\Bounteous-x-Accolite-Job-Portal\JobPortal_Backend\Bountous X Accolite Job Portal\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Security.Cryptography.ProtectedData.dll
 C:\Assignments\Bounteous-x-Accolite-Job-Portal\JobPortal_Backend\Bountous X Accolite Job Portal\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Windows.Extensions.dll
+C:\Assignments\Bounteous-x-Accolite-Job-Portal\JobPortal_Backend\Bountous X Accolite Job Portal\obj\Debug\net8.0\Bountous X Accolite Job Portal.csproj.AssemblyReference.cache
+C:\Assignments\Bounteous-x-Accolite-Job-Portal\JobPortal_Backend\Bountous X Accolite Job Portal\obj\Debug\net8.0\Bountous X Accolite Job Portal.GeneratedMSBuildEditorConfig.editorconfig
+C:\Assignments\Bounteous-x-Accolite-Job-Portal\JobPortal_Backend\Bountous X Accolite Job Portal\obj\Debug\net8.0\Bountous X Accolite Job Portal.AssemblyInfoInputs.cache
+C:\Assignments\Bounteous-x-Accolite-Job-Portal\JobPortal_Backend\Bountous X Accolite Job Portal\obj\Debug\net8.0\Bountous X Accolite Job Portal.AssemblyInfo.cs
+C:\Assignments\Bounteous-x-Accolite-Job-Portal\JobPortal_Backend\Bountous X Accolite Job Portal\obj\Debug\net8.0\Bountous X Accolite Job Portal.csproj.CoreCompileInputs.cache
+C:\Assignments\Bounteous-x-Accolite-Job-Portal\JobPortal_Backend\Bountous X Accolite Job Portal\obj\Debug\net8.0\Bountous X Accolite Job Portal.MvcApplicationPartsAssemblyInfo.cs
+C:\Assignments\Bounteous-x-Accolite-Job-Portal\JobPortal_Backend\Bountous X Accolite Job Portal\obj\Debug\net8.0\Bountous X Accolite Job Portal.MvcApplicationPartsAssemblyInfo.cache
+C:\Assignments\Bounteous-x-Accolite-Job-Portal\JobPortal_Backend\Bountous X Accolite Job Portal\obj\Debug\net8.0\Bountous X Accolite Job Portal.sourcelink.json
 C:\Assignments\Bounteous-x-Accolite-Job-Portal\JobPortal_Backend\Bountous X Accolite Job Portal\obj\Debug\net8.0\staticwebassets.build.json
 C:\Assignments\Bounteous-x-Accolite-Job-Portal\JobPortal_Backend\Bountous X Accolite Job Portal\obj\Debug\net8.0\staticwebassets.development.json
 C:\Assignments\Bounteous-x-Accolite-Job-Portal\JobPortal_Backend\Bountous X Accolite Job Portal\obj\Debug\net8.0\staticwebassets\msbuild.Bountous X Accolite Job Portal.Microsoft.AspNetCore.StaticWebAssets.props
