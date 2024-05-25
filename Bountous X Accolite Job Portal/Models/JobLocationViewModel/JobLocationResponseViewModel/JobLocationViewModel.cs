@@ -2,6 +2,7 @@
 {
     public class JobLocationViewModel
     {
+        public Guid LocationId { get; set; }
         public string Address { get; set; }
         public string City { get; set; }
         public string State { get; set; }
@@ -10,6 +11,7 @@
 
         public JobLocationViewModel(JobLocation loc)
         {
+            LocationId = loc.LocationId;
             City = loc.City;
             State = loc.State;
             Country = loc.Country;

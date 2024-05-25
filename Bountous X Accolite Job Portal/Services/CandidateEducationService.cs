@@ -40,7 +40,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             string? allEducationOfACandidateByCandidateIdFromCache = await _cache.GetStringAsync(key);
 
             List<CandidateEducation> allEducationsOfCandidate;
-            if (string.IsNullOrEmpty(allEducationOfACandidateByCandidateIdFromCache))
+            if (string.IsNullOrWhiteSpace(allEducationOfACandidateByCandidateIdFromCache))
             {
                 allEducationsOfCandidate = _dbContext.CandidateEducations.Where(item => item.CandidateId == CandidateId).ToList();
                 await _cache.SetStringAsync(key, JsonSerializer.Serialize(allEducationsOfCandidate));
@@ -70,7 +70,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             string? getEducationByIdFromCache = await _cache.GetStringAsync(key);
 
             CandidateEducation education;
-            if (string.IsNullOrEmpty(getEducationByIdFromCache))
+            if (string.IsNullOrWhiteSpace(getEducationByIdFromCache))
             {
                 education = _dbContext.CandidateEducations.Find(Id);
                 if (education == null)
@@ -152,7 +152,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             string? getEducationByIdFromCache = await _cache.GetStringAsync(key);
 
             CandidateEducation education;
-            if (string.IsNullOrEmpty(getEducationByIdFromCache))
+            if (string.IsNullOrWhiteSpace(getEducationByIdFromCache))
             {
                 education = _dbContext.CandidateEducations.Find(updateEducation.EducationId);
                 if (education == null)
@@ -214,7 +214,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             string? getEducationByIdFromCache = await _cache.GetStringAsync(key);
 
             CandidateEducation education;
-            if (string.IsNullOrEmpty(getEducationByIdFromCache))
+            if (string.IsNullOrWhiteSpace(getEducationByIdFromCache))
             {
                 education = _dbContext.CandidateEducations.Find(Id);
                 if (education == null)

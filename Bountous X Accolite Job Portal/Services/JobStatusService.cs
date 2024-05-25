@@ -25,7 +25,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             string? allStatusFromCache = await _cache.GetStringAsync(key);
 
             List<Status> status;
-            if (string.IsNullOrEmpty(allStatusFromCache))
+            if (string.IsNullOrWhiteSpace(allStatusFromCache))
             {
                 status = _dbContext.Status.ToList();
                 await _cache.SetStringAsync(key, JsonSerializer.Serialize(status));
@@ -37,7 +37,63 @@ namespace Bountous_X_Accolite_Job_Portal.Services
 
             foreach(Status s in status)
             {
-                if(String.Equals(s.StatusName.ToLower(), "referred"))
+                if (String.Equals(s.StatusName.ToLower(), "referred"))
+                {
+                    statusId = s.StatusId;
+                }
+            }
+
+            return statusId;
+        }
+        public async Task<int> getInitialSuccesstatus()
+        {
+            int statusId = -1;
+
+            string key = $"allStatus";
+            string? allStatusFromCache = await _cache.GetStringAsync(key);
+
+            List<Status> status;
+            if (string.IsNullOrWhiteSpace(allStatusFromCache))
+            {
+                status = _dbContext.Status.ToList();
+                await _cache.SetStringAsync(key, JsonSerializer.Serialize(status));
+            }
+            else
+            {
+                status = JsonSerializer.Deserialize<List<Status>>(allStatusFromCache);
+            }
+
+            foreach (Status s in status)
+            {
+                if (String.Equals(s.StatusName.ToLower(), "success"))
+                {
+                    statusId = s.StatusId;
+                }
+            }
+
+            return statusId;
+        }
+        public async Task<int> GetInitialApplicationStatus()
+        {
+            int statusId = -1;
+
+            string key = $"allStatus";
+            string? allStatusFromCache = await _cache.GetStringAsync(key);
+
+            List<Status> status;
+            if (string.IsNullOrWhiteSpace(allStatusFromCache))
+            {
+                status = _dbContext.Status.ToList();
+                await _cache.SetStringAsync(key, JsonSerializer.Serialize(status));
+            }
+            else
+            {
+                status = JsonSerializer.Deserialize<List<Status>>(allStatusFromCache);
+            }
+
+            foreach (Status s in status)
+            {
+                if (String.Equals(s.StatusName.ToLower(), "applied"))
                 {
                     statusId = s.StatusId;
                 }
@@ -46,18 +102,13 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             return statusId;
         }
 
-        public int GetInitialStatus()
-        {
-            return 1;
-        }
-
         public async Task<bool> IsRejectedStatus(int StatusId)
         {
             string key = $"getStatusById-{StatusId}";
             string? getStatusFromCache = await _cache.GetStringAsync(key);
 
             Status status;
-            if (string.IsNullOrEmpty(getStatusFromCache))
+            if (string.IsNullOrWhiteSpace(getStatusFromCache))
             {
                 status = _dbContext.Status.Find(StatusId);
                 if(status == null)
@@ -80,12 +131,17 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             return false;
         }
 
-        public async Task<bool> AddStatus(AddJobStatusViewModel jobstatus, Guid empId)
+        public async Task<ResponseViewModel> AddStatus(AddJobStatusViewModel jobstatus, Guid empId)
         {
+            ResponseViewModel response = new ResponseViewModel();
+
             if (jobstatus == null || jobstatus.StatusName == null)
             {
-                return false;
+                response.Status = 400;
+                response.Message = "Invalid !!";
+                return response;
             }
+
             Status addJobStatus = new Status();
             addJobStatus.StatusName = jobstatus.StatusName;
             addJobStatus.CreatedAt = DateTime.Now;
@@ -95,8 +151,10 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             await _dbContext.SaveChangesAsync();
 
             await _cache.RemoveAsync($"allStatus");
- 
-            return true;
+
+            response.Status = 200;
+            response.Message = "Successfully added status";
+            return response;
         }
 
         public async Task<JobStatusResponseViewModel> GetStatusById(int statusId)
@@ -107,7 +165,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             string? getStatusFromCache = await _cache.GetStringAsync(key);
 
             Status status;
-            if (string.IsNullOrEmpty(getStatusFromCache))
+            if (string.IsNullOrWhiteSpace(getStatusFromCache))
             {
                 status = _dbContext.Status.Find(statusId);
                 if (status == null)
@@ -138,7 +196,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             string? allStatusFromCache = await _cache.GetStringAsync(key);
 
             List<Status> l;
-            if (string.IsNullOrEmpty(allStatusFromCache))
+            if (string.IsNullOrWhiteSpace(allStatusFromCache))
             {
                 l = _dbContext.Status.Where(ite => true).ToList();
                 await _cache.SetStringAsync(key, JsonSerializer.Serialize(l));
@@ -157,6 +215,42 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             response.Status = 200;
             response.Message = "Successfully retrived all status.";
             response.AllStatus = list;
+            return response;
+        }
+
+        public async Task<ResponseViewModel> DeleteStatus(int statusId)
+        {
+            ResponseViewModel response = new ResponseViewModel();
+
+            string key = $"getStatusById-{statusId}";
+            string? getStatusFromCache = await _cache.GetStringAsync(key);
+
+            Status status;
+            if (string.IsNullOrWhiteSpace(getStatusFromCache))
+            {
+                status = _dbContext.Status.Find(statusId);
+                if (status == null)
+                {
+                    response.Status = 404;
+                    response.Message = "Status with this Id does not exist.";
+                    return response;
+                }
+
+                await _cache.SetStringAsync(key, JsonSerializer.Serialize(status));
+            }
+            else
+            {
+                status = JsonSerializer.Deserialize<Status>(getStatusFromCache);
+            }
+            
+            _dbContext.Status.Remove(status);
+            await _dbContext.SaveChangesAsync();
+
+            await _cache.RemoveAsync($"allStatus");
+            await _cache.RemoveAsync($"getStatusById-{statusId}");
+
+            response.Status = 200;
+            response.Message = "Successfully removed this Status !!.";
             return response;
         }
     }

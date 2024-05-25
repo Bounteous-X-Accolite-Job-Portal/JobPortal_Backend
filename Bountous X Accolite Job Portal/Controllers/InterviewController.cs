@@ -21,7 +21,6 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
 
         [HttpGet]
         [Route("GetAllInterviewsForInterviewer")]
-        [Authorize]
         public async Task<All_InterviewResponseViewModel> GetAllInterviewsForInterviewer()
         {
             All_InterviewResponseViewModel response = new All_InterviewResponseViewModel();
@@ -42,7 +41,6 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
 
         [HttpGet]
         [Route("getAllInterviewsByApplicationId/{ApplicationId}")]
-        [Authorize]
         public async Task<All_InterviewResponseViewModel> GetAllInterviewsByApplicationId(Guid ApplicationId)
         {
             All_InterviewResponseViewModel response = new All_InterviewResponseViewModel();
@@ -63,7 +61,6 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
 
         [HttpGet]
         [Route("getAllApplicantInterviewsByApplicationId/{ApplicationId}")]
-        [Authorize]
         public async Task<AllApplicantInterviewResponseViewModel> GetAllApplicantInterviewsByApplicationId(Guid ApplicationId)
         {
             AllApplicantInterviewResponseViewModel response = new AllApplicantInterviewResponseViewModel();

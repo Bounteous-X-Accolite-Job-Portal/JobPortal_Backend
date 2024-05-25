@@ -24,7 +24,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             string? getAllDegreesFromCache = await _cache.GetStringAsync(key);
 
             List<Degree> list;
-            if (string.IsNullOrEmpty(getAllDegreesFromCache))
+            if (string.IsNullOrWhiteSpace(getAllDegreesFromCache))
             {
                 list = _dbContext.Degrees.Where(item => true).ToList();
                 await _cache.SetStringAsync(key, JsonSerializer.Serialize(list));
@@ -51,7 +51,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             string? getDegreeByIdFromCache = await _cache.GetStringAsync(key);
 
             Degree degree;
-            if (string.IsNullOrEmpty(getDegreeByIdFromCache))
+            if (string.IsNullOrWhiteSpace(getDegreeByIdFromCache))
             {
                 degree = _dbContext.Degrees.Find(id);
                 if (degree == null)
@@ -110,7 +110,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             string? getDegreeByIdFromCache = await _cache.GetStringAsync(key);
 
             Degree degree;
-            if (string.IsNullOrEmpty(getDegreeByIdFromCache))
+            if (string.IsNullOrWhiteSpace(getDegreeByIdFromCache))
             {
                 degree = _dbContext.Degrees.Find(updateDegree.DegreeId);
                 if (degree == null)
@@ -150,7 +150,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             string? getDegreeByIdFromCache = await _cache.GetStringAsync(key);
 
             Degree degree;
-            if (string.IsNullOrEmpty(getDegreeByIdFromCache))
+            if (string.IsNullOrWhiteSpace(getDegreeByIdFromCache))
             {
                 degree = _dbContext.Degrees.Find(id);
                 if (degree == null)
@@ -171,7 +171,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             string? getAllCandidateEducationsByDegreeIdFromCache = await _cache.GetStringAsync(key);
 
             List<CandidateEducation> education;
-            if (string.IsNullOrEmpty(getAllCandidateEducationsByDegreeIdFromCache))
+            if (string.IsNullOrWhiteSpace(getAllCandidateEducationsByDegreeIdFromCache))
             {
                 education = _dbContext.CandidateEducations.Where(item => item.DegreeId == id).ToList();
                 if (education.Count != 0)

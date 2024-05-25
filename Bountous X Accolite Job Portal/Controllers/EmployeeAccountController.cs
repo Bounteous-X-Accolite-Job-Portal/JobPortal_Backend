@@ -10,6 +10,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class EmployeeAccountController : ControllerBase
     {
         private readonly IEmployeeAccountService _employeeAuthService;
@@ -28,7 +29,6 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
 
         [HttpGet]
         [Route("getAllEmployees")]
-        [Authorize]
         public async Task<AllEmployeesResponseViewModel> GetAllEmployees()
         {
             AllEmployeesResponseViewModel response;
@@ -49,7 +49,6 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
 
         [HttpGet]
         [Route("employee/{Id}")]
-        [Authorize]
         public async Task<EmployeeResponseViewModel> GetEmployeesById(Guid Id)
         {
             EmployeeResponseViewModel response;
@@ -69,7 +68,6 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
 
         [HttpPost]
         [Route("register")]
-        [Authorize]
         public async Task<EmployeeResponseViewModel> Register(EmployeeRegisterViewModel employee)
         {
             EmployeeResponseViewModel response;
@@ -79,15 +77,6 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 response = new EmployeeResponseViewModel();
                 response.Status = 404;
                 response.Message = "Please fill all the details.";
-                return response;
-            }
-
-            var email = User.FindFirstValue("Email");
-            if (email == null)
-            {
-                response = new EmployeeResponseViewModel();
-                response.Status = 401;
-                response.Message = "You are not loggedIn or not authorised to do add other employees.";
                 return response;
             }
 
@@ -125,7 +114,6 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
 
         [HttpPut]
         [Route("disableAccount/{Id}")]
-        [Authorize]
         public async Task<EmployeeResponseViewModel> DisableEmployeeAccount(Guid Id)
         {
             EmployeeResponseViewModel response;

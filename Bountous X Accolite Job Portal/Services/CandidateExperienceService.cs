@@ -38,7 +38,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             string? getAllCandidateExperiencesByCandidateIdFromCache = await _cache.GetStringAsync(key);
 
             List<CandidateExperience> allExperienceOfCandidate;
-            if (string.IsNullOrEmpty(getAllCandidateExperiencesByCandidateIdFromCache))
+            if (string.IsNullOrWhiteSpace(getAllCandidateExperiencesByCandidateIdFromCache))
             {
                 allExperienceOfCandidate = _dbContext.CandidateExperience.Where(item => item.CandidateId == CandidateId).ToList();
                 await _cache.SetStringAsync(key, JsonSerializer.Serialize(allExperienceOfCandidate));
@@ -68,7 +68,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             string? getCandidateExperienceByIdFromCache = await _cache.GetStringAsync(key);
 
             CandidateExperience experience;
-            if (string.IsNullOrEmpty(getCandidateExperienceByIdFromCache))
+            if (string.IsNullOrWhiteSpace(getCandidateExperienceByIdFromCache))
             {
                 experience = _dbContext.CandidateExperience.Find(Id);
                 if (experience == null)
@@ -141,7 +141,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             string? getCandidateExperienceByIdFromCache = await _cache.GetStringAsync(key);
 
             CandidateExperience experience;
-            if (string.IsNullOrEmpty(getCandidateExperienceByIdFromCache))
+            if (string.IsNullOrWhiteSpace(getCandidateExperienceByIdFromCache))
             {
                 experience = _dbContext.CandidateExperience.Find(updateExperience.ExperienceId);
                 if (experience == null)
@@ -194,7 +194,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             string? getCandidateExperienceByIdFromCache = await _cache.GetStringAsync(key);
 
             CandidateExperience experience;
-            if (string.IsNullOrEmpty(getCandidateExperienceByIdFromCache))
+            if (string.IsNullOrWhiteSpace(getCandidateExperienceByIdFromCache))
             {
                 experience = _dbContext.CandidateExperience.Find(Id);
                 if (experience == null)

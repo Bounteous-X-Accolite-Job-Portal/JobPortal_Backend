@@ -24,7 +24,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             string? getAllCompaniesFromCache = await _cache.GetStringAsync(key);
 
             List<Company> list;
-            if (string.IsNullOrEmpty(getAllCompaniesFromCache))
+            if (string.IsNullOrWhiteSpace(getAllCompaniesFromCache))
             {
                 list = _dbContext.Company.Where(item => true).ToList();
                 await _cache.SetStringAsync(key, JsonSerializer.Serialize(list));
@@ -55,7 +55,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             string? getCompanyByIdFromCache = await _cache.GetStringAsync(key);
 
             Company company;
-            if (string.IsNullOrEmpty(getCompanyByIdFromCache))
+            if (string.IsNullOrWhiteSpace(getCompanyByIdFromCache))
             {
                 company = _dbContext.Company.Find(id);
                 if (company == null)
@@ -115,7 +115,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             string? getCompanyByIdFromCache = await _cache.GetStringAsync(key);
 
             Company company;
-            if (string.IsNullOrEmpty(getCompanyByIdFromCache))
+            if (string.IsNullOrWhiteSpace(getCompanyByIdFromCache))
             {
                 company = _dbContext.Company.Find(updateCompany.CompanyId);
                 if (company == null)
@@ -157,7 +157,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             string? getCompanyByIdFromCache = await _cache.GetStringAsync(key);
 
             Company company;
-            if (string.IsNullOrEmpty(getCompanyByIdFromCache))
+            if (string.IsNullOrWhiteSpace(getCompanyByIdFromCache))
             {
                 company = _dbContext.Company.Find(id);
                 if (company == null)
@@ -178,7 +178,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             string? getAllCandidateExperiencesByCompanyIdFromCache = await _cache.GetStringAsync(key);
 
             List<CandidateExperience> experience;
-            if (string.IsNullOrEmpty(getAllCandidateExperiencesByCompanyIdFromCache))
+            if (string.IsNullOrWhiteSpace(getAllCandidateExperiencesByCompanyIdFromCache))
             {
                 experience = _dbContext.CandidateExperience.Where(item => item.CompanyId == id).ToList();
                 if (experience.Count != 0)

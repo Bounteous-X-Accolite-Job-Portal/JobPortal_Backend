@@ -1,10 +1,10 @@
-﻿using Azure;
-using Bountous_X_Accolite_Job_Portal.Data;
+﻿using Bountous_X_Accolite_Job_Portal.Data;
 using Bountous_X_Accolite_Job_Portal.Helpers;
 using Bountous_X_Accolite_Job_Portal.Models;
 using Bountous_X_Accolite_Job_Portal.Models.AuthenticationViewModel.CandidateViewModels;
 using Bountous_X_Accolite_Job_Portal.Models.EMAIL;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -20,19 +20,17 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
         private readonly ICandidateAccountService _candidateAccountService;
         private readonly UserManager<User> _userManager;
         private readonly ApplicationDbContext _authContext;
-        private readonly IConfiguration _config;
         private readonly IEmailService _emailService;
-        public CandidateAccountController(ICandidateAccountService candidateAccountService,UserManager<User> userManager,IConfiguration configuration,IEmailService emailService,ApplicationDbContext applicationDb)
+        public CandidateAccountController(ICandidateAccountService candidateAccountService,UserManager<User> userManager,IEmailService emailService,ApplicationDbContext applicationDb)
         {
             _candidateAccountService = candidateAccountService; 
             _userManager = userManager;
-            _config = configuration;
-            _authContext= applicationDb;
             _emailService = emailService;
         }
 
         [HttpGet]
         [Route("{Id}")]
+        [Authorize]
         public async Task<CandidateResponseViewModel> GetCandidateById(Guid Id)
         {
             CandidateResponseViewModel response;
@@ -68,7 +66,6 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             var email = User.FindFirstValue("Name");
             if (email != null)
             {
-                
                 response = new CandidateResponseViewModel();
                 response.Status = 403;
                 response.Message = "Please first logout to login.";
@@ -82,6 +79,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
 
         [HttpPut]
         [Route("updateCandidateProfile")]
+        [Authorize]
         public async Task<CandidateResponseViewModel> UpdateCandidateProfile(UpdateCandidateViewModel updatedCandidate)
         {
             CandidateResponseViewModel response;

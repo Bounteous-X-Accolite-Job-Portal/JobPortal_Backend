@@ -1,5 +1,4 @@
-﻿
-using Bountous_X_Accolite_Job_Portal.Helpers;
+﻿using Bountous_X_Accolite_Job_Portal.Helpers;
 using Bountous_X_Accolite_Job_Portal.Models.JobLocationViewModel;
 using Bountous_X_Accolite_Job_Portal.Models.JobLocationViewModel.JobLocationResponseViewModel;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
@@ -63,7 +62,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
         }
 
         [HttpDelete]
-        [Route("DeleteLocation/{Id}")]
+        [Route("DeleteLocation/{locationId}")]
         [Authorize]
         public async Task<JobLocationResponseViewModel> DeleteLocation(Guid locationId)
         {

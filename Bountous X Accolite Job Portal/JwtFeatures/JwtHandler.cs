@@ -52,7 +52,7 @@ namespace Bountous_X_Accolite_Job_Portal.JwtFeatures
                 string? getEmployeeByIdFromCache = await _cache.GetStringAsync(key);
 
                 Employee employee;
-                if (string.IsNullOrEmpty(getEmployeeByIdFromCache))
+                if (string.IsNullOrWhiteSpace(getEmployeeByIdFromCache))
                 {
                     employee = _dbContext.Employees.Find(user.EmpId);
                     await _cache.SetStringAsync(key, JsonSerializer.Serialize(employee));
@@ -68,7 +68,7 @@ namespace Bountous_X_Accolite_Job_Portal.JwtFeatures
                 string? getDesignationByIdFromCache = await _cache.GetStringAsync(key);
 
                 Designation designation;
-                if (string.IsNullOrEmpty(getDesignationByIdFromCache))
+                if (string.IsNullOrWhiteSpace(getDesignationByIdFromCache))
                 {
                     designation = _dbContext.Designations.Find(employee.DesignationId);
                     await _cache.SetStringAsync(key, JsonSerializer.Serialize(designation, new JsonSerializerOptions { ReferenceHandler = ReferenceHandler.Preserve }));
@@ -90,7 +90,7 @@ namespace Bountous_X_Accolite_Job_Portal.JwtFeatures
                 string? getCandidateByIdFromCache = await _cache.GetStringAsync(key);
 
                 Candidate candidate;
-                if (string.IsNullOrEmpty(getCandidateByIdFromCache))
+                if (string.IsNullOrWhiteSpace(getCandidateByIdFromCache))
                 {
                     candidate = _dbContext.Candidates.Find(user.CandidateId);
                     await _cache.SetStringAsync(key, JsonSerializer.Serialize(candidate));

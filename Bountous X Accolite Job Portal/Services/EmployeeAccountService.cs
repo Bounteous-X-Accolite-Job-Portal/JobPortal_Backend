@@ -2,6 +2,7 @@
 using Bountous_X_Accolite_Job_Portal.Helpers;
 using Bountous_X_Accolite_Job_Portal.Models;
 using Bountous_X_Accolite_Job_Portal.Models.AuthenticationViewModel.EmployeeViewModel;
+using Bountous_X_Accolite_Job_Portal.Models.EMAIL;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Caching.Distributed;
@@ -15,12 +16,14 @@ namespace Bountous_X_Accolite_Job_Portal.Services
         private readonly ApplicationDbContext _dbContext;
         private readonly IDesignationService _designationService;
         private readonly IDistributedCache _cache;
-        public EmployeeAccountService(UserManager<User> userManager, ApplicationDbContext applicationDbContext, IDesignationService designationService, IDistributedCache cache)
+        private readonly IEmailService _emailService;
+        public EmployeeAccountService(UserManager<User> userManager, ApplicationDbContext applicationDbContext, IDesignationService designationService, IEmailService emailService, IDistributedCache cache)
         {
             _userManager = userManager;
             _dbContext = applicationDbContext;
             _designationService = designationService;
             _cache = cache; 
+            _emailService = emailService;
         }
 
         public async Task<AllEmployeesResponseViewModel> GetAllEmployees()
@@ -31,7 +34,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             string? getAllEmployeesFromCache = await _cache.GetStringAsync(key);
 
             List<Employee> listOfEmployee;
-            if (string.IsNullOrEmpty(getAllEmployeesFromCache))
+            if (string.IsNullOrWhiteSpace(getAllEmployeesFromCache))
             {
                 listOfEmployee = _dbContext.Employees.ToList();
                 await _cache.SetStringAsync(key, JsonSerializer.Serialize(listOfEmployee));
@@ -61,7 +64,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             string? getEmployeeByIdFromCache = await _cache.GetStringAsync(key);
 
             Employee employee;
-            if (string.IsNullOrEmpty(getEmployeeByIdFromCache))
+            if (string.IsNullOrWhiteSpace(getEmployeeByIdFromCache))
             {
                 employee = _dbContext.Employees.Find(EmployeeId);
                 if (employee == null)
@@ -117,35 +120,28 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             string? getUserByEmailFromCache = await _cache.GetStringAsync(key);
 
             User checkUserWhetherExist;
-            if (string.IsNullOrEmpty(getUserByEmailFromCache))
+            if (string.IsNullOrWhiteSpace(getUserByEmailFromCache))
             {
                 checkUserWhetherExist = _dbContext.Users.Where(item => item.Email == RegisterEmployee.Email).FirstOrDefault();
-                if (checkUserWhetherExist != null)
-                {
-                    response.Status = 409;
-                    response.Message = "This email is already registered with us. Please Login.";
-                    return response;
-                }
-
-                await _cache.SetStringAsync(key, JsonSerializer.Serialize(checkUserWhetherExist));
             }
             else
             {
                 checkUserWhetherExist = JsonSerializer.Deserialize<User>(getUserByEmailFromCache);
             }
-            
+
             var employee = new Employee();
             employee.EmpId = RegisterEmployee.EmpId;  // company employee id
             employee.FirstName = RegisterEmployee.FirstName;
             employee.LastName = RegisterEmployee.LastName;
             employee.Email = RegisterEmployee.Email;
             employee.DesignationId = RegisterEmployee.DesignationId;
+            employee.Phone = RegisterEmployee.Phone;
             employee.Inactive = false;
 
             await _dbContext.Employees.AddAsync(employee);
             await _dbContext.SaveChangesAsync();
-
-            if(employee == null)
+            
+            if (employee == null)
             {
                 response.Status = 500;
                 response.Message = "Unable to create Employee, please try again.";
@@ -158,6 +154,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             user.EmpId = employee.EmployeeId;
 
             var password = GeneratePassword.GenerateRandomPassword();
+            Console.WriteLine("Employee Password", password);
 
             var result = await _userManager.CreateAsync(user, password);
             if (!result.Succeeded)
@@ -169,6 +166,9 @@ namespace Bountous_X_Accolite_Job_Portal.Services
                 response.Message = "Unable to create Employee, please try again.";
                 return response;
             }
+
+            EmailData email = new EmailData(employee.Email, "bounteous x Accolite Job Portal!", EmplyoeeRegisterdMail.EmailStringBody());
+            _emailService.SendEmail(email);
 
             await _cache.RemoveAsync($"allEmployees");
             await _cache.RemoveAsync($"getEmployeesByDesignationId-{employee.DesignationId}");
@@ -187,7 +187,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             string? getEmployeeByIdFromCache = await _cache.GetStringAsync(key);
 
             Employee employee;
-            if (string.IsNullOrEmpty(getEmployeeByIdFromCache))
+            if (string.IsNullOrWhiteSpace(getEmployeeByIdFromCache))
             {
                 employee = _dbContext.Employees.Find(Id);
                 if (employee == null)

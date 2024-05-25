@@ -59,7 +59,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             await _context.Interviews.AddAsync(newInterview);
             await _context.SaveChangesAsync();
 
-            if(newInterview==null)
+            if(newInterview == null)
             {
                 response.Status = 500;
                 response.Message = "Unable to Add Interview !!";
@@ -85,7 +85,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             string? getInterviewByIdFromCache = await _cache.GetStringAsync(key);
 
             Interview interview;
-            if (string.IsNullOrEmpty(getInterviewByIdFromCache))
+            if (string.IsNullOrWhiteSpace(getInterviewByIdFromCache))
             {
                 interview = _context.Interviews.Find(Id);
                 if (interview == null)
@@ -119,19 +119,19 @@ namespace Bountous_X_Accolite_Job_Portal.Services
         {
             InterviewResponseViewModel response = new InterviewResponseViewModel();
 
-            var application = _jobApplicationService.GetJobApplicaionById((Guid)interview.ApplicationId);
-            if (application == null)
+            var application = await _jobApplicationService.GetJobApplicaionById((Guid)interview.ApplicationId);
+            if (application.Application == null)
             {
                 response.Status = 404;
                 response.Message = "The application does not exist.";
                 return response;
             }
 
-            var interviewer = _employeeAccountService.GetEmployeeById((Guid)interview.InterViewerId);
-            if (interviewer == null)
+            var interviewer = await _employeeAccountService.GetEmployeeById((Guid)interview.InterViewerId);
+            if (interviewer.Employee == null)
             {
                 response.Status = 404;
-                response.Message = "The application does not exist.";
+                response.Message = "The interviewer does not exist.";
                 return response;
             }
 
@@ -139,7 +139,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             string? getInterviewByIdFromCache = await _cache.GetStringAsync(key);
 
             Interview dbinterview;
-            if (string.IsNullOrEmpty(getInterviewByIdFromCache))
+            if (string.IsNullOrWhiteSpace(getInterviewByIdFromCache))
             {
                 dbinterview = _context.Interviews.Find(interview.InterviewId);
                 if (dbinterview == null)
@@ -182,7 +182,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             string? getAllInterviewsFromCache = await _cache.GetStringAsync(key);
 
             List<Interview> list;
-            if (string.IsNullOrEmpty(getAllInterviewsFromCache))
+            if (string.IsNullOrWhiteSpace(getAllInterviewsFromCache))
             {
                 list = _context.Interviews.ToList();
                 await _cache.SetStringAsync(key, JsonSerializer.Serialize(list));
@@ -209,7 +209,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             string? getAllInterviewsByInterviewerIdFromCache = await _cache.GetStringAsync(key);
 
             List<Interview> list;
-            if (string.IsNullOrEmpty(getAllInterviewsByInterviewerIdFromCache))
+            if (string.IsNullOrWhiteSpace(getAllInterviewsByInterviewerIdFromCache))
             {
                 list = _context.Interviews.Where(e => e.InterViewerId == InterViewerId).ToList();
                 await _cache.SetStringAsync(key, JsonSerializer.Serialize(list));
@@ -242,7 +242,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             string? getInterviewByIdFromCache = await _cache.GetStringAsync(key);
 
             Interview dbinterview;
-            if (string.IsNullOrEmpty(getInterviewByIdFromCache))
+            if (string.IsNullOrWhiteSpace(getInterviewByIdFromCache))
             {
                 dbinterview = _context.Interviews.Find(Id);
                 if (dbinterview == null)
@@ -271,7 +271,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             string? getInterviewByIdFromCache = await _cache.GetStringAsync(key);
 
             Interview interview;
-            if (string.IsNullOrEmpty(getInterviewByIdFromCache))
+            if (string.IsNullOrWhiteSpace(getInterviewByIdFromCache))
             {
                 interview = _context.Interviews.Find(InterviewId);
                 if (interview == null)
@@ -314,7 +314,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             string? getAllInterviewsByApplicationIdFromCache = await _cache.GetStringAsync(key);
 
             List<Interview> interviews;
-            if (string.IsNullOrEmpty(getAllInterviewsByApplicationIdFromCache))
+            if (string.IsNullOrWhiteSpace(getAllInterviewsByApplicationIdFromCache))
             {
                 interviews = _context.Interviews.Where(item => item.ApplicationId == ApplicationId).ToList();
                 await _cache.SetStringAsync(key, JsonSerializer.Serialize(interviews));
@@ -360,7 +360,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
                 string? getInterviewFeedbackByIdFromCache = await _cache.GetStringAsync(key);
 
                 InterviewFeedback feedback;
-                if (string.IsNullOrEmpty(getInterviewFeedbackByIdFromCache))
+                if (string.IsNullOrWhiteSpace(getInterviewFeedbackByIdFromCache))
                 {
                     feedback = _context.InterviewFeedbacks.Find(item.FeedbackId);
                     if (feedback != null)

@@ -28,8 +28,18 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
 
         [HttpGet]
         [Route("getClosedJob/{Id}")]
+        [Authorize]
         public async Task<ClosedJobResponseViewModel> GetClosedJobById(Guid Id)
         {
+            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            if (!isEmployee)
+            {
+                ClosedJobResponseViewModel response = new ClosedJobResponseViewModel();
+                response.Status = 401;
+                response.Message = "Not Logged IN / Not Authorized to Get closed Jobs.";
+                return response;
+            }
+
             return await _job.GetClosedJobById(Id);
         }
 
@@ -42,8 +52,18 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
 
         [HttpGet]
         [Route("getAllClosedJobs")]
+        [Authorize]
         public async Task<AllClosedJobResponseViewModel> GetAllClosedJobs()
         {
+            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            if (!isEmployee)
+            {
+                AllClosedJobResponseViewModel response = new AllClosedJobResponseViewModel();
+                response.Status = 401;
+                response.Message = "Not Logged IN / Not Authorized to Get closed Jobs.";
+                return response;
+            }
+
             return await _job.GetAllClosedJobs(); 
         }
 
@@ -130,20 +150,12 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
 
-            var checkJob = (await GetJobById(job.JobId)).job;
-            if(checkJob == null || checkJob.EmployeeId != employeeId)
-            {
-                response.Status = 403;
-                response.Message = "You are not authorised to edit job.";
-                return response;
-            }
-
             response = await _job.EditJob(job);
             return response;
         }
 
         [HttpDelete]
-        [Route("DeleteJob/{Id}")]
+        [Route("DeleteJob/{JobId}")]
         [Authorize]
         public async Task<JobResponseViewModel> DeleteJob(Guid JobId)
         {
@@ -155,14 +167,6 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             {
                 response.Status = 401;
                 response.Message = "Not Logged IN / Not Authorized to Delete Job";
-                return response;
-            }
-
-            var checkJob = (await GetJobById(JobId)).job;
-            if (checkJob == null || checkJob.EmployeeId != employeeId)
-            {
-                response.Status = 403;
-                response.Message = "You are not authorised to delete this job.";
                 return response;
             }
 

@@ -1,7 +1,6 @@
 ﻿using Bountous_X_Accolite_Job_Portal.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using System.Reflection.Metadata;
 
 namespace Bountous_X_Accolite_Job_Portal.Data
 {
@@ -36,6 +35,9 @@ namespace Bountous_X_Accolite_Job_Portal.Data
         public DbSet<ClosedJobApplication> ClosedJobApplications { get; set; }
         public DbSet<ClosedJob> ClosedJobs { get; set; }
         public DbSet<Referral> Referrals { get; set; }
+        public DbSet<SuccessfulJobApplication> SuccessfulJobs { get; set; } 
+
+       
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

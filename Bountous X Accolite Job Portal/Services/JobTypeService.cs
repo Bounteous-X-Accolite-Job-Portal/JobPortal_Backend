@@ -3,7 +3,6 @@ using Bountous_X_Accolite_Job_Portal.Models;
 using Bountous_X_Accolite_Job_Portal.Models.JobTypeViewModel;
 using Bountous_X_Accolite_Job_Portal.Models.JobTypeViewModel.JobTypeResponseViewModel;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
 using System.Text.Json;
 
@@ -52,7 +51,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             string? getJobTypesByIdFromCache = await _cache.GetStringAsync(key);
 
             JobType jobType;
-            if (string.IsNullOrEmpty(getJobTypesByIdFromCache))
+            if (string.IsNullOrWhiteSpace(getJobTypesByIdFromCache))
             {
                 jobType = _context.JobType.Find(Id);
                 if (jobType == null)
@@ -86,7 +85,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             string? allJobTypesFromCache = await _cache.GetStringAsync(key);
 
             List<JobType> list;
-            if (string.IsNullOrEmpty(allJobTypesFromCache))
+            if (string.IsNullOrWhiteSpace(allJobTypesFromCache))
             {
                 list = _context.JobType.ToList();
                 await _cache.SetStringAsync(key, JsonSerializer.Serialize(list));
@@ -119,7 +118,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             string? getJobTypesByIdFromCache = await _cache.GetStringAsync(key);
 
             JobType jobType;
-            if (string.IsNullOrEmpty(getJobTypesByIdFromCache))
+            if (string.IsNullOrWhiteSpace(getJobTypesByIdFromCache))
             {
                 jobType = _context.JobType.Find(Id);
                 if (jobType == null)
@@ -150,7 +149,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             string? getJobTypesByIdFromCache = await _cache.GetStringAsync(key);
 
             JobType dbjobType;
-            if (string.IsNullOrEmpty(getJobTypesByIdFromCache))
+            if (string.IsNullOrWhiteSpace(getJobTypesByIdFromCache))
             {
                 dbjobType = _context.JobType.Find(jobType.JobTypeId);
                 if (dbjobType == null)

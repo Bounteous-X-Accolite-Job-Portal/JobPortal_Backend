@@ -2,6 +2,7 @@
 using Bountous_X_Accolite_Job_Portal.Models.ReferralViewModel;
 using Bountous_X_Accolite_Job_Portal.Models.ReferralViewModel.ResponseViewModels;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -9,6 +10,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ReferralController : ControllerBase
     {
         private readonly IReferralService _referralService;
@@ -64,5 +66,6 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             response = await _referralService.GetAllReferralsOfLoggedInEmployee(employeeId);
             return response;
         }
+        
     }
 }

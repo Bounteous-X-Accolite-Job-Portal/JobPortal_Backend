@@ -1,4 +1,5 @@
-﻿using Bountous_X_Accolite_Job_Portal.Models.ReferralViewModel;
+﻿using Bountous_X_Accolite_Job_Portal.Models.EMAIL;
+using Bountous_X_Accolite_Job_Portal.Models.ReferralViewModel;
 using Bountous_X_Accolite_Job_Portal.Models.ReferralViewModel.ResponseViewModels;
 
 namespace Bountous_X_Accolite_Job_Portal.Services.Abstract
@@ -7,5 +8,6 @@ namespace Bountous_X_Accolite_Job_Portal.Services.Abstract
     {
         Task<AllReferralResponseViewModel> GetAllReferralsOfLoggedInEmployee(Guid EmpId);
         Task<ReferralResponseViewModel> Refer(AddReferralViewModel addReferral, Guid EmpId);
+        //void SendEmail(EmailData request);
     }
 }

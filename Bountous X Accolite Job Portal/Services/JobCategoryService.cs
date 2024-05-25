@@ -24,7 +24,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             string? allJobCategoryFromCache = await _cache.GetStringAsync(key);
 
             List<JobCategory> list;
-            if (string.IsNullOrEmpty(allJobCategoryFromCache))
+            if (string.IsNullOrWhiteSpace(allJobCategoryFromCache))
             {
                 list = _context.JobCategory.ToList();
                 await _cache.SetStringAsync(key, JsonSerializer.Serialize(list));
@@ -55,7 +55,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             string? getJobCategoryFromCache = await _cache.GetStringAsync(key);
 
             JobCategory category;
-            if (string.IsNullOrEmpty(getJobCategoryFromCache))
+            if (string.IsNullOrWhiteSpace(getJobCategoryFromCache))
             {
                 category = _context.JobCategory.Find(categoryId);
                 if (category == null)
@@ -113,7 +113,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             string? getJobCategoryFromCache = await _cache.GetStringAsync(key);
 
             JobCategory dbcategory;
-            if (string.IsNullOrEmpty(getJobCategoryFromCache))
+            if (string.IsNullOrWhiteSpace(getJobCategoryFromCache))
             {
                 dbcategory = _context.JobCategory.Find(category.CategoryId);
                 if (dbcategory == null)
@@ -154,7 +154,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             string? getJobCategoryFromCache = await _cache.GetStringAsync(key);
 
             JobCategory category;
-            if (string.IsNullOrEmpty(getJobCategoryFromCache))
+            if (string.IsNullOrWhiteSpace(getJobCategoryFromCache))
             {
                 category = _context.JobCategory.Find(categoryId);
                 if (category == null)

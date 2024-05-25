@@ -27,7 +27,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             string? getAllDesignationWithPrivilegeFromCache = await _cache.GetStringAsync(key);
 
             List<DesignationWhichHasPrivilege> allPrivileges;
-            if (string.IsNullOrEmpty(getAllDesignationWithPrivilegeFromCache))
+            if (string.IsNullOrWhiteSpace(getAllDesignationWithPrivilegeFromCache))
             {
                 allPrivileges = _dbContext.DesignationWhichHasPrivileges.Where(item => true).ToList();
                 await _cache.SetStringAsync(key, JsonSerializer.Serialize(allPrivileges));
@@ -57,7 +57,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             string? getPrivilegeByIdFromCache = await _cache.GetStringAsync(key);
 
             DesignationWhichHasPrivilege privilege;
-            if (string.IsNullOrEmpty(getPrivilegeByIdFromCache))
+            if (string.IsNullOrWhiteSpace(getPrivilegeByIdFromCache))
             {
                 privilege = _dbContext.DesignationWhichHasPrivileges.Find(PrivilegeId);
                 if (privilege == null)
@@ -122,7 +122,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             string? getPrivilegeByIdFromCache = await _cache.GetStringAsync(key);
 
             DesignationWhichHasPrivilege privilege;
-            if (string.IsNullOrEmpty(getPrivilegeByIdFromCache))
+            if (string.IsNullOrWhiteSpace(getPrivilegeByIdFromCache))
             {
                 privilege = _dbContext.DesignationWhichHasPrivileges.Find(PrivilegeId);
                 if (privilege == null)
@@ -168,7 +168,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             string? getPrivilegeByDesignationIdFromCache = await _cache.GetStringAsync(key);
 
             DesignationWhichHasPrivilege privilege;
-            if (string.IsNullOrEmpty(getPrivilegeByDesignationIdFromCache))
+            if (string.IsNullOrWhiteSpace(getPrivilegeByDesignationIdFromCache))
             {
                 privilege = _dbContext.DesignationWhichHasPrivileges.Where(item => item.DesignationId == DesignationId).FirstOrDefault();
                 if (privilege == null)

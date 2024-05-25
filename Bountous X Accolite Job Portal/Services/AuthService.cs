@@ -37,7 +37,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             string? getUserByEmailFromCache = await _cache.GetStringAsync(key);
 
             User checkUserWhetherExist;
-            if (string.IsNullOrEmpty(getUserByEmailFromCache))
+            if (string.IsNullOrWhiteSpace(getUserByEmailFromCache))
             {
                 checkUserWhetherExist = _dbContext.Users.Where(item => item.Email == loginUser.Email).FirstOrDefault();
                 if (checkUserWhetherExist == null)

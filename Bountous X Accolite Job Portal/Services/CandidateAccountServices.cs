@@ -4,11 +4,10 @@ using Bountous_X_Accolite_Job_Portal.Models;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
 using Microsoft.AspNetCore.Identity;
 using Bountous_X_Accolite_Job_Portal.Models.EMAIL;
-using MimeKit.Text;
-using MimeKit;
-using MailKit.Net.Smtp;
 using Microsoft.Extensions.Caching.Distributed;
 using System.Text.Json;
+using System.Security.Cryptography;
+using Microsoft.EntityFrameworkCore;
 
 namespace Bountous_X_Accolite_Job_Portal.Services
 {
@@ -36,7 +35,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             string? getCandidateByIdFromCache = await _cache.GetStringAsync(key);
 
             Candidate candidate;
-            if (string.IsNullOrEmpty(getCandidateByIdFromCache))
+            if (string.IsNullOrWhiteSpace(getCandidateByIdFromCache))
             {
                 candidate = _dbContext.Candidates.Find(CandidateId);
                 if (candidate == null)
@@ -67,28 +66,26 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             string? getUserByEmailFromCache = await _cache.GetStringAsync(key);
 
             User checkUserWhetherExist;
-            if (string.IsNullOrEmpty(getUserByEmailFromCache))
+            if (string.IsNullOrWhiteSpace(getUserByEmailFromCache))
             {
                 checkUserWhetherExist = _dbContext.Users.Where(item => item.Email == registerUser.Email).FirstOrDefault();
-                if (checkUserWhetherExist != null)
-                {
-                    response.Status = 409;
-                    response.Message = "This email is already registered with us. Please Login.";
-                    return response;
-                }
-
-                await _cache.SetStringAsync(key, JsonSerializer.Serialize(checkUserWhetherExist));
             }
             else
             {
                 checkUserWhetherExist = JsonSerializer.Deserialize<User>(getUserByEmailFromCache);
             }
-            
+
+            if (checkUserWhetherExist != null)
+            {
+                response.Status = 409;
+                response.Message = "This email is already registered with us. Please Login.";
+                return response;
+            }
+
             var candidate = new Candidate();
             candidate.FirstName = registerUser.FirstName;
             candidate.LastName = registerUser.LastName;
             candidate.Email = registerUser.Email;
-            
 
             await _dbContext.Candidates.AddAsync(candidate);
             await _dbContext.SaveChangesAsync();
@@ -104,6 +101,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             user.UserName = candidate.Email;
             user.Email = candidate.Email;
             user.CandidateId = candidate.CandidateId;
+
             var result = await _userManager.CreateAsync(user, registerUser.Password);
             if (!result.Succeeded)
             {
@@ -115,44 +113,31 @@ namespace Bountous_X_Accolite_Job_Portal.Services
                 return response;
             }
 
+            var userEmail = await _userManager.FindByEmailAsync(candidate.Email);
+            var tokenBytes = RandomNumberGenerator.GetBytes(64);
+            var emailToken = Convert.ToBase64String(tokenBytes);
+            userEmail.EmailToken = emailToken;
+            userEmail.EmailConfirmExpiry = DateTime.Now.AddMinutes(5);
+            EmailData emailRef = new EmailData(userEmail.Email, "bounteous x Accolite Job Portal!", ConfirmEmailBody.EmailStringBody(userEmail.Email, userEmail.EmailToken));
+            _emailService.SendEmail(emailRef);
+
+            _dbContext.Entry(userEmail).State = EntityState.Modified;
+
+            //var newToken = confirmEmailDTO.EmailToken.Replace(" ", "+");
+            //var newToken = confirm.EmailToken.Replace(" ", "+");
+
+            var TokenCode = user.EmailToken;
+            DateTime emailTokenExpiry = (DateTime)user.EmailConfirmExpiry;
+
+            //await _userManager.ConfirmEmailAsync(user, newToken);
+            //user.EmailConfirmed = true;
+
             response.Status = 200;
             response.Message = "Successfully created Candidate.";
             response.Candidate = new CandidateViewModel(candidate);
             return response;
         }
-        public void SendConfirmEmail(EmailData request)
-        {
-            var email = new MimeMessage();
-            var from = _config["EmailSettings:From"];
-            email.From.Add(new MailboxAddress("Job Portal", from));
-            email.To.Add(new MailboxAddress(request.To, request.To));
-            email.Subject = request.Subject;
-            email.Body = new TextPart(TextFormat.Html)
-            { Text = string.Format(request.Body) };
 
-            using var smtp = new SmtpClient();
-            {
-                try
-                {
-                    smtp.Connect(_config["EmailSettings:SmtpServer"], 465, true);
-                    var temp = _config.GetSection("EmailSettings:From").Value;
-                    var temp2 = _config.GetSection("EmailSettings:EmailPassword").Value;
-
-                    smtp.Authenticate(_config.GetSection("EmailSettings:From").Value, _config.GetSection("EmailSettings:EmailPassword").Value);
-                    smtp.Send(email);
-                }
-                catch (Exception ex)
-                {
-                    throw;
-
-                }
-                finally
-                {
-                    smtp.Disconnect(true);
-                    smtp.Dispose();
-                }
-            }
-        }
 
         public async Task<CandidateResponseViewModel> UpdateCandidateProfile(UpdateCandidateViewModel updatedCandidate)
         {
@@ -162,7 +147,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             string? getCandidateByIdFromCache = await _cache.GetStringAsync(key);
 
             Candidate candidate;
-            if (string.IsNullOrEmpty(getCandidateByIdFromCache))
+            if (string.IsNullOrWhiteSpace(getCandidateByIdFromCache))
             {
                 candidate = _dbContext.Candidates.Find(updatedCandidate.CandidateId);
                 if (candidate == null)

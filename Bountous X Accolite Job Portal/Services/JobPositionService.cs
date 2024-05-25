@@ -56,7 +56,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             string? getJobPositionByIdFromCache = await _cache.GetStringAsync(key);
 
             JobPosition position;
-            if (string.IsNullOrEmpty(getJobPositionByIdFromCache))
+            if (string.IsNullOrWhiteSpace(getJobPositionByIdFromCache))
             {
                 position = _context.JobPosition.Find(PositionId);
                 if (position == null)
@@ -91,7 +91,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             string? allJobPositionsFromCache = await _cache.GetStringAsync(key);
 
             List<JobPosition> list;
-            if (string.IsNullOrEmpty(allJobPositionsFromCache))
+            if (string.IsNullOrWhiteSpace(allJobPositionsFromCache))
             {
                 list = _context.JobPosition.ToList();
                 await _cache.SetStringAsync(key, JsonSerializer.Serialize(list));
@@ -120,7 +120,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             string? getJobPositionByIdFromCache = await _cache.GetStringAsync(key);
 
             JobPosition position;
-            if (string.IsNullOrEmpty(getJobPositionByIdFromCache))
+            if (string.IsNullOrWhiteSpace(getJobPositionByIdFromCache))
             {
                 position = _context.JobPosition.Find(PositionId);
                 if(position == null)
@@ -151,7 +151,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             string? getJobPositionByIdFromCache = await _cache.GetStringAsync(key);
 
             JobPosition dbposition;
-            if (string.IsNullOrEmpty(getJobPositionByIdFromCache))
+            if (string.IsNullOrWhiteSpace(getJobPositionByIdFromCache))
             {
                 dbposition = _context.JobPosition.Find(jobPosition.PositionId);
                 if (dbposition == null)

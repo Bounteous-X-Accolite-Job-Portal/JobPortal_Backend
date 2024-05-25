@@ -23,7 +23,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             string? getAllInstitutionsFromCache = await _cache.GetStringAsync(key);
 
             List<EducationInstitution> list;
-            if (string.IsNullOrEmpty(getAllInstitutionsFromCache))
+            if (string.IsNullOrWhiteSpace(getAllInstitutionsFromCache))
             {
                 list = _dbContext.EducationInstitutions.Where(item => true).ToList();
                 await _cache.SetStringAsync(key, JsonSerializer.Serialize(list));
@@ -50,7 +50,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             string? getInstitutionByIdFromCache = await _cache.GetStringAsync(key);
 
             EducationInstitution institution;
-            if (string.IsNullOrEmpty(getInstitutionByIdFromCache))
+            if (string.IsNullOrWhiteSpace(getInstitutionByIdFromCache))
             {
                 institution = _dbContext.EducationInstitutions.Find(id);
                 if (institution == null)
@@ -107,7 +107,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             string? getInstitutionByIdFromCache = await _cache.GetStringAsync(key);
 
             EducationInstitution institution;
-            if (string.IsNullOrEmpty(getInstitutionByIdFromCache))
+            if (string.IsNullOrWhiteSpace(getInstitutionByIdFromCache))
             {
                 institution = _dbContext.EducationInstitutions.Find(updateInstitution.InstitutionId);
                 if (institution == null)
@@ -147,7 +147,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             string? getInstitutionByIdFromCache = await _cache.GetStringAsync(key);
 
             EducationInstitution institution;
-            if (string.IsNullOrEmpty(getInstitutionByIdFromCache))
+            if (string.IsNullOrWhiteSpace(getInstitutionByIdFromCache))
             {
                 institution = _dbContext.EducationInstitutions.Find(id);
                 if (institution == null)
@@ -168,7 +168,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             string? getAllCandidateEducationsByInstitutionIdFromCache = await _cache.GetStringAsync(key);
 
             List<CandidateEducation> education;
-            if (string.IsNullOrEmpty(getAllCandidateEducationsByInstitutionIdFromCache))
+            if (string.IsNullOrWhiteSpace(getAllCandidateEducationsByInstitutionIdFromCache))
             {
                 education = _dbContext.CandidateEducations.Where(item => item.InstitutionId == id).ToList();
                 if (education.Count != 0)

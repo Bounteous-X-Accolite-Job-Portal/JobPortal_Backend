@@ -35,7 +35,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             string? getPrivilegeByDesignationIdFromCache = await _cache.GetStringAsync(key);
 
             DesignationWhichHasPrivilege check;
-            if (string.IsNullOrEmpty(getPrivilegeByDesignationIdFromCache))
+            if (string.IsNullOrWhiteSpace(getPrivilegeByDesignationIdFromCache))
             {
                 check = _dbContext.DesignationWhichHasPrivileges.Where(item => item.DesignationId == designationId).FirstOrDefault();
                 if (check == null)
@@ -59,7 +59,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
         //    string? getDesignationByRoleFromCache = await _cache.GetStringAsync(key);
 
         //    Designation designation;
-        //    if (string.IsNullOrEmpty(getDesignationByRoleFromCache))
+        //    if (string.IsNullOrWhiteSpace(getDesignationByRoleFromCache))
         //    {
         //        designation = _dbContext.Designations.Where(item => String.Equals(item.DesignationName.ToLower(), role.ToLower())).FirstOrDefault();
         //        if(designation == null)
@@ -78,7 +78,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
         //    string? getPrivilegeByDesignationIdFromCache = await _cache.GetStringAsync(key);
 
         //    DesignationWhichHasPrivilege check;
-        //    if (string.IsNullOrEmpty(getPrivilegeByDesignationIdFromCache))
+        //    if (string.IsNullOrWhiteSpace(getPrivilegeByDesignationIdFromCache))
         //    {
         //        check = _dbContext.DesignationWhichHasPrivileges.Where(item => item.DesignationId == designation.DesignationId).FirstOrDefault();
         //        if (check == null)
@@ -104,7 +104,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             string? getDesignationByIdFromCache = await _cache.GetStringAsync(key);
 
             Designation designation;
-            if (string.IsNullOrEmpty(getDesignationByIdFromCache))
+            if (string.IsNullOrWhiteSpace(getDesignationByIdFromCache))
             {
                 designation = _dbContext.Designations.Find(Id);
                 if (designation == null)
@@ -159,7 +159,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             string? getAllDesignationsFromCache = await _cache.GetStringAsync(key);
 
             List<Designation> list;
-            if (string.IsNullOrEmpty(getAllDesignationsFromCache))
+            if (string.IsNullOrWhiteSpace(getAllDesignationsFromCache))
             {
                 list = _dbContext.Designations.ToList();
                 await _cache.SetStringAsync(key, JsonSerializer.Serialize(list));
@@ -193,7 +193,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             string? getDesignationByIdFromCache = await _cache.GetStringAsync(key);
 
             Designation designation;
-            if (string.IsNullOrEmpty(getDesignationByIdFromCache))
+            if (string.IsNullOrWhiteSpace(getDesignationByIdFromCache))
             {
                 designation = _dbContext.Designations.Find(Id);
                 if (designation == null)
@@ -214,7 +214,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             string? getEmployeesByDesignationIdFromCache = await _cache.GetStringAsync(key);
 
             List<Employee> list;
-            if (string.IsNullOrEmpty(getEmployeesByDesignationIdFromCache))
+            if (string.IsNullOrWhiteSpace(getEmployeesByDesignationIdFromCache))
             {
                 list = _dbContext.Employees.Where(item => item.DesignationId == Id).ToList();
                 if (list.Count != 0)
@@ -236,7 +236,6 @@ namespace Bountous_X_Accolite_Job_Portal.Services
 
             await _cache.RemoveAsync($"allDesignations");
             await _cache.RemoveAsync($"getDesignationById-{designation.DesignationId}");
-            await _cache.RemoveAsync($"getDesignationByRole-{designation.DesignationName}");
             await _cache.RemoveAsync($"getPrivilegeByDesignationId-{designation.DesignationId}");
             await _cache.RemoveAsync($"getEmployeesByDesignationId-{designation.DesignationId}");
 

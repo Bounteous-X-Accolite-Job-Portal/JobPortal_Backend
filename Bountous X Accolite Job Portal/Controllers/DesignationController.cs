@@ -23,6 +23,15 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
         [Route("getAllDesignations")]
         public async Task<AllDesignationResponseViewModel> GetAllDesignations()
         {
+            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            if (!isEmployee)
+            {
+                AllDesignationResponseViewModel response = new AllDesignationResponseViewModel();
+                response.Status = 403;
+                response.Message = "You are not authorized to get all Designations.";
+                return response;
+            }
+
             return await _designationService.GetAllDesignation();
         }
 
@@ -30,6 +39,15 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
         [Route("designation/{Id}")]
         public async Task<DesignationResponseViewModel> GetDesignationsById(int Id)
         {
+            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            if (!isEmployee)
+            {
+                DesignationResponseViewModel response = new DesignationResponseViewModel();
+                response.Status = 403;
+                response.Message = "You are not authorized to get Designation.";
+                return response;
+            }
+
             return await _designationService.GetDesignationById(Id);
         }
 

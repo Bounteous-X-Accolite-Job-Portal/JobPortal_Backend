@@ -86,7 +86,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
         }
 
         [HttpDelete]
-        [Route("DeleteJobPosition/{Id}")]
+        [Route("DeleteJobPosition/{PositionId}")]
         [Authorize]
         public async Task<JobPositionResponseViewModel> DeleteJobPosition(Guid PositionId)
         {

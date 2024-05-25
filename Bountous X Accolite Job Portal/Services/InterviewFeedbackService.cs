@@ -33,7 +33,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
                 return response;
             }
             
-            if(interview.Interview.InterViewerId!=Empid)
+            if(interview.Interview.InterViewerId != Empid)
             {
                 response = new InterviewFeedbackResponseViewModel();
                 response.Status = 402;
@@ -81,7 +81,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             string? getInterviewFeedbackByIdFromCache = await _cache.GetStringAsync(key);
 
             InterviewFeedback interviewFeedback;
-            if (string.IsNullOrEmpty(getInterviewFeedbackByIdFromCache))
+            if (string.IsNullOrWhiteSpace(getInterviewFeedbackByIdFromCache))
             {
                 interviewFeedback = _context.InterviewFeedbacks.Find(Id);
                 if (interviewFeedback == null)
@@ -132,7 +132,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             string? getInterviewFeedbackByIdFromCache = await _cache.GetStringAsync(key);
 
             InterviewFeedback dbInterviewFeedback;
-            if (string.IsNullOrEmpty(getInterviewFeedbackByIdFromCache))
+            if (string.IsNullOrWhiteSpace(getInterviewFeedbackByIdFromCache))
             {
                 dbInterviewFeedback = _context.InterviewFeedbacks.Find(interviewFeedback.FeedbackId);
                 if (dbInterviewFeedback == null)
@@ -172,7 +172,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             string? getAllInterviewFeedbackByEmployeeIdFromCache = await _cache.GetStringAsync(key);
 
             List<InterviewFeedback> list;
-            if (string.IsNullOrEmpty(getAllInterviewFeedbackByEmployeeIdFromCache))
+            if (string.IsNullOrWhiteSpace(getAllInterviewFeedbackByEmployeeIdFromCache))
             {
                 list = _context.InterviewFeedbacks.ToList();
                 await _cache.SetStringAsync(key, JsonSerializer.Serialize(list));
@@ -210,7 +210,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             string? getInterviewFeedbackByIdFromCache = await _cache.GetStringAsync(key);
 
             InterviewFeedback dbInterviewFeedback;
-            if (string.IsNullOrEmpty(getInterviewFeedbackByIdFromCache))
+            if (string.IsNullOrWhiteSpace(getInterviewFeedbackByIdFromCache))
             {
                 dbInterviewFeedback = _context.InterviewFeedbacks.Find(Id);
                 if (dbInterviewFeedback == null)

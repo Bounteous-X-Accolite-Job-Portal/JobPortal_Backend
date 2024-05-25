@@ -1,5 +1,4 @@
-﻿using Bountous_X_Accolite_Job_Portal.Models.JobApplicationModels;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Bountous_X_Accolite_Job_Portal.Models
 {
@@ -26,16 +25,6 @@ namespace Bountous_X_Accolite_Job_Portal.Models
         }
 
         public ClosedJobApplication(JobApplication application)
-        {
-            ApplicationId = application.ApplicationId;
-            CandidateId = application.CandidateId;
-            JobId = application.JobId;
-            AppliedOn = application.AppliedOn;
-            StatusId = application.StatusId;
-            ClosedJobId = application.ClosedJobId;
-        }
-
-        public ClosedJobApplication(JobApplicationViewModel application)
         {
             ApplicationId = application.ApplicationId;
             CandidateId = application.CandidateId;

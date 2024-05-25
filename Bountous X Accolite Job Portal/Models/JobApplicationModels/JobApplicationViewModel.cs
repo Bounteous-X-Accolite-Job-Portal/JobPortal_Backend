@@ -1,4 +1,3 @@
-﻿
 namespace Bountous_X_Accolite_Job_Portal.Models.JobApplicationModels
 {
     public class JobApplicationViewModel
@@ -7,8 +6,8 @@ namespace Bountous_X_Accolite_Job_Portal.Models.JobApplicationModels
         public Guid? CandidateId { get; set; }
 
         public DateTime AppliedOn { get; set; } = DateTime.Now;
-  
-        public int? StatusId { get;  set; }
+
+        public int? StatusId { get; set; }
         public Guid? JobId { get; set; }
         public Guid? ClosedJobId { get; set; }
 
