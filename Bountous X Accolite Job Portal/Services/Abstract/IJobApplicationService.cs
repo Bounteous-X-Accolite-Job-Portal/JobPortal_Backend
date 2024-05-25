@@ -19,5 +19,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services.Abstract
         Task<AllApplicantResponseViewModel> GetApplicantsByJobId(Guid JobId);
         Task<AllApplicantResponseViewModel> GetApplicantsByClosedJobId(Guid JobId);
         Task<List<SuccessfulJobApplication>> GetAllApplicationsWithSuccess();
+
+        Task SendOfferLetter(Guid Id);
     }
 }

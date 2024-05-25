@@ -286,6 +286,19 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
 
             return Ok(successApplications);
         }
+        [HttpPost("sendofferletter/{id}")]
+        public async Task<IActionResult> SendOfferLetter(Guid id)
+        {
+            try
+            {
+                await _jobApplicationService.SendOfferLetter(id);
+                return Ok("Offer letter sent successfully.");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"An error occurred: {ex.Message}");
+            }
+        }
 
     }
 }
