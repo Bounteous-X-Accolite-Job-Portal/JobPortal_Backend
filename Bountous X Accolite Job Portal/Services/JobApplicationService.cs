@@ -363,6 +363,18 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             }
             else
             {
+                if (StatusId == (await _jobStatusService.getInitialSuccesstatus()))
+                {
+                    SuccessfulJobApplication successfulApplication = new SuccessfulJobApplication();
+                    successfulApplication.ApplicationId = app.ApplicationId;
+                    successfulApplication.CandidateId = app.CandidateId;
+                    successfulApplication.JobId = app.JobId;
+                    successfulApplication.ClosedJobId = app.ClosedJobId;
+
+                    await _dbContext.AddAsync(successfulApplication);
+                    await _cache.RemoveAsync($"allSuccessfulJobApplications");
+                }
+
                 app.StatusId = StatusId;
                 _dbContext.JobApplications.Update(app);
 
@@ -603,52 +615,37 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             return response;
         }
 
-        public async Task<List<SuccessfulJobApplication>> GetAllApplicationsWithSuccess()
+        public async Task<SuccessfulApplicationsResponseViewModel> GetAllApplicationsWithSuccess()
         {
-            List<SuccessfulJobApplication> successfulApplications = new List<SuccessfulJobApplication>();
-            JobApplicationResponseViewModel response;
+            SuccessfulApplicationsResponseViewModel response = new SuccessfulApplicationsResponseViewModel();
 
-            int successStatusId = await _jobStatusService.getInitialSuccesstatus();
-            if (successStatusId == -1)
+            string key = $"allSuccessfulJobApplications";
+            string? allSuccessfulJobApplicationsFromCache = await _cache.GetStringAsync(key);
+
+            List<SuccessfulJobApplication> allSuccessfulJobApplications;
+            if (string.IsNullOrWhiteSpace(allSuccessfulJobApplicationsFromCache))
             {
-                response = new JobApplicationResponseViewModel();
-                response.Status = 404;
-                response.Message = "Referral Status i.e 'ReferralStatusId' not found in the database";
-                return successfulApplications;
-            }
-
-            String key = $"allJobApplications";
-            string? allJobApplicationsFromCache = await _cache.GetStringAsync(key);
-
-            List<JobApplication> allJobApplications;
-            if (string.IsNullOrWhiteSpace(allJobApplicationsFromCache))
-            {
-                allJobApplications = _dbContext.JobApplications.ToList();
-                await _cache.SetStringAsync(key, JsonSerializer.Serialize(allJobApplications));
+                allSuccessfulJobApplications = _dbContext.SuccessfulJobs.ToList();
+                await _cache.SetStringAsync(key, JsonSerializer.Serialize(allSuccessfulJobApplications));
             }
             else
             {
-                allJobApplications = JsonSerializer.Deserialize<List<JobApplication>>(allJobApplicationsFromCache);
+                allSuccessfulJobApplications = JsonSerializer.Deserialize<List<SuccessfulJobApplication>>(allSuccessfulJobApplicationsFromCache);
             }
 
-            foreach (var application in allJobApplications)
+            List<SuccessfulApplicationViewModel> successfulApplications = new List<SuccessfulApplicationViewModel>();
+            foreach (var application in allSuccessfulJobApplications)
             {
-                if (application.StatusId == successStatusId)
+                if (!application.IsOfferLetterGenerated)
                 {
-                    SuccessfulJobApplication successfulJobApplication = new SuccessfulJobApplication
-                    {
-                        CandidateId = application.CandidateId,
-                        ApplicationId = application.ApplicationId,
-                    };
-
-                    await _dbContext.SuccessfulJobs.AddAsync(successfulJobApplication);
-                    successfulApplications.Add(successfulJobApplication);
+                    successfulApplications.Add(new SuccessfulApplicationViewModel(application));
                 }
             }
 
-            await _dbContext.SaveChangesAsync();
-
-            return successfulApplications;
+            response.Status = 200;
+            response.Message = "Successfully fetched all successful application.";
+            response.successfulJobApplication = successfulApplications;
+            return response;
         }
     }
 }

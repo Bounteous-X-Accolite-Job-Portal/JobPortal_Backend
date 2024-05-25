@@ -4,6 +4,7 @@ using Bountous_X_Accolite_Job_Portal.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Bountous_X_Accolite_Job_Portal.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240525170243_initialMigration")]
+    partial class initialMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -937,27 +940,17 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                     b.Property<Guid?>("CandidateId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("ClosedJobId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<bool>("IsOfferLetterGenerated")
                         .HasColumnType("bit");
 
                     b.Property<Guid?>("JobApplicationApplicationId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("JobId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
                     b.HasIndex("CandidateId");
 
-                    b.HasIndex("ClosedJobId");
-
                     b.HasIndex("JobApplicationApplicationId");
-
-                    b.HasIndex("JobId");
 
                     b.ToTable("SuccessfulJobs");
                 });
@@ -1575,23 +1568,11 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                         .WithMany()
                         .HasForeignKey("CandidateId");
 
-                    b.HasOne("Bountous_X_Accolite_Job_Portal.Models.ClosedJob", "ClosedJob")
-                        .WithMany()
-                        .HasForeignKey("ClosedJobId");
-
                     b.HasOne("Bountous_X_Accolite_Job_Portal.Models.JobApplication", "JobApplication")
                         .WithMany()
                         .HasForeignKey("JobApplicationApplicationId");
 
-                    b.HasOne("Bountous_X_Accolite_Job_Portal.Models.Job", "Job")
-                        .WithMany()
-                        .HasForeignKey("JobId");
-
                     b.Navigation("Candidate");
-
-                    b.Navigation("ClosedJob");
-
-                    b.Navigation("Job");
 
                     b.Navigation("JobApplication");
                 });

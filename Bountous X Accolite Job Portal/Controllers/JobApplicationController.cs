@@ -1,4 +1,5 @@
-﻿using Bountous_X_Accolite_Job_Portal.Helpers;
+﻿using Azure;
+using Bountous_X_Accolite_Job_Portal.Helpers;
 using Bountous_X_Accolite_Job_Portal.Models.JobApplicationModels;
 using Bountous_X_Accolite_Job_Portal.Models.JobApplicationModels.ResponseViewModels;
 using Bountous_X_Accolite_Job_Portal.Models.JobApplicationViewModel.JobApplicationResponse;
@@ -271,20 +272,23 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
 
         [HttpGet]
         [Route("jobApplication/successfulApplication")]
-        public async Task<IActionResult> GetAllApplicationsWithSuccess()
+        public async Task<SuccessfulApplicationsResponseViewModel> GetAllApplicationsWithSuccess()
         {
+            SuccessfulApplicationsResponseViewModel response;
 
-            var successApplications = await _jobApplicationService.GetAllApplicationsWithSuccess();
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
-            Guid employeeId = GetGuidFromString.Get(User.FindFirstValue("Id"));
-            var role = User.FindFirstValue("Role");
-
-            if (successApplications.Count == 0 && role == null || !_designationService.HasSpecialPrivilege(role))
+            bool hasPrivilege = Convert.ToBoolean(User.FindFirstValue("HasPrivilege"));
+            bool hasSpecialPrivilege = Convert.ToBoolean(User.FindFirstValue("HasSpecialPrivilege"));
+            if (!isEmployee || !hasPrivilege || !hasSpecialPrivilege)
             {
-                return NotFound("No successful applications found.");
+                response = new SuccessfulApplicationsResponseViewModel();
+                response.Status = 401;
+                response.Message = "You are either not loggedIn or not authorized to access all successfull applications.";
+                return response;
             }
 
-            return Ok(successApplications);
+            response = await _jobApplicationService.GetAllApplicationsWithSuccess();
+            return response;
         }
 
     }

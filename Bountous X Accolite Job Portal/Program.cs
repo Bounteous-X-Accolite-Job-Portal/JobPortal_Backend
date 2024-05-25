@@ -18,6 +18,8 @@ namespace Bountous_X_Accolite_Job_Portal
     {
         public static void Main(string[] args)
         {
+            ThreadPool.SetMinThreads(500, 500);
+
             var builder = WebApplication.CreateBuilder(args);
 
             builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("LocalConnection")));

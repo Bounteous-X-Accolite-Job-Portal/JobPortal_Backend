@@ -867,6 +867,7 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IsOfferLetterGenerated = table.Column<bool>(type: "bit", nullable: false),
                     CandidateId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     ApplicationId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     JobApplicationApplicationId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)

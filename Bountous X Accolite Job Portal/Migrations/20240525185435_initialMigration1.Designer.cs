@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Bountous_X_Accolite_Job_Portal.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240525060109_initialMigration")]
-    partial class initialMigration
+    [Migration("20240525185435_initialMigration1")]
+    partial class initialMigration1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -940,7 +940,13 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                     b.Property<Guid?>("CandidateId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<bool>("IsOfferLetterGenerated")
+                        .HasColumnType("bit");
+
                     b.Property<Guid?>("JobApplicationApplicationId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("JobId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
@@ -948,6 +954,8 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                     b.HasIndex("CandidateId");
 
                     b.HasIndex("JobApplicationApplicationId");
+
+                    b.HasIndex("JobId");
 
                     b.ToTable("SuccessfulJobs");
                 });
@@ -1569,7 +1577,13 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                         .WithMany()
                         .HasForeignKey("JobApplicationApplicationId");
 
+                    b.HasOne("Bountous_X_Accolite_Job_Portal.Models.Job", "Job")
+                        .WithMany()
+                        .HasForeignKey("JobId");
+
                     b.Navigation("Candidate");
+
+                    b.Navigation("Job");
 
                     b.Navigation("JobApplication");
                 });
