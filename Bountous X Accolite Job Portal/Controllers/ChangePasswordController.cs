@@ -48,8 +48,8 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
 
 
         }
-        [HttpPost("ChangePasswordEmail")]
 
+        [HttpPost("ChangePasswordEmail")]
         public async Task<IActionResult> ChangePassword(ChangePasswordDTO changePassword)
         {
             var user = await _userManager.FindByEmailAsync(changePassword.Email);

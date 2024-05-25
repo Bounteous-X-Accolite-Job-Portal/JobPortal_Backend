@@ -20,8 +20,13 @@ namespace Bountous_X_Accolite_Job_Portal
         {
             var builder = WebApplication.CreateBuilder(args);
 
-             builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("LocalConnection")));
+            builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("LocalConnection")));
 
+            builder.Services.AddStackExchangeRedisCache(options =>
+            {
+                options.Configuration = builder.Configuration.GetConnectionString("RedisCacheConnection");
+                options.InstanceName = "master";
+            });
 
             builder.Services.Configure<IdentityOptions>(options =>
             {
@@ -76,7 +81,7 @@ namespace Bountous_X_Accolite_Job_Portal
             builder.Services.AddControllers();
 
             builder.Services.AddControllers()
-                .AddJsonOptions(opt =>
+            .AddJsonOptions(opt =>
                 {
                     opt.JsonSerializerOptions.Converters.Add(new DateOnlyJsonConverter());
                 });

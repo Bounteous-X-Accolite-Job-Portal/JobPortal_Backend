@@ -1,12 +1,8 @@
 ﻿using Bountous_X_Accolite_Job_Portal.Helpers;
-using Bountous_X_Accolite_Job_Portal.Models;
-using Bountous_X_Accolite_Job_Portal.Models.DegreeModels.DegreeResponseViewModel;
 using Bountous_X_Accolite_Job_Portal.Models.ReferralViewModel;
 using Bountous_X_Accolite_Job_Portal.Models.ReferralViewModel.ResponseViewModels;
-using Bountous_X_Accolite_Job_Portal.Services;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -14,14 +10,13 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ReferralController : ControllerBase
     {
         private readonly IReferralService _referralService;
-        private readonly UserManager<User> _userManager;
-        public ReferralController(IReferralService referralService,UserManager<User> userManager)
+        public ReferralController(IReferralService referralService)
         {
             _referralService = referralService;
-            _userManager = userManager;
         }
 
         [HttpPost]
@@ -54,7 +49,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
 
         [HttpGet]
         [Route("getAllReferrals")]
-        public AllReferralResponseViewModel GetAllReferralsOfLoggedInEmployee()
+        public async Task<AllReferralResponseViewModel> GetAllReferralsOfLoggedInEmployee()
         {
             AllReferralResponseViewModel response;
 
@@ -68,7 +63,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             }
 
             Guid employeeId = GetGuidFromString.Get(User.FindFirstValue("Id"));
-            response = _referralService.GetAllReferralsOfLoggedInEmployee(employeeId);
+            response = await _referralService.GetAllReferralsOfLoggedInEmployee(employeeId);
             return response;
         }
         

@@ -1,8 +1,7 @@
-﻿using Bountous_X_Accolite_Job_Portal.JwtFeatures;
-using Bountous_X_Accolite_Job_Portal.Models;
+﻿using Bountous_X_Accolite_Job_Portal.Models;
 using Bountous_X_Accolite_Job_Portal.Models.AuthenticationViewModel;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Bountous_X_Accolite_Job_Portal.Controllers
@@ -12,13 +11,9 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
     public class AccountController : ControllerBase
     {
         private readonly IAuthService _authService;
-        private readonly UserManager<User> _userManager;
-        private readonly JwtHandler _jwtHandler;
-        public AccountController(IAuthService authService, UserManager<User> userManager, JwtHandler jwtHandler)
+        public AccountController(IAuthService authService)
         {
             _authService = authService;
-            _userManager = userManager;
-            _jwtHandler = jwtHandler;
         }
 
         [HttpPost]
@@ -55,6 +50,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
 
         [HttpPost]
         [Route("logout")]
+        [Authorize]
         public async Task<ResponseViewModel> Logout()
         {
             ResponseViewModel response = await _authService.Logout();

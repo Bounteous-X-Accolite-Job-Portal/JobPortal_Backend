@@ -1,10 +1,14 @@
 ﻿using Bountous_X_Accolite_Job_Portal.Data;
 using Bountous_X_Accolite_Job_Portal.Models;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
+using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.IdentityModel.Tokens;
+using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Bountous_X_Accolite_Job_Portal.JwtFeatures
 {
@@ -14,12 +18,14 @@ namespace Bountous_X_Accolite_Job_Portal.JwtFeatures
         private readonly IConfigurationSection _jwtSettings;
         private readonly ApplicationDbContext _dbContext;
         private readonly IDesignationService _designationService;
-        public JwtHandler(IConfiguration configuration, ApplicationDbContext dbContext, IDesignationService designationService)
+        private readonly IDistributedCache _cache;
+        public JwtHandler(IConfiguration configuration, ApplicationDbContext dbContext, IDesignationService designationService, IDistributedCache cache)
         {
             _configuration = configuration;
             _jwtSettings = _configuration.GetSection("JwtSettings");
             _dbContext = dbContext;
             _designationService = designationService;
+            _cache = cache;
         }
         public SigningCredentials GetSigningCredentials()
         {
@@ -27,7 +33,7 @@ namespace Bountous_X_Accolite_Job_Portal.JwtFeatures
             var secret = new SymmetricSecurityKey(key);
             return new SigningCredentials(secret, SecurityAlgorithms.HmacSha256);
         }
-        public List<Claim> GetClaims(User user)
+        public async Task<List<Claim>> GetClaims(User user)
         {
 
             var claims = new List<Claim>();
@@ -42,17 +48,58 @@ namespace Bountous_X_Accolite_Job_Portal.JwtFeatures
             bool hasSpecialPrivilege = false;
             if (user.EmpId != null)
             {
-                var employee = _dbContext.Employees.Find(user.EmpId);
-                name = employee.FirstName;
-                role = _dbContext.Designations.Find(employee.DesignationId).DesignationName.ToLower();
+                string key = $"getEmployeeById-{user.EmpId}";
+                string? getEmployeeByIdFromCache = await _cache.GetStringAsync(key);
 
-                hasPrivilege = _designationService.HasPrivilege(role);
+                Employee employee;
+                if (string.IsNullOrWhiteSpace(getEmployeeByIdFromCache))
+                {
+                    employee = _dbContext.Employees.Find(user.EmpId);
+                    await _cache.SetStringAsync(key, JsonSerializer.Serialize(employee));
+                }
+                else
+                {
+                    employee = JsonSerializer.Deserialize<Employee>(getEmployeeByIdFromCache);
+                }
+
+                name = employee.FirstName;
+
+                key = $"getDesignationById-{employee.DesignationId}";
+                string? getDesignationByIdFromCache = await _cache.GetStringAsync(key);
+
+                Designation designation;
+                if (string.IsNullOrWhiteSpace(getDesignationByIdFromCache))
+                {
+                    designation = _dbContext.Designations.Find(employee.DesignationId);
+                    await _cache.SetStringAsync(key, JsonSerializer.Serialize(designation, new JsonSerializerOptions { ReferenceHandler = ReferenceHandler.Preserve }));
+                }
+                else
+                {
+                    designation = JsonSerializer.Deserialize<Designation>(getDesignationByIdFromCache, new JsonSerializerOptions { ReferenceHandler = ReferenceHandler.Preserve });
+                }
+
+                role = designation.DesignationName.ToLower();
+
+                hasPrivilege = await _designationService.HasPrivilege(designation.DesignationId);
 
                 hasSpecialPrivilege = _designationService.HasSpecialPrivilege(role);
             }
             else
             {
-                var candidate = _dbContext.Candidates.Find(user.CandidateId);
+                string key = $"getCandidateById-{user.CandidateId}";
+                string? getCandidateByIdFromCache = await _cache.GetStringAsync(key);
+
+                Candidate candidate;
+                if (string.IsNullOrWhiteSpace(getCandidateByIdFromCache))
+                {
+                    candidate = _dbContext.Candidates.Find(user.CandidateId);
+                    await _cache.SetStringAsync(key, JsonSerializer.Serialize(candidate));
+                }
+                else
+                {
+                    candidate = JsonSerializer.Deserialize<Candidate>(getCandidateByIdFromCache);
+                }
+
                 name = candidate.FirstName;
             }
 

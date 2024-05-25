@@ -10,26 +10,32 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class EmployeeAccountController : ControllerBase
     {
         private readonly IEmployeeAccountService _employeeAuthService;
         private readonly IDesignationService _designationService;
-        public EmployeeAccountController(IEmployeeAccountService employeeAuthService, IDesignationService designationService)
+        private readonly I_InterviewService _interviewService;
+        private readonly IReferralService _referralService;
+        private readonly IJobService _jobService;
+        public EmployeeAccountController(IEmployeeAccountService employeeAuthService, IDesignationService designationService, I_InterviewService interviewService, IReferralService referralService, IJobService jobService)
         {
             _employeeAuthService = employeeAuthService;
             _designationService = designationService;   
+            _interviewService = interviewService;
+            _jobService = jobService;
+            _referralService = referralService;
         }
 
         [HttpGet]
         [Route("getAllEmployees")]
-        [Authorize]
-        public AllEmployeesResponseViewModel GetAllEmployees()
+        public async Task<AllEmployeesResponseViewModel> GetAllEmployees()
         {
             AllEmployeesResponseViewModel response;
 
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
-            var role = User.FindFirstValue("Role");
-            if (!isEmployee || role == null || !_designationService.HasPrivilege(role))
+            bool hasPrivilege = Convert.ToBoolean(User.FindFirstValue("HasPrivilege"));
+            if (!isEmployee || !hasPrivilege)
             {
                 response = new AllEmployeesResponseViewModel();
                 response.Status = 401;
@@ -37,14 +43,13 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
 
-            response = _employeeAuthService.GetAllEmployees();
+            response = await _employeeAuthService.GetAllEmployees();
             return response;
         }
 
         [HttpGet]
         [Route("employee/{Id}")]
-        [Authorize]
-        public EmployeeResponseViewModel GetEmployeesById(Guid Id)
+        public async Task<EmployeeResponseViewModel> GetEmployeesById(Guid Id)
         {
             EmployeeResponseViewModel response;
 
@@ -57,60 +62,51 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
 
-            response = _employeeAuthService.GetEmployeeById(Id);
+            response = await _employeeAuthService.GetEmployeeById(Id);
             return response;
         }
 
         [HttpPost]
         [Route("register")]
-        //[Authorize]
         public async Task<EmployeeResponseViewModel> Register(EmployeeRegisterViewModel employee)
         {
             EmployeeResponseViewModel response;
 
-            //if(!ModelState.IsValid)
-            //{
-            //    response = new EmployeeResponseViewModel();
-            //    response.Status = 404;
-            //    response.Message = "Please fill all the details.";
-            //    return response;
-            //}
+            if(!ModelState.IsValid)
+            {
+                response = new EmployeeResponseViewModel();
+                response.Status = 404;
+                response.Message = "Please fill all the details.";
+                return response;
+            }
 
-            //var email = User.FindFirstValue("Email");
-            //if (email == null)
-            //{
-            //    response = new EmployeeResponseViewModel();
-            //    response.Status = 401;
-            //    response.Message = "You are not loggedIn or not authorised to do add other employees.";
-            //    return response;
-            //}
+            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            bool hasPrivilege = Convert.ToBoolean(User.FindFirstValue("HasPrivilege"));
+            var role = User.FindFirstValue("Role");
+            if (!isEmployee || !hasPrivilege)
+            {
+                response = new EmployeeResponseViewModel();
+                response.Status = 401;
+                response.Message = "You are not loggedIn or not authorised to do add other employees.";
+                return response;
+            }
 
-            //bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
-            //var role = User.FindFirstValue("Role");
-            //if (!isEmployee || role == null || !_designationService.HasPrivilege(role))
-            //{
-            //    response = new EmployeeResponseViewModel();
-            //    response.Status = 401;
-            //    response.Message = "You are not loggedIn or not authorised to do add other employees.";
-            //    return response;
-            //}
-
-            //DesignationResponseViewModel designation = await _designationService.GetDesignationById(employee.DesignationId);
-            //if(designation.Designation == null)
-            //{
-            //    response = new EmployeeResponseViewModel();
-            //    response.Status = designation.Status;
-            //    response.Message = designation.Message;
-            //    return response;
-            //}
+            DesignationResponseViewModel designation = await _designationService.GetDesignationById(employee.DesignationId);
+            if(designation.Designation == null)
+            {
+                response = new EmployeeResponseViewModel();
+                response.Status = designation.Status;
+                response.Message = designation.Message;
+                return response;
+            }
              
-            //if(String.Equals(designation.Designation.DesignationName.ToLower(), "admin") && !_designationService.HasSpecialPrivilege(role))
-            //{
-            //    response = new EmployeeResponseViewModel();
-            //    response.Status = 401;
-            //    response.Message = "You are not loggedIn or not authorised to do add other employees with this designation.";
-            //    return response;
-            //}
+            if(string.Equals(designation.Designation.DesignationName.ToLower(), "admin") && !_designationService.HasSpecialPrivilege(role))
+            {
+                response = new EmployeeResponseViewModel();
+                response.Status = 401;
+                response.Message = "You are not loggedIn or not authorised to do add other employees with this designation.";
+                return response;
+            }
 
             response = await _employeeAuthService.Register(employee);
             return response;
@@ -118,14 +114,14 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
 
         [HttpPut]
         [Route("disableAccount/{Id}")]
-        [Authorize]
         public async Task<EmployeeResponseViewModel> DisableEmployeeAccount(Guid Id)
         {
             EmployeeResponseViewModel response;
 
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            bool hasPrivilege = Convert.ToBoolean(User.FindFirstValue("HasPrivilege"));
             var role = User.FindFirstValue("Role");
-            if (!isEmployee || role == null || !_designationService.HasPrivilege(role))
+            if (!isEmployee || !hasPrivilege)
             {
                 response = new EmployeeResponseViewModel();
                 response.Status = 401;
@@ -143,6 +139,33 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             }
 
             response = await _employeeAuthService.DisableEmployeeAccount(Id, _designationService.HasSpecialPrivilege(role));
+            return response;
+        }
+
+        [HttpGet]
+        [Route("profileData/{Id}")]
+        public async Task<ProfileDataResponseViewModel> GetProfileData(Guid Id)
+        {
+            ProfileDataResponseViewModel response = new ProfileDataResponseViewModel();
+
+            var employee = await GetEmployeesById(Id);
+            if(employee.Employee == null)
+            {
+                response.Status = 404;
+                response.Message = "Employee with this Id does not exist.";
+                return response;
+            }
+
+            var interview = await _interviewService.GetAllInterviewsForInterviewer(Id);
+            var referral = await _referralService.GetAllReferralsOfLoggedInEmployee(Id);
+            var jobs = await _jobService.GetAllJobsByEmployeeId(Id);
+            var closedJobs = await _jobService.GetAllClosedJobsByEmployeeId(Id);
+
+            response.Status = 200;
+            response.Message = "Successfully retrieved employee profile.";
+            response.InterviewTaken = interview.allInterviews.Count;
+            response.CandidatesReferred = referral.Referrals.Count;
+            response.JobAdded = jobs.allJobs.Count + closedJobs.ClosedJobs.Count;
             return response;
         }
     }

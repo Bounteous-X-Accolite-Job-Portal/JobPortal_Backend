@@ -1,7 +1,6 @@
 ﻿using Bountous_X_Accolite_Job_Portal.Helpers;
 using Bountous_X_Accolite_Job_Portal.Models.JobPositionViewModel;
 using Bountous_X_Accolite_Job_Portal.Models.JobPositionViewModel.JobPositionResponseViewModel;
-using Bountous_X_Accolite_Job_Portal.Services;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -14,25 +13,23 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
     public class JobPositionController : ControllerBase
     {
         private readonly IJobPositionService _jobPosition;
-        private readonly IDesignationService _designationService;
-        public JobPositionController(IJobPositionService jobPosition, IDesignationService designationService)
+        public JobPositionController(IJobPositionService jobPosition)
         {
             _jobPosition = jobPosition;
-            _designationService = designationService;
         }
 
         [HttpGet]
         [Route("getAllJobPositions")]
-        public AllJobPositionResponseViewModel GetAllJobPositions()
+        public async Task<AllJobPositionResponseViewModel> GetAllJobPositions()
         {
-            return _jobPosition.GetAllJobPositions();
+            return await _jobPosition.GetAllJobPositions();
         }
 
         [HttpGet]
         [Route("getJobPosition/{Id}")]
-        public JobPositionResponseViewModel GetJobPositionById(Guid Id)
+        public async Task<JobPositionResponseViewModel> GetJobPositionById(Guid Id)
         {
-            return _jobPosition.GetJobPositionById(Id);
+            return await _jobPosition.GetJobPositionById(Id);
         }
 
         [HttpPost]
@@ -49,9 +46,9 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             }
 
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            bool hasPrivilege = Convert.ToBoolean(User.FindFirstValue("HasPrivilege"));
             Guid employeeId = GetGuidFromString.Get(User.FindFirstValue("Id"));
-            var role = User.FindFirstValue("Role");
-            if (!isEmployee || role == null || !_designationService.HasPrivilege(role) || employeeId == Guid.Empty)
+            if (!isEmployee || !hasPrivilege || employeeId == Guid.Empty)
             {
                 response.Status = 401;
                 response.Message = "Not Logged IN / Not Authorized to Add Position";
@@ -76,8 +73,8 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             }
 
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
-            var role = User.FindFirstValue("Role");
-            if (!isEmployee || role == null || !_designationService.HasPrivilege(role))
+            bool hasPrivilege = Convert.ToBoolean(User.FindFirstValue("HasPrivilege"));
+            if (!isEmployee || !hasPrivilege)
             {
                 response.Status = 401;
                 response.Message = "Not Logged IN / Not Authorized to Update Position";
@@ -96,8 +93,8 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             JobPositionResponseViewModel response = new JobPositionResponseViewModel();
 
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
-            var role = User.FindFirstValue("Role");
-            if (!isEmployee || role == null || !_designationService.HasPrivilege(role))
+            bool hasPrivilege = Convert.ToBoolean(User.FindFirstValue("HasPrivilege"));
+            if (!isEmployee || !hasPrivilege)
             {
                 response.Status = 401;
                 response.Message = "Not Logged IN / Not Authorized to Delete Position";

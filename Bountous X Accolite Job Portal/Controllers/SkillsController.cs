@@ -35,7 +35,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
 
-            response = _skillsService.GetSkillsOfACandidate(CandidateId);
+            response = await _skillsService.GetSkillsOfACandidate(CandidateId);
             return response;
         }
 
@@ -43,7 +43,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
         [Route("skills/{Id}")]
         public async Task<SkillsResponseViewModel> GetSkillsById(Guid Id)
         {
-            SkillsResponseViewModel response = _skillsService.GetSkillsById(Id);
+            SkillsResponseViewModel response = await _skillsService.GetSkillsById(Id);
             if (response.Skills == null)
             {
                 return response;
@@ -114,7 +114,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
 
-            SkillsResponseViewModel skills = _skillsService.GetSkillsById(updateSkills.SkillsId);
+            SkillsResponseViewModel skills = await _skillsService.GetSkillsById(updateSkills.SkillsId);
             if (skills.Skills == null)
             {
                 return skills;
@@ -148,7 +148,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
 
-            SkillsResponseViewModel skills = _skillsService.GetSkillsById(Id);
+            SkillsResponseViewModel skills = await _skillsService.GetSkillsById(Id);
             if (skills.Skills == null)
             {
                 return skills;

@@ -4,7 +4,6 @@ using Bountous_X_Accolite_Job_Portal.Models.CompanyModels.CompanyResponseViewMod
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Data;
 using System.Security.Claims;
 
 namespace Bountous_X_Accolite_Job_Portal.Controllers
@@ -14,27 +13,25 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
     public class CompanyController : ControllerBase
     {
         private readonly ICompanyService _companyService;
-        private readonly IDesignationService _designationService;
-        public CompanyController(ICompanyService companyService, IDesignationService designationService)
+        public CompanyController(ICompanyService companyService)
         {
             _companyService = companyService;
-            _designationService = designationService;
         }
 
         [HttpGet]
         [Route("getAllCompanies")]
-        public AllCompanyResponseViewModel GetAllCompanies()
+        public async Task<AllCompanyResponseViewModel> GetAllCompanies()
         {
-            AllCompanyResponseViewModel response = _companyService.GetAllCompanies();   
+            AllCompanyResponseViewModel response = await _companyService.GetAllCompanies();   
             return response;
         }
 
         [HttpGet]
         [Route("getCompany/{Id}")]
         [Authorize]
-        public CompanyResponseViewModel GetCompanyById(Guid Id)
+        public async Task<CompanyResponseViewModel> GetCompanyById(Guid Id)
         {
-            CompanyResponseViewModel response = _companyService.GetCompanyById(Id); 
+            CompanyResponseViewModel response = await _companyService.GetCompanyById(Id); 
             return response;
         }
 
@@ -54,9 +51,9 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             }
 
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            bool hasPrivilege = Convert.ToBoolean(User.FindFirstValue("HasPrivilege"));
             Guid employeeId = GetGuidFromString.Get(User.FindFirstValue("Id"));
-            var role = User.FindFirstValue("Role");
-            if (!isEmployee || role == null || !_designationService.HasPrivilege(role))
+            if (!isEmployee || !hasPrivilege)
             {
                 response = new CompanyResponseViewModel();
                 response.Status = 401;
@@ -84,8 +81,8 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             }
 
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
-            var role = User.FindFirstValue("Role");
-            if (!isEmployee || role == null || !_designationService.HasPrivilege(role))
+            bool hasPrivilege = Convert.ToBoolean(User.FindFirstValue("HasPrivilege"));
+            if (!isEmployee || !hasPrivilege)
             {
                 response = new CompanyResponseViewModel();
                 response.Status = 401;
@@ -105,8 +102,8 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             CompanyResponseViewModel response;
 
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
-            var role = User.FindFirstValue("Role");
-            if (!isEmployee || role == null || !_designationService.HasPrivilege(role))
+            bool hasPrivilege = Convert.ToBoolean(User.FindFirstValue("HasPrivilege"));
+            if (!isEmployee || !hasPrivilege)
             {
                 response = new CompanyResponseViewModel();
                 response.Status = 401;

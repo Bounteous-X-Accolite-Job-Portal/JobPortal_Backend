@@ -5,10 +5,10 @@ namespace Bountous_X_Accolite_Job_Portal.Services.Abstract
 {
     public interface IDesignationService
     {
-        bool HasPrivilege(string role);
+        Task<bool> HasPrivilege(int designationId);
         bool HasSpecialPrivilege(string role);
         Task<DesignationResponseViewModel> GetDesignationById(int Id);
-        AllDesignationResponseViewModel GetAllDesignation();
+        Task<AllDesignationResponseViewModel> GetAllDesignation();
         Task<DesignationResponseViewModel> RemoveDesignation(int Id);
         Task<DesignationResponseViewModel> AddDesignation(AddDesignationViewModel designation, Guid empId);
     }

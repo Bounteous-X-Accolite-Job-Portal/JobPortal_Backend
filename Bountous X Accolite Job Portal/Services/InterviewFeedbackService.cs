@@ -3,6 +3,8 @@ using Bountous_X_Accolite_Job_Portal.Models;
 using Bountous_X_Accolite_Job_Portal.Models.InterviewFeedbackModels;
 using Bountous_X_Accolite_Job_Portal.Models.InterviewFeedbackModels.InterviewFeedbackResponseViewModel;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
+using Microsoft.Extensions.Caching.Distributed;
+using System.Text.Json;
 
 namespace Bountous_X_Accolite_Job_Portal.Services
 {
@@ -10,18 +12,20 @@ namespace Bountous_X_Accolite_Job_Portal.Services
     {
         private readonly ApplicationDbContext _context;
         private readonly I_InterviewService _interviewService;
-        public InterviewFeedbackService(ApplicationDbContext context, I_InterviewService interviewService)
+        private readonly IDistributedCache _cache;
+        public InterviewFeedbackService(ApplicationDbContext context, I_InterviewService interviewService, IDistributedCache cache)
         {
             _context = context;
             _interviewService = interviewService;
+            _cache = cache; 
         }
 
         public async Task<InterviewFeedbackResponseViewModel> AddInterviewFeedback(CreateInterviewFeedbackViewModel interviewFeedback , Guid Empid)
         {
-            var interview = _context.Interviews.Find(interviewFeedback.InterviewId);
+            var interview = await _interviewService.GetInterviewById((Guid)interviewFeedback.InterviewId); 
 
             InterviewFeedbackResponseViewModel response;
-            if (interview == null)
+            if (interview.Interview == null)
             {
                 response = new InterviewFeedbackResponseViewModel();
                 response.Status = 402;
@@ -29,7 +33,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
                 return response;
             }
             
-            if(interview.InterViewerId!=Empid)
+            if(interview.Interview.InterViewerId != Empid)
             {
                 response = new InterviewFeedbackResponseViewModel();
                 response.Status = 402;
@@ -53,6 +57,8 @@ namespace Bountous_X_Accolite_Job_Portal.Services
 
             if(newInterviewFeedback!=null)
             {
+                await _cache.RemoveAsync($"getAllInterviewFeedbackByEmployeeId-{newInterviewFeedback.EmployeeId}");
+
                 response = new InterviewFeedbackResponseViewModel();
                 response.Status = 200;
                 response.Message = "Interview Feedback Successfully Added ! ! ";
@@ -70,68 +76,112 @@ namespace Bountous_X_Accolite_Job_Portal.Services
         public async Task<InterviewFeedbackResponseViewModel> DeleteInterviewFeedback(Guid Id)
         {
             InterviewFeedbackResponseViewModel response = new InterviewFeedbackResponseViewModel();
-            var interviewFeedback = _context.InterviewFeedbacks.Find(Id);
-            if(interviewFeedback!=null)
-            {
-                _context.InterviewFeedbacks.Remove(interviewFeedback);
-                await _context.SaveChangesAsync();
 
-                response.Status = 200;
-                response.Message = "Interview Feedback Successfully Removed !";
+            string key = $"getInterviewFeedbackById-{Id}";
+            string? getInterviewFeedbackByIdFromCache = await _cache.GetStringAsync(key);
+
+            InterviewFeedback interviewFeedback;
+            if (string.IsNullOrWhiteSpace(getInterviewFeedbackByIdFromCache))
+            {
+                interviewFeedback = _context.InterviewFeedbacks.Find(Id);
+                if (interviewFeedback == null)
+                {
+                    response.Status = 404;
+                    response.Message = "Not Able to Found Interview Feedback";
+                    return response;
+                }
+
+                await _cache.SetStringAsync(key, JsonSerializer.Serialize(interviewFeedback));
             }
             else
             {
-                response.Status = 500;
-                response.Message = "Unable to Remove Interview Feedback !!";
+                interviewFeedback = JsonSerializer.Deserialize<InterviewFeedback>(getInterviewFeedbackByIdFromCache);
             }
+
+            _context.InterviewFeedbacks.Remove(interviewFeedback);
+            await _context.SaveChangesAsync();
+
+            await _cache.RemoveAsync($"getInterviewFeedbackById-{Id}");
+            await _cache.RemoveAsync($"getAllInterviewFeedbackByEmployeeId-{interviewFeedback.EmployeeId}");
+
+            response.Status = 200;
+            response.Message = "Interview Feedback Successfully Removed !";
             return response;
         }
 
         public async Task<InterviewFeedbackResponseViewModel> EditInterviewFeedback(EditInterviewFeedbackViewModel interviewFeedback , Guid EmpId)
         {
-            var interview = _context.Interviews.Find(interviewFeedback.InterviewId);
+            var interview = await _interviewService.GetInterviewById((Guid)interviewFeedback.InterviewId);
 
             InterviewFeedbackResponseViewModel response = new InterviewFeedbackResponseViewModel();
-            if (interview == null)
+            if (interview.Interview == null)
             {
                 response.Status = 402;
                 response.Message = "Interview Not Exists ! ";
                 return response;
             }
 
-            if (interview.InterViewerId != EmpId)
+            if (interview.Interview.InterViewerId != EmpId)
             {
                 response.Status = 402;
                 response.Message = " Currently Logged In Employee & Interviewer Mismatches !! ";
                 return response;
             }
 
-            var dbInterviewFeedback = _context.InterviewFeedbacks.Find(interviewFeedback.FeedbackId);
+            string key = $"getInterviewFeedbackById-{interviewFeedback.FeedbackId}";
+            string? getInterviewFeedbackByIdFromCache = await _cache.GetStringAsync(key);
 
-            if (dbInterviewFeedback != null)
+            InterviewFeedback dbInterviewFeedback;
+            if (string.IsNullOrWhiteSpace(getInterviewFeedbackByIdFromCache))
             {
-                dbInterviewFeedback.Rating = interviewFeedback.Rating;
-                dbInterviewFeedback.Feedback = interviewFeedback.Feedback;
-                dbInterviewFeedback.AdditionalLink = interviewFeedback.AdditionalLink;
-                
-                _context.InterviewFeedbacks.Update(dbInterviewFeedback);
-                await _context.SaveChangesAsync();
-                
-                response.Status = 200;
-                response.Message = "Interview Feedback Successfully Updated ! ! ";
-                response.interviewFeedback = new InterviewFeedbackViewModel(dbInterviewFeedback);
+                dbInterviewFeedback = _context.InterviewFeedbacks.Find(interviewFeedback.FeedbackId);
+                if (dbInterviewFeedback == null)
+                {
+                    response.Status = 404;
+                    response.Message = "Not Able to Found Interview Feedback";
+                    return response;
+                }
+
+                await _cache.SetStringAsync(key, JsonSerializer.Serialize(dbInterviewFeedback));
             }
             else
             {
-                response.Status = 403;
-                response.Message = "Unable to UPDATE Interview Feedback ! ";
+                dbInterviewFeedback = JsonSerializer.Deserialize<InterviewFeedback>(getInterviewFeedbackByIdFromCache);
             }
+
+
+            dbInterviewFeedback.Rating = interviewFeedback.Rating;
+            dbInterviewFeedback.Feedback = interviewFeedback.Feedback;
+            dbInterviewFeedback.AdditionalLink = interviewFeedback.AdditionalLink;
+
+            _context.InterviewFeedbacks.Update(dbInterviewFeedback);
+            await _context.SaveChangesAsync();
+
+            await _cache.RemoveAsync($"getInterviewFeedbackById-{dbInterviewFeedback.FeedbackId}");
+            await _cache.RemoveAsync($"getAllInterviewFeedbackByEmployeeId-{dbInterviewFeedback.EmployeeId}");
+
+            response.Status = 200;
+            response.Message = "Interview Feedback Successfully Updated ! ! ";
+            response.interviewFeedback = new InterviewFeedbackViewModel(dbInterviewFeedback);
             return response;
         }
 
-        public AllInterviewFeedbackResponseViewModel GetAllInterviewFeedbacksByAEmployee(Guid EmployeeId)
+        public async Task<AllInterviewFeedbackResponseViewModel> GetAllInterviewFeedbacksByAEmployee(Guid EmployeeId)
         {
-            List<InterviewFeedback> list = _context.InterviewFeedbacks.ToList();
+            string key = $"getAllInterviewFeedbackByEmployeeId-{EmployeeId}";
+            string? getAllInterviewFeedbackByEmployeeIdFromCache = await _cache.GetStringAsync(key);
+
+            List<InterviewFeedback> list;
+            if (string.IsNullOrWhiteSpace(getAllInterviewFeedbackByEmployeeIdFromCache))
+            {
+                list = _context.InterviewFeedbacks.ToList();
+                await _cache.SetStringAsync(key, JsonSerializer.Serialize(list));
+            }
+            else
+            {
+                list = JsonSerializer.Deserialize<List<InterviewFeedback>>(getAllInterviewFeedbackByEmployeeIdFromCache);
+            }
+
             List<InterviewFeedbackViewModel> interviewFeedbackList = new List<InterviewFeedbackViewModel>();
             foreach (var item in list)
             {
@@ -152,23 +202,34 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             return response;
         }
 
-        public InterviewFeedbackResponseViewModel GetInterviewFeedbackById(Guid Id)
+        public async Task<InterviewFeedbackResponseViewModel> GetInterviewFeedbackById(Guid Id)
         {
             InterviewFeedbackResponseViewModel response = new InterviewFeedbackResponseViewModel();
-            var dbInterviewFeedback = _context.InterviewFeedbacks.Find(Id);
 
-            if(dbInterviewFeedback != null)
+            string key = $"getInterviewFeedbackById-{Id}";
+            string? getInterviewFeedbackByIdFromCache = await _cache.GetStringAsync(key);
+
+            InterviewFeedback dbInterviewFeedback;
+            if (string.IsNullOrWhiteSpace(getInterviewFeedbackByIdFromCache))
             {
-                response.Status = 200;
-                response.Message = "Successfully Found Interview Feedback";
-                response.interviewFeedback = new InterviewFeedbackViewModel(dbInterviewFeedback);
+                dbInterviewFeedback = _context.InterviewFeedbacks.Find(Id);
+                if (dbInterviewFeedback == null)
+                {
+                    response.Status = 404;
+                    response.Message = "Not Able to Found Interview Feedback";
+                    return response;
+                }
+
+                await _cache.SetStringAsync(key, JsonSerializer.Serialize(dbInterviewFeedback));
             }
             else
             {
-                response.Status = 500;
-                response.Message = "Not Able to Found Interview Feedback";
+                dbInterviewFeedback = JsonSerializer.Deserialize<InterviewFeedback>(getInterviewFeedbackByIdFromCache);
             }
 
+            response.Status = 200;
+            response.Message = "Successfully Found Interview Feedback";
+            response.interviewFeedback = new InterviewFeedbackViewModel(dbInterviewFeedback);
             return response;
         }
     }

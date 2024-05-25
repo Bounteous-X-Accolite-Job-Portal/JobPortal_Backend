@@ -13,18 +13,16 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
     public class DegreeController : ControllerBase
     {
         private readonly IDegreeService _degreeService;
-        private readonly IDesignationService _designationService;
-        public DegreeController(IDegreeService degreeService, IDesignationService designationService)
+        public DegreeController(IDegreeService degreeService)
         {
             _degreeService = degreeService;
-            _designationService = designationService;
         }
 
         [HttpGet]
         [Route("getAllDegrees")]
-        public AllDegreeResponseViewModel GetAllDegrees()
+        public async Task<AllDegreeResponseViewModel> GetAllDegrees()
         {
-            List<DegreeViewModel> degrees = _degreeService.GetAllDegree();
+            List<DegreeViewModel> degrees = await _degreeService.GetAllDegree();
 
             AllDegreeResponseViewModel response = new AllDegreeResponseViewModel();
             response.Status = 200;
@@ -35,9 +33,9 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
 
         [HttpGet]
         [Route("getDegree/{id}")]
-        public DegreeResponseViewModel GetDegree(Guid id)
+        public async Task<DegreeResponseViewModel> GetDegree(Guid id)
         {
-            DegreeResponseViewModel response = _degreeService.GetDegree(id);
+            DegreeResponseViewModel response = await _degreeService.GetDegree(id);
             return response;
         }
 
@@ -57,9 +55,9 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             }
 
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            bool hasPrivilege = Convert.ToBoolean(User.FindFirstValue("HasPrivilege"));
             Guid employeeId = GetGuidFromString.Get(User.FindFirstValue("Id"));
-            var role = User.FindFirstValue("Role");
-            if (!isEmployee || role == null || !_designationService.HasPrivilege(role))
+            if (!isEmployee || !hasPrivilege)
             {
                 response = new DegreeResponseViewModel();
                 response.Status = 401;
@@ -87,8 +85,8 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             }
 
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
-            var role = User.FindFirstValue("Role");
-            if (!isEmployee || role == null || !_designationService.HasPrivilege(role))
+            bool hasPrivilege = Convert.ToBoolean(User.FindFirstValue("HasPrivilege"));
+            if (!isEmployee || !hasPrivilege)
             {
                 response = new DegreeResponseViewModel();
                 response.Status = 401;
@@ -108,8 +106,8 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             DegreeResponseViewModel response;
 
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
-            var role = User.FindFirstValue("Role");
-            if (!isEmployee || role == null || !_designationService.HasPrivilege(role))
+            bool hasPrivilege = Convert.ToBoolean(User.FindFirstValue("HasPrivilege"));
+            if (!isEmployee || !hasPrivilege)
             {
                 response = new DegreeResponseViewModel();
                 response.Status = 401;

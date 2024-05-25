@@ -1,5 +1,4 @@
-﻿using Azure;
-using Bountous_X_Accolite_Job_Portal.Helpers;
+﻿using Bountous_X_Accolite_Job_Portal.Helpers;
 using Bountous_X_Accolite_Job_Portal.Models.DesignationViewModel;
 using Bountous_X_Accolite_Job_Portal.Models.DesignationViewModel.ResponseViewModels;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
@@ -22,15 +21,33 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
 
         [HttpGet]
         [Route("getAllDesignations")]
-        public AllDesignationResponseViewModel GetAllDesignations()
+        public async Task<AllDesignationResponseViewModel> GetAllDesignations()
         {
-            return _designationService.GetAllDesignation();
+            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            if (!isEmployee)
+            {
+                AllDesignationResponseViewModel response = new AllDesignationResponseViewModel();
+                response.Status = 403;
+                response.Message = "You are not authorized to get all Designations.";
+                return response;
+            }
+
+            return await _designationService.GetAllDesignation();
         }
 
         [HttpGet]
         [Route("designation/{Id}")]
         public async Task<DesignationResponseViewModel> GetDesignationsById(int Id)
         {
+            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            if (!isEmployee)
+            {
+                DesignationResponseViewModel response = new DesignationResponseViewModel();
+                response.Status = 403;
+                response.Message = "You are not authorized to get Designation.";
+                return response;
+            }
+
             return await _designationService.GetDesignationById(Id);
         }
 
@@ -49,9 +66,9 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             }
 
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            bool hasPrivilege = Convert.ToBoolean(User.FindFirstValue("HasPrivilege"));
             Guid employeeId = GetGuidFromString.Get(User.FindFirstValue("Id"));
-            var role = User.FindFirstValue("Role");
-            if (!isEmployee || role == null || !_designationService.HasPrivilege(role))
+            if (!isEmployee || !hasPrivilege)
             {
                 response = new DesignationResponseViewModel();
                 response.Status = 403;

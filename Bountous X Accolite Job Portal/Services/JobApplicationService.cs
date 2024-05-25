@@ -1,11 +1,12 @@
 ﻿using Bountous_X_Accolite_Job_Portal.Data;
-using Bountous_X_Accolite_Job_Portal.Models.JobApplicationViewModel;
+using Bountous_X_Accolite_Job_Portal.Models.JobApplicationModels;
 using Bountous_X_Accolite_Job_Portal.Models;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
-using Bountous_X_Accolite_Job_Portal.Models.JobApplicationViewModel.ResponseViewModels;
+using Bountous_X_Accolite_Job_Portal.Models.JobApplicationModels.ResponseViewModels;
 using Bountous_X_Accolite_Job_Portal.Models.CandidateEducationViewModel.ResponseViewModels;
 using Bountous_X_Accolite_Job_Portal.Models.CandidateExperienceViewModel;
-using Bountous_X_Accolite_Job_Portal.Models.JobApplicationViewModel.JobApplicationResponse;
+using Microsoft.Extensions.Caching.Distributed;
+using System.Text.Json;
 using Bountous_X_Accolite_Job_Portal.Models.JobViewModels.JobResponseViewModel;
 
 namespace Bountous_X_Accolite_Job_Portal.Services
@@ -14,7 +15,6 @@ namespace Bountous_X_Accolite_Job_Portal.Services
     {
         private readonly ApplicationDbContext _dbContext;
         private readonly IJobStatusService _jobStatusService;
-        private readonly I_InterviewService _interviewService;
         private readonly IJobService _jobService;
         private readonly ICandidateAccountService _candidateAccountService;
         private readonly ISkillsService _skillsService;
@@ -25,25 +25,25 @@ namespace Bountous_X_Accolite_Job_Portal.Services
         private readonly IEducationInstitutionService _educationInstitutionService;
         private readonly IDegreeService _degreeService;
         private readonly ICompanyService _companyService;
+        private readonly IDistributedCache _cache;
         public JobApplicationService(
-            ApplicationDbContext applicationDbContext,
-            IJobStatusService jobStatusService,
-            I_InterviewService interviewService,
-            IJobService jobService,
-            ICandidateAccountService candidateAccountService,
-            ISkillsService skillsService,
+            ApplicationDbContext applicationDbContext, 
+            IJobStatusService jobStatusService, 
+            IJobService jobService, 
+            ICandidateAccountService candidateAccountService, 
+            ISkillsService skillsService, 
             IResumeService resumeService,
             IJobStatusService statusService,
             ICandidateExperienceService candidateExperienceService,
             ICandidateEducationService candidateEducationService,
             IEducationInstitutionService educationInstitutionService,
             IDegreeService degreeService,
-            ICompanyService companyService
+            ICompanyService companyService,
+            IDistributedCache cache
         )
         {
             _dbContext = applicationDbContext;
             _jobStatusService = jobStatusService;
-            _interviewService = interviewService;
             _jobService = jobService;
             _candidateAccountService = candidateAccountService;
             _skillsService = skillsService;
@@ -54,18 +54,32 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             _educationInstitutionService = educationInstitutionService;
             _degreeService = degreeService;
             _companyService = companyService;
+            _cache = cache;
         }
 
-        public JobApplicationResponseViewModel GetJobApplicaionById(Guid Id)
+        public async Task<JobApplicationResponseViewModel> GetJobApplicaionById(Guid Id)
         {
             JobApplicationResponseViewModel response = new JobApplicationResponseViewModel();
 
-            var application = _dbContext.JobApplications.Find(Id);
-            if (application == null)
+            string key = $"getJobApplicationsById-{Id}";
+            string? getJobApplicationsByIdFromCache = await _cache.GetStringAsync(key);
+
+            JobApplication application;
+            if (string.IsNullOrWhiteSpace(getJobApplicationsByIdFromCache))
             {
-                response.Status = 404;
-                response.Message = "Application with this Id does not exist";
-                return response;
+                application = _dbContext.JobApplications.Find(Id);
+                if (application == null)
+                {
+                    response.Status = 404;
+                    response.Message = "Application with this Id does not exist";
+                    return response;
+                }
+
+                await _cache.SetStringAsync(key, JsonSerializer.Serialize(application));
+            }
+            else
+            {
+                application = JsonSerializer.Deserialize<JobApplication>(getJobApplicationsByIdFromCache);
             }
 
             response.Status = 200;
@@ -74,44 +88,31 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             return response;
         }
 
-        public AllJobApplicationResponseViewModel GetJobApplicationByCandidateId(Guid CandidateId)
+        public async Task<AllJobApplicationResponseViewModel> GetJobApplicationByCandidateId(Guid CandidateId)
         {
             AllJobApplicationResponseViewModel response = new AllJobApplicationResponseViewModel();
 
-            var candidate = _dbContext.Candidates.Find(CandidateId);
-            if (candidate == null)
+            var candidate = await _candidateAccountService.GetCandidateById(CandidateId);
+            if(candidate.Candidate == null)
             {
                 response.Status = 404;
                 response.Message = "Candidate with this Id does not exist";
                 return response;
             }
 
-            List<JobApplication> applications = _dbContext.JobApplications.Where(item => item.CandidateId == CandidateId).ToList();
+            string key = $"getJobApplicationsByCandidateId-{CandidateId}";
+            string? getJobApplicationsByCandidateIdFromCache = await _cache.GetStringAsync(key);
 
-            List<JobApplicationViewModel> returnApplications = new List<JobApplicationViewModel>();
-            foreach (var application in applications)
+            List<JobApplication> applications;
+            if (string.IsNullOrWhiteSpace(getJobApplicationsByCandidateIdFromCache))
             {
-                returnApplications.Add(new JobApplicationViewModel(application));
+                applications = _dbContext.JobApplications.Where(item => item.CandidateId == CandidateId).ToList();
+                await _cache.SetStringAsync(key, JsonSerializer.Serialize(applications));
             }
-
-            response.Status = 200;
-            response.Message = "Successfully retrieved all job applications with this candidateId.";
-            response.AllJobApplications = returnApplications;
-            return response;
-        }
-        public AllJobApplicationResponseViewModel GetJobApplicationByJobId(Guid JobId)
-        {
-            AllJobApplicationResponseViewModel response = new AllJobApplicationResponseViewModel();
-
-            var job = _dbContext.Jobs.Find(JobId);
-            if (job == null)
+            else
             {
-                response.Status = 404;
-                response.Message = "Job with this Id does not exist";
-                return response;
+                applications = JsonSerializer.Deserialize<List<JobApplication>>(getJobApplicationsByCandidateIdFromCache);
             }
-
-            List<JobApplication> applications = _dbContext.JobApplications.Where(item => item.JobId == JobId).ToList();
 
             List<JobApplicationViewModel> returnApplications = new List<JobApplicationViewModel>();
             foreach (var application in applications)
@@ -125,19 +126,69 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             return response;
         }
 
-        public AllJobApplicationResponseViewModel GetJobApplicationByClosedJobId(Guid ClosedJobId)
+        public async Task<AllJobApplicationResponseViewModel> GetJobApplicationByJobId(Guid JobId)
         {
             AllJobApplicationResponseViewModel response = new AllJobApplicationResponseViewModel();
 
-            var job = _dbContext.ClosedJobs.Find(ClosedJobId);
-            if (job == null)
+            var job = await _jobService.GetJobById(JobId);
+            if (job.job == null)
             {
                 response.Status = 404;
                 response.Message = "Job with this Id does not exist";
                 return response;
             }
 
-            List<JobApplication> applications = _dbContext.JobApplications.Where(item => item.ClosedJobId == ClosedJobId).ToList();
+            string key = $"getJobApplicationsByJobId-{JobId}";
+            string? getJobApplicationsByJobIdFromCache = await _cache.GetStringAsync(key);
+
+            List<JobApplication> applications;
+            if (string.IsNullOrWhiteSpace(getJobApplicationsByJobIdFromCache))
+            {
+                applications = _dbContext.JobApplications.Where(item => item.JobId == JobId).ToList();
+                await _cache.SetStringAsync(key, JsonSerializer.Serialize(applications));
+            }
+            else
+            {
+                applications = JsonSerializer.Deserialize<List<JobApplication>>(getJobApplicationsByJobIdFromCache);
+            }
+
+            List<JobApplicationViewModel> returnApplications = new List<JobApplicationViewModel>();
+            foreach (var application in applications)
+            {
+                returnApplications.Add(new JobApplicationViewModel(application));
+            }
+
+            response.Status = 200;
+            response.Message = "Successfully retrieved all job applications with this candidateId.";
+            response.AllJobApplications = returnApplications;
+            return response;
+        }
+
+        public async Task<AllJobApplicationResponseViewModel> GetJobApplicationByClosedJobId(Guid ClosedJobId)
+        {
+            AllJobApplicationResponseViewModel response = new AllJobApplicationResponseViewModel();
+
+            var job = await _jobService.GetClosedJobById(ClosedJobId);
+            if (job.ClosedJob == null)
+            {
+                response.Status = 404;
+                response.Message = "Job with this Id does not exist";
+                return response;
+            }
+
+            string key = $"getJobApplicationsByClosedJobId-{ClosedJobId}";
+            string? getJobApplicationsByClosedJobIdFromCache = await _cache.GetStringAsync(key);
+
+            List<JobApplication> applications;
+            if (string.IsNullOrWhiteSpace(getJobApplicationsByClosedJobIdFromCache))
+            {
+                applications = _dbContext.JobApplications.Where(item => item.ClosedJobId == ClosedJobId).ToList();
+                await _cache.SetStringAsync(key, JsonSerializer.Serialize(applications));
+            }
+            else
+            {
+                applications = JsonSerializer.Deserialize<List<JobApplication>>(getJobApplicationsByClosedJobIdFromCache);
+            }
 
             List<JobApplicationViewModel> returnApplications = new List<JobApplicationViewModel>();
             foreach (var application in applications)
@@ -151,19 +202,31 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             return response;
         }
 
-        public AllJobApplicationResponseViewModel GetClosedJobApplicationByCandidateId(Guid CandidateId)
+        public async Task<AllJobApplicationResponseViewModel> GetClosedJobApplicationByCandidateId(Guid CandidateId)
         {
             AllJobApplicationResponseViewModel response = new AllJobApplicationResponseViewModel();
 
-            var candidate = _dbContext.Candidates.Find(CandidateId);
-            if (candidate == null)
+            var candidate = await _candidateAccountService.GetCandidateById(CandidateId);
+            if (candidate.Candidate == null)
             {
                 response.Status = 404;
                 response.Message = "Candidate with this Id does not exist";
                 return response;
             }
 
-            List<ClosedJobApplication> applications = _dbContext.ClosedJobApplications.Where(item => item.CandidateId == CandidateId).ToList();
+            string key = $"getClosedJobApplicationsByCandidateId-{CandidateId}";
+            string? getClosedJobApplicationsByCandidateIdFromCache = await _cache.GetStringAsync(key);
+
+            List<ClosedJobApplication> applications;
+            if (string.IsNullOrWhiteSpace(getClosedJobApplicationsByCandidateIdFromCache))
+            {
+                applications = _dbContext.ClosedJobApplications.Where(item => item.CandidateId == CandidateId).ToList();
+                await _cache.SetStringAsync(key, JsonSerializer.Serialize(applications));
+            }
+            else
+            {
+                applications = JsonSerializer.Deserialize<List<ClosedJobApplication>>(getClosedJobApplicationsByCandidateIdFromCache);
+            }
 
             List<JobApplicationViewModel> returnApplications = new List<JobApplicationViewModel>();
             foreach (var application in applications)
@@ -177,22 +240,24 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             return response;
         }
 
-        public Boolean IsCandidateApplicable(Guid JobId, Guid CandidateId)
+        public async Task<Boolean> IsCandidateApplicable(Guid JobId, Guid CandidateId)
         {
-            AllJobApplicationResponseViewModel alljobsApplied = GetJobApplicationByCandidateId(CandidateId);
+            AllJobApplicationResponseViewModel alljobsApplied = await GetJobApplicationByCandidateId(CandidateId);
+
             foreach (JobApplicationViewModel jobApplication in alljobsApplied.AllJobApplications)
             {
                 if (jobApplication.JobId == JobId)
                     return false;
             }
+
             return true;
         }
         public async Task<JobApplicationResponseViewModel> Apply(AddJobApplication application, Guid CandidateId)
         {
             JobApplicationResponseViewModel response;
 
-            var candidate = _dbContext.Candidates.Find(CandidateId);
-            if (candidate == null)
+            var candidate = await _candidateAccountService.GetCandidateById(CandidateId);
+            if(candidate.Candidate == null)
             {
                 response = new JobApplicationResponseViewModel();
                 response.Status = 404;
@@ -200,8 +265,8 @@ namespace Bountous_X_Accolite_Job_Portal.Services
                 return response;
             }
 
-            var job = _dbContext.Jobs.Find(application.JobId);
-            if (job == null)
+            var job = await _jobService.GetJobById(application.JobId);
+            if(job.job == null)
             {
                 response = new JobApplicationResponseViewModel();
                 response.Status = 404;
@@ -213,7 +278,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             {
                 jobApplication.JobId = application.JobId;
                 jobApplication.CandidateId = CandidateId;
-                jobApplication.StatusId = _jobStatusService.GetInitialStatus();
+                jobApplication.StatusId = await _jobStatusService.GetInitialApplicationStatus();
             };
 
             await _dbContext.JobApplications.AddAsync(jobApplication);
@@ -227,20 +292,23 @@ namespace Bountous_X_Accolite_Job_Portal.Services
                 return response;
             }
 
+            await _cache.RemoveAsync($"allJobApplications");
+            await _cache.RemoveAsync($"getJobApplicationsByCandidateId-{jobApplication.CandidateId}");
+            await _cache.RemoveAsync($"getJobApplicationsByJobId-{jobApplication.JobId}");
+
             response = new JobApplicationResponseViewModel();
             response.Status = 200;
             response.Message = "Successfully applied too the job.";
             response.Application = new JobApplicationViewModel(jobApplication);
             return response;
-
         }
 
         public async Task<JobApplicationResponseViewModel> ChangeJobApplicationStatus(Guid ApplicationId, int StatusId)
         {
             JobApplicationResponseViewModel response;
 
-            var application = _dbContext.JobApplications.Find(ApplicationId);
-            if (application == null)
+            var application = await GetJobApplicaionById(ApplicationId);
+            if(application.Application == null)
             {
                 response = new JobApplicationResponseViewModel();
                 response.Status = 404;
@@ -248,8 +316,8 @@ namespace Bountous_X_Accolite_Job_Portal.Services
                 return response;
             }
 
-            var status = _dbContext.Status.Find(StatusId);
-            if (status == null)
+            var status = await _jobStatusService.GetStatusById(StatusId);
+            if(status.StatusViewModel == null)
             {
                 response = new JobApplicationResponseViewModel();
                 response.Status = 404;
@@ -261,16 +329,20 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             response.Status = 200;
             response.Message = "Successfully changed the status of application.";
 
-            if (_jobStatusService.IsRejectedStatus(StatusId))
+            JobApplication app = new JobApplication();
+            app.ApplicationId = application.Application.ApplicationId;
+            app.CandidateId = application.Application.CandidateId;
+            app.JobId = application.Application.JobId;
+            app.AppliedOn = application.Application.AppliedOn;
+            app.ClosedJobId = application.Application.ClosedJobId;
+            app.StatusId = application.Application.StatusId;
+
+            if (await _jobStatusService.IsRejectedStatus(StatusId))
             {
-                ClosedJobApplication closedApplication = new ClosedJobApplication(application);
+                ClosedJobApplication closedApplication = new ClosedJobApplication(app);
                 closedApplication.StatusId = StatusId;
 
                 await _dbContext.ClosedJobApplications.AddAsync(closedApplication);
-
-                _interviewService.ChangeInterviewApplicationToClosedApplication(ApplicationId, closedApplication.ClosedJobApplicationId);
-
-                _dbContext.JobApplications.Remove(application);
 
                 if (closedApplication == null)
                 {
@@ -280,26 +352,71 @@ namespace Bountous_X_Accolite_Job_Portal.Services
                     return response;
                 }
 
+                ChangeInterviewApplicationToClosedApplication(ApplicationId, closedApplication.ClosedJobApplicationId);
+                _dbContext.JobApplications.Remove(app);
+
                 response.Application = new JobApplicationViewModel(closedApplication);
+
+                await _cache.RemoveAsync($"allClosedJobApplications");
+                await _cache.RemoveAsync($"getClosedJobApplicationsByCandidateId-{application.Application.CandidateId}");
+                await _cache.RemoveAsync($"getJobApplicationsByClosedJobId-{closedApplication.ClosedJobId}");
             }
             else
             {
-                application.StatusId = StatusId;
-                _dbContext.JobApplications.Update(application);
+                app.StatusId = StatusId;
+                _dbContext.JobApplications.Update(app);
 
-                response.Application = new JobApplicationViewModel(application);
+                response.Application = new JobApplicationViewModel(app);
             }
 
             await _dbContext.SaveChangesAsync();
+
+            await _cache.RemoveAsync($"allJobApplications");
+            await _cache.RemoveAsync($"getJobApplicationsById-{app.ApplicationId}");
+            await _cache.RemoveAsync($"getJobApplicationsByCandidateId-{app.CandidateId}");
+            await _cache.RemoveAsync($"getJobApplicationsByJobId-{app.JobId}");
             return response;
+        }
+
+        public async void ChangeInterviewApplicationToClosedApplication(Guid ApplicationId, Guid ClosedApplicationId)
+        {
+            string key = $"getAllInterviewsByApplicationId-{ApplicationId}";
+            string? getAllInterviewsByApplicationIdFromCache = await _cache.GetStringAsync(key);
+
+            List<Interview> interviews;
+            if (string.IsNullOrWhiteSpace(getAllInterviewsByApplicationIdFromCache))
+            {
+                interviews = _dbContext.Interviews.Where(item => item.ApplicationId == ApplicationId).ToList();
+                await _cache.SetStringAsync(key, JsonSerializer.Serialize(interviews));
+            }
+            else
+            {
+                interviews = JsonSerializer.Deserialize<List<Interview>>(getAllInterviewsByApplicationIdFromCache);
+            }
+
+            foreach (Interview interview in interviews)
+            {
+                interview.ApplicationId = null;
+                interview.ClosedJobApplicationId = ClosedApplicationId;
+
+                _dbContext.Interviews.Update(interview);
+
+                await _cache.RemoveAsync($"getInterviewById-{interview.InterviewId}");
+                await _cache.RemoveAsync($"getAllInterviewsByInterviewerId-{interview.InterViewerId}");
+            }
+
+            await _dbContext.SaveChangesAsync();
+
+            await _cache.RemoveAsync($"allInterviews");
+            await _cache.RemoveAsync($"getAllInterviewsByApplicationId-{ApplicationId}");
         }
 
         public async Task<AllApplicantResponseViewModel> GetApplicantsByJobId(Guid JobId)
         {
             AllApplicantResponseViewModel response = new AllApplicantResponseViewModel();
 
-            var applications = GetJobApplicationByJobId(JobId);
-            if (applications.Status != 200)
+            var applications = await GetJobApplicationByJobId(JobId);
+            if(applications.Status != 200)
             {
                 response.Status = applications.Status;
                 response.Message = applications.Message;
@@ -313,13 +430,13 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             foreach (var item in applications.AllJobApplications)
             {
                 List<CompleteEducationViewModel> education = new List<CompleteEducationViewModel>();
-                var educations = _candidateEducationService.GetAllEducationOfACandidate((Guid)item.CandidateId);
+                var educations = await _candidateEducationService.GetAllEducationOfACandidate((Guid)item.CandidateId);
                 foreach (var element in educations.CandidateEducation)
                 {
                     CompleteEducationViewModel edu = new CompleteEducationViewModel();
 
-                    var institution = _educationInstitutionService.GetInstitution((Guid)element.InstitutionId);
-                    var degree = _degreeService.GetDegree((Guid)element.DegreeId);
+                    var institution = await _educationInstitutionService.GetInstitution((Guid)element.InstitutionId);
+                    var degree = await _degreeService.GetDegree((Guid)element.DegreeId);
 
                     edu.Education = element;
                     edu.Institution = institution.EducationInstitution;
@@ -329,12 +446,12 @@ namespace Bountous_X_Accolite_Job_Portal.Services
                 }
 
                 List<ExperienceWithCompanyViewModel> exp = new List<ExperienceWithCompanyViewModel>();
-                var experiences = _candidateExperienceService.GetAllExperienceOfACandidate((Guid)item.CandidateId);
+                var experiences = await _candidateExperienceService.GetAllExperienceOfACandidate((Guid)item.CandidateId);
                 foreach (var element in experiences.Experiences)
                 {
                     ExperienceWithCompanyViewModel experience = new ExperienceWithCompanyViewModel();
 
-                    var company = _companyService.GetCompanyById((Guid)element.CompanyId);
+                    var company = await _companyService.GetCompanyById((Guid)element.CompanyId);
 
                     experience.Experience = element;
                     experience.Company = company.Company;
@@ -344,10 +461,10 @@ namespace Bountous_X_Accolite_Job_Portal.Services
 
                 ApplicantViewModel applicant = new ApplicantViewModel();
 
-                var candidate = _candidateAccountService.GetCandidateById((Guid)item.CandidateId);
-                var skills = _skillsService.GetSkillsOfACandidate((Guid)item.CandidateId);
-                var resume = _resumeService.GetResumeOfACandidate((Guid)item.CandidateId);
-                var status = _statusService.GetStatusById((int)item.StatusId);
+                var candidate = await _candidateAccountService.GetCandidateById((Guid)item.CandidateId);
+                var skills = await _skillsService.GetSkillsOfACandidate((Guid)item.CandidateId);
+                var resume = await _resumeService.GetResumeOfACandidate((Guid)item.CandidateId);
+                var status = await _statusService.GetStatusById((int)item.StatusId);
 
                 if (candidate.Candidate != null)
                 {
@@ -368,21 +485,35 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             return response;
         }
 
-        public AllJobResponseViewModel GetJobsAppliedByCandidateId(Guid CandidateId)
+        public async Task<AllJobResponseViewModel> GetJobsAppliedByCandidateId(Guid CandidateId)
         {
             AllJobResponseViewModel response = new AllJobResponseViewModel();
             List<JobViewModel> appliedjobList = new List<JobViewModel>();
-            List<Job> jobs = _dbContext.Jobs.ToList();
+
+            string key = $"allJobs";
+            string? allJobsFromCache = await _cache.GetStringAsync(key);
+
+            List<Job> jobs;
+            if (string.IsNullOrWhiteSpace(allJobsFromCache))
+            {
+                jobs = _dbContext.Jobs.ToList();
+                await _cache.SetStringAsync(key, JsonSerializer.Serialize(jobs));
+            }
+            else
+            {
+                jobs = JsonSerializer.Deserialize<List<Job>>(allJobsFromCache);
+            }
 
             HashSet<Guid?> appliedJobsId = new HashSet<Guid?>();
 
-            AllJobApplicationResponseViewModel candidateApplications = this.GetJobApplicationByCandidateId(CandidateId);
+            AllJobApplicationResponseViewModel candidateApplications = await GetJobApplicationByCandidateId(CandidateId);
             if (candidateApplications.Status != 200)
             {
                 response.Status = 401;
                 response.Message = "Error in Fetching Job Applications !!";
                 return response;
             }
+
             foreach (JobApplicationViewModel application in candidateApplications.AllJobApplications)
                 appliedJobsId.Add(application.JobId);
 
@@ -395,17 +526,14 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             response.Status = 200;
             response.Message = "Successfully Reterived All Applied Jobs";
             response.allJobs = appliedjobList;
-
             return response;
         }
-
-
 
         public async Task<AllApplicantResponseViewModel> GetApplicantsByClosedJobId(Guid JobId)
         {
             AllApplicantResponseViewModel response = new AllApplicantResponseViewModel();
 
-            var applications = GetJobApplicationByClosedJobId(JobId);
+            var applications = await GetJobApplicationByClosedJobId(JobId);
             if (applications.Status != 200)
             {
                 response.Status = applications.Status;
@@ -420,13 +548,13 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             foreach (var item in applications.AllJobApplications)
             {
                 List<CompleteEducationViewModel> education = new List<CompleteEducationViewModel>();
-                var educations = _candidateEducationService.GetAllEducationOfACandidate((Guid)item.CandidateId);
+                var educations = await _candidateEducationService.GetAllEducationOfACandidate((Guid)item.CandidateId);
                 foreach (var element in educations.CandidateEducation)
                 {
                     CompleteEducationViewModel edu = new CompleteEducationViewModel();
 
-                    var institution = _educationInstitutionService.GetInstitution((Guid)element.InstitutionId);
-                    var degree = _degreeService.GetDegree((Guid)element.DegreeId);
+                    var institution = await _educationInstitutionService.GetInstitution((Guid)element.InstitutionId);
+                    var degree = await _degreeService.GetDegree((Guid)element.DegreeId);
 
                     edu.Education = element;
                     edu.Institution = institution.EducationInstitution;
@@ -436,12 +564,12 @@ namespace Bountous_X_Accolite_Job_Portal.Services
                 }
 
                 List<ExperienceWithCompanyViewModel> exp = new List<ExperienceWithCompanyViewModel>();
-                var experiences = _candidateExperienceService.GetAllExperienceOfACandidate((Guid)item.CandidateId);
+                var experiences = await _candidateExperienceService.GetAllExperienceOfACandidate((Guid)item.CandidateId);
                 foreach (var element in experiences.Experiences)
                 {
                     ExperienceWithCompanyViewModel experience = new ExperienceWithCompanyViewModel();
 
-                    var company = _companyService.GetCompanyById((Guid)element.CompanyId);
+                    var company = await _companyService.GetCompanyById((Guid)element.CompanyId);
 
                     experience.Experience = element;
                     experience.Company = company.Company;
@@ -451,10 +579,10 @@ namespace Bountous_X_Accolite_Job_Portal.Services
 
                 ApplicantViewModel applicant = new ApplicantViewModel();
 
-                var candidate = _candidateAccountService.GetCandidateById((Guid)item.CandidateId);
-                var skills = _skillsService.GetSkillsOfACandidate((Guid)item.CandidateId);
-                var resume = _resumeService.GetResumeOfACandidate((Guid)item.CandidateId);
-                var status = _statusService.GetStatusById((int)item.StatusId);
+                var candidate = await _candidateAccountService.GetCandidateById((Guid)item.CandidateId);
+                var skills = await _skillsService.GetSkillsOfACandidate((Guid)item.CandidateId);
+                var resume = await _resumeService.GetResumeOfACandidate((Guid)item.CandidateId);
+                var status = await _statusService.GetStatusById((int)item.StatusId);
 
                 if (candidate.Candidate != null)
                 {
@@ -475,14 +603,13 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             return response;
         }
 
-
-        public List<SuccessfulJobApplication> GetAllApplicationsWithSuccess()
+        public async Task<List<SuccessfulJobApplication>> GetAllApplicationsWithSuccess()
         {
             List<SuccessfulJobApplication> successfulApplications = new List<SuccessfulJobApplication>();
             JobApplicationResponseViewModel response;
 
-            int successStatusId = _jobStatusService.getInitialSuccesstatus();
-            if (successStatusId == 0)
+            int successStatusId = await _jobStatusService.getInitialSuccesstatus();
+            if (successStatusId == -1)
             {
                 response = new JobApplicationResponseViewModel();
                 response.Status = 404;
@@ -490,31 +617,38 @@ namespace Bountous_X_Accolite_Job_Portal.Services
                 return successfulApplications;
             }
 
-            List<JobApplication> allJobApplications = _dbContext.JobApplications.ToList();
+            String key = $"allJobApplications";
+            string? allJobApplicationsFromCache = await _cache.GetStringAsync(key);
+
+            List<JobApplication> allJobApplications;
+            if (string.IsNullOrWhiteSpace(allJobApplicationsFromCache))
+            {
+                allJobApplications = _dbContext.JobApplications.ToList();
+                await _cache.SetStringAsync(key, JsonSerializer.Serialize(allJobApplications));
+            }
+            else
+            {
+                allJobApplications = JsonSerializer.Deserialize<List<JobApplication>>(allJobApplicationsFromCache);
+            }
+
             foreach (var application in allJobApplications)
             {
                 if (application.StatusId == successStatusId)
                 {
-
                     SuccessfulJobApplication successfulJobApplication = new SuccessfulJobApplication
                     {
-                        Id = Guid.NewGuid(),
                         CandidateId = application.CandidateId,
                         ApplicationId = application.ApplicationId,
-
-
                     };
 
+                    await _dbContext.SuccessfulJobs.AddAsync(successfulJobApplication);
                     successfulApplications.Add(successfulJobApplication);
                 }
             }
 
-
-            _dbContext.SuccessfulJobs.AddRange(successfulApplications);
-            _dbContext.SaveChanges();
+            await _dbContext.SaveChangesAsync();
 
             return successfulApplications;
         }
-
     }
 }

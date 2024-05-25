@@ -1,6 +1,6 @@
 ﻿using Bountous_X_Accolite_Job_Portal.Helpers;
-using Bountous_X_Accolite_Job_Portal.Models.JobApplicationViewModel;
-using Bountous_X_Accolite_Job_Portal.Models.JobApplicationViewModel.ResponseViewModels;
+using Bountous_X_Accolite_Job_Portal.Models.JobApplicationModels;
+using Bountous_X_Accolite_Job_Portal.Models.JobApplicationModels.ResponseViewModels;
 using Bountous_X_Accolite_Job_Portal.Models.JobApplicationViewModel.JobApplicationResponse;
 using Bountous_X_Accolite_Job_Portal.Models.JobViewModels.JobResponseViewModel;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
@@ -12,26 +12,24 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    // [Authorize]
+    [Authorize]
     public class ApplicationController : ControllerBase
     {
 
         private readonly IJobApplicationService _jobApplicationService;
-        private readonly IJobService _jobService;
         private readonly IDesignationService _designationService;
-        public ApplicationController(IJobApplicationService applicationService, IJobService jobService, IDesignationService designationService)
+        public ApplicationController(IJobApplicationService applicationService, IDesignationService designationService)
         {
             _jobApplicationService = applicationService;
-            _jobService = jobService;
             _designationService = designationService;
         }
 
         [HttpGet]
         [Route("jobApplication/{Id}")]
-        public JobApplicationResponseViewModel GetJobApplicaionById(Guid Id)
+        public async Task<JobApplicationResponseViewModel> GetJobApplicaionById(Guid Id)
         {
-            JobApplicationResponseViewModel response = _jobApplicationService.GetJobApplicaionById(Id);
-            if (response.Application == null)
+            JobApplicationResponseViewModel response = await _jobApplicationService.GetJobApplicaionById(Id);
+            if(response.Application == null)
             {
                 return response;
             }
@@ -91,27 +89,27 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
 
         [HttpGet]
         [Route("jobApplication/candidate/{Id}")]
-        public AllJobApplicationResponseViewModel GetJobApplicationByCandidateId(Guid Id)
+        public async Task<AllJobApplicationResponseViewModel> GetJobApplicationByCandidateId(Guid Id)
         {
             AllJobApplicationResponseViewModel response;
 
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
             Guid candidateId = GetGuidFromString.Get(User.FindFirstValue("Id"));
-            //if (!isEmployee && candidateId != Id)
-            //{
-            //    response = new AllJobApplicationResponseViewModel();
-            //    response.Status = 401;
-            //    response.Message = "You are either not loggedIn or not authorized to get applications by candidateId.";
-            //    return response;
-            //}
+            if (!isEmployee && candidateId != Id)
+            {
+                response = new AllJobApplicationResponseViewModel();
+                response.Status = 401;
+                response.Message = "You are either not loggedIn or not authorized to get applications by candidateId.";
+                return response;
+            }
 
-            response = _jobApplicationService.GetJobApplicationByCandidateId(Id);
+            response = await _jobApplicationService.GetJobApplicationByCandidateId(Id);
             return response;
         }
 
         [HttpGet]
         [Route("jobApplication/isCandidateApplicable/{JobId}")]
-        public ApplicationResponseViewModel IsCandidateApplicable(Guid JobId)
+        public async Task<ApplicationResponseViewModel> IsCandidateApplicable(Guid JobId)
         {
             ApplicationResponseViewModel response = new ApplicationResponseViewModel();
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
@@ -122,6 +120,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 response.name = "Employee Logged In !!";
                 return response;
             }
+
             Guid candidateId = GetGuidFromString.Get(User.FindFirstValue("Id"));
             if (candidateId == Guid.Empty)
             {
@@ -131,7 +130,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
 
-            Boolean result = _jobApplicationService.IsCandidateApplicable(JobId, candidateId);
+            Boolean result = await _jobApplicationService.IsCandidateApplicable(JobId, candidateId);
             if (result)
             {
                 response.Status = 200;
@@ -151,7 +150,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
 
         [HttpGet]
         [Route("jobApplication/job/{Id}")]
-        public AllJobApplicationResponseViewModel GetJobApplicationByJobId(Guid Id)
+        public async Task<AllJobApplicationResponseViewModel> GetJobApplicationByJobId(Guid Id)
         {
             AllJobApplicationResponseViewModel response;
 
@@ -164,12 +163,12 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
 
-            return _jobApplicationService.GetJobApplicationByJobId(Id);
+            return await _jobApplicationService.GetJobApplicationByJobId(Id);
         }
 
         [HttpGet]
         [Route("jobApplication/closedJob/{Id}")]
-        public AllJobApplicationResponseViewModel GetJobApplicationByClosedJobId(Guid Id)
+        public async Task<AllJobApplicationResponseViewModel> GetJobApplicationByClosedJobId(Guid Id)
         {
             AllJobApplicationResponseViewModel response;
 
@@ -182,12 +181,12 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
 
-            return _jobApplicationService.GetJobApplicationByClosedJobId(Id);
+            return await _jobApplicationService.GetJobApplicationByClosedJobId(Id);
         }
 
         [HttpGet]
         [Route("closedJobApplication/candidate/{Id}")]
-        public AllJobApplicationResponseViewModel GetClosedJobApplicationByCandidateId(Guid Id)
+        public async Task<AllJobApplicationResponseViewModel> GetClosedJobApplicationByCandidateId(Guid Id)
         {
             AllJobApplicationResponseViewModel response;
 
@@ -201,25 +200,25 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
 
-            response = _jobApplicationService.GetClosedJobApplicationByCandidateId(Id);
+            response = await _jobApplicationService.GetClosedJobApplicationByCandidateId(Id);
             return response;
         }
 
         [HttpGet]
         [Route("CandidateAppliedJobs/{CandidateId}")]
-        public AllJobResponseViewModel GetJobsAppliedByCandidateId(Guid CandidateId)
+        public async Task<AllJobResponseViewModel> GetJobsAppliedByCandidateId(Guid CandidateId)
         {
             AllJobResponseViewModel response;
-            //Guid candidateId = GetGuidFromString.Get(User.FindFirstValue("Id"));
-            //if(candidateId!=CandidateId)
-            //{
-            //    response= new AllJobResponseViewModel();
-            //    response.Status = 401;
-            //    response.Message = "Candidate Not Found !!";
-            //    return response;
-            //}
+            Guid candidateId = GetGuidFromString.Get(User.FindFirstValue("Id"));
+            if(candidateId != CandidateId)
+            {
+                response= new AllJobResponseViewModel();
+                response.Status = 401;
+                response.Message = "Candidate Not Found !!";
+                return response;
+            }
 
-            response = _jobApplicationService.GetJobsAppliedByCandidateId(CandidateId);
+            response = await _jobApplicationService.GetJobsAppliedByCandidateId(CandidateId);
             return response;
         }
 
@@ -272,10 +271,10 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
 
         [HttpGet]
         [Route("jobApplication/successfulApplication")]
-        public IActionResult GetAllApplicationsWithSuccess()
+        public async Task<IActionResult> GetAllApplicationsWithSuccess()
         {
 
-            var successApplications = _jobApplicationService.GetAllApplicationsWithSuccess();
+            var successApplications = await _jobApplicationService.GetAllApplicationsWithSuccess();
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
             Guid employeeId = GetGuidFromString.Get(User.FindFirstValue("Id"));
             var role = User.FindFirstValue("Role");

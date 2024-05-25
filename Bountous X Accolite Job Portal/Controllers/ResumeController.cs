@@ -35,7 +35,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
 
-            response = _resumeService.GetResumeOfACandidate(CandidateId);
+            response = await _resumeService.GetResumeOfACandidate(CandidateId);
             return response;
         }
 
@@ -43,7 +43,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
         [Route("resume/{Id}")]
         public async Task<ResumeResponseViewModel> GetResumeById(Guid Id)
         {
-            ResumeResponseViewModel response = _resumeService.GetResumeById(Id);
+            ResumeResponseViewModel response = await _resumeService.GetResumeById(Id);
             if (response.Resume == null)
             {
                 return response;
@@ -106,7 +106,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
 
-            ResumeResponseViewModel resume = _resumeService.GetResumeById(Id);
+            ResumeResponseViewModel resume = await _resumeService.GetResumeById(Id);
             if (resume.Resume == null)
             {
                 return resume;

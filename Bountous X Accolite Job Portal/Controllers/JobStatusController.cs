@@ -1,6 +1,5 @@
 ﻿using Bountous_X_Accolite_Job_Portal.Helpers;
 using Bountous_X_Accolite_Job_Portal.Models;
-using Bountous_X_Accolite_Job_Portal.Models.DegreeModels.DegreeResponseViewModel;
 using Bountous_X_Accolite_Job_Portal.Models.JobStatusViewModel;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
 using Microsoft.AspNetCore.Authorization;
@@ -14,11 +13,9 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
     public class JobStatusController : Controller
     {
         private readonly IJobStatusService _jobStatusService;
-        private readonly IDesignationService _designationService;
-        public JobStatusController(IJobStatusService jobStatusService, IDesignationService designationService)
+        public JobStatusController(IJobStatusService jobStatusService)
         {
             _jobStatusService = jobStatusService;
-            _designationService = designationService;
         }
 
         [HttpPost]
@@ -37,9 +34,9 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             }
 
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            bool hasPrivilege = Convert.ToBoolean(User.FindFirstValue("HasPrivilege"));
             Guid employeeId = GetGuidFromString.Get(User.FindFirstValue("Id"));
-            var role = User.FindFirstValue("Role");
-            if (!isEmployee || role == null || !_designationService.HasPrivilege(role) || employeeId == Guid.Empty)
+            if (!isEmployee || !hasPrivilege || employeeId == Guid.Empty)
             {
                 response.Status = 403;
                 response.Message = "Not Authorized for Status !!";
@@ -55,11 +52,11 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
         [Authorize]
         public async Task<ResponseViewModel> deleteStatus(int id)
         {
-            ResponseViewModel response = new ResponseViewModel();
+            ResponseViewModel response;
             
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
-            var role = User.FindFirstValue("Role");
-            if (!isEmployee || role == null || !_designationService.HasPrivilege(role))
+            bool hasPrivilege = Convert.ToBoolean(User.FindFirstValue("HasPrivilege"));
+            if (!isEmployee || !hasPrivilege)
             {
                 response = new ResponseViewModel();
                 response.Status = 401;
@@ -73,12 +70,18 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
 
         [HttpGet]
         [Route("{Id}")]
-        public JobStatusResponseViewModel GetStatusById(int Id)
+        public async Task<JobStatusResponseViewModel> GetStatusById(int Id)
         {
-            JobStatusResponseViewModel response = _jobStatusService.GetStatusById(Id);
+            JobStatusResponseViewModel response = await _jobStatusService.GetStatusById(Id);
             return response;
         }
 
-
+        [HttpGet]
+        [Route("getAllStatus")]
+        [Authorize]
+        public async Task<AllStatusResponseViewModel> GetAllStatus()
+        {
+            return await _jobStatusService.GetAllStatus();
+        }
     }
 }

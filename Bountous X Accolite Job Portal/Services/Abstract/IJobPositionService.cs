@@ -5,8 +5,8 @@ namespace Bountous_X_Accolite_Job_Portal.Services.Abstract
 {
     public interface IJobPositionService
     {
-        AllJobPositionResponseViewModel GetAllJobPositions();
-        JobPositionResponseViewModel GetJobPositionById(Guid PositionId);
+        Task<AllJobPositionResponseViewModel> GetAllJobPositions();
+        Task<JobPositionResponseViewModel> GetJobPositionById(Guid PositionId);
         Task<JobPositionResponseViewModel> AddJobPosition(CreateJobPositionViewModel jobPosition , Guid EmpId);
         Task<JobPositionResponseViewModel> UpdateJobPosition(EditJobPositionViewModel jobPosition);
         Task<JobPositionResponseViewModel> DeleteJobPosition(Guid PositionId);

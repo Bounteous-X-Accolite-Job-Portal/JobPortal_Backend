@@ -12,18 +12,16 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
     public class EducationInstitutionController : ControllerBase
     {
         private readonly IEducationInstitutionService _educationInstitutionService;
-        private readonly IDesignationService _designationService;
-        public EducationInstitutionController(IEducationInstitutionService educationInstitutionService, IDesignationService designationService)
+        public EducationInstitutionController(IEducationInstitutionService educationInstitutionService)
         {
             _educationInstitutionService = educationInstitutionService;
-            _designationService = designationService;
         }
 
         [HttpGet]
         [Route("getAllInstitution")]
         public async Task<AllInstitutionResponseViewModel> GetAllInstitution()
         {
-            List<InstitutionViewModel> instutions = _educationInstitutionService.GetAllInstitutions();
+            List<InstitutionViewModel> instutions = await _educationInstitutionService.GetAllInstitutions();
 
             AllInstitutionResponseViewModel response = new AllInstitutionResponseViewModel();
             response.Status = 200;
@@ -37,7 +35,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
         [Authorize]
         public async Task<InstitutionResponseViewModel> GetInstitution(Guid id)
         {
-            InstitutionResponseViewModel response = _educationInstitutionService.GetInstitution(id);
+            InstitutionResponseViewModel response = await _educationInstitutionService.GetInstitution(id);
             return response;
         }
 
@@ -57,9 +55,9 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             }
 
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            bool hasPrivilege = Convert.ToBoolean(User.FindFirstValue("HasPrivilege"));
             Guid employeeId = GetGuidFromString.Get(User.FindFirstValue("Id"));
-            var role = User.FindFirstValue("Role");
-            if (!isEmployee || role == null || !_designationService.HasPrivilege(role))
+            if (!isEmployee || !hasPrivilege)
             {
                 response = new InstitutionResponseViewModel();
                 response.Status = 401;
@@ -87,8 +85,8 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             }
 
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
-            var role = User.FindFirstValue("Role");
-            if (!isEmployee || role == null || !_designationService.HasPrivilege(role))
+            bool hasPrivilege = Convert.ToBoolean(User.FindFirstValue("HasPrivilege"));
+            if (!isEmployee || !hasPrivilege)
             {
                 response = new InstitutionResponseViewModel();
                 response.Status = 401;
@@ -108,8 +106,8 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             InstitutionResponseViewModel response;
 
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
-            var role = User.FindFirstValue("Role");
-            if (!isEmployee || role == null || !_designationService.HasPrivilege(role))
+            bool hasPrivilege = Convert.ToBoolean(User.FindFirstValue("HasPrivilege"));
+            if (!isEmployee || !hasPrivilege)
             {
                 response = new InstitutionResponseViewModel();
                 response.Status = 401;
