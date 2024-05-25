@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\vishal.s_INT1587\\Desktop\\JobPortal_WebAPI\\Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj": {}
+    "C:\\Users\\shagun.p_int1590\\Desktop\\Backend\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj": {}
   },
   "projects": {
-    "C:\\Users\\vishal.s_INT1587\\Desktop\\JobPortal_WebAPI\\Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj": {
+    "C:\\Users\\shagun.p_int1590\\Desktop\\Backend\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\vishal.s_INT1587\\Desktop\\JobPortal_WebAPI\\Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj",
+        "projectUniqueName": "C:\\Users\\shagun.p_int1590\\Desktop\\Backend\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj",
         "projectName": "Bountous X Accolite Job Portal",
-        "projectPath": "C:\\Users\\vishal.s_INT1587\\Desktop\\JobPortal_WebAPI\\Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj",
-        "packagesPath": "C:\\Users\\vishal.s_INT1587\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\vishal.s_INT1587\\Desktop\\JobPortal_WebAPI\\Bountous X Accolite Job Portal\\obj\\",
+        "projectPath": "C:\\Users\\shagun.p_int1590\\Desktop\\Backend\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj",
+        "packagesPath": "C:\\Users\\shagun.p_int1590\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\shagun.p_int1590\\Desktop\\Backend\\JobPortal_Backend\\Bountous X Accolite Job Portal\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\vishal.s_INT1587\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\shagun.p_int1590\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -79,9 +79,17 @@
               "target": "Package",
               "version": "[2.1.0, )"
             },
+            "PDFsharp": {
+              "target": "Package",
+              "version": "[6.0.0, )"
+            },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[6.4.0, )"
+            },
+            "System.Drawing.Common": {
+              "target": "Package",
+              "version": "[8.0.5, )"
             }
           },
           "imports": [

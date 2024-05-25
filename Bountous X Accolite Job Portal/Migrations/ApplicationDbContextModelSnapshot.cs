@@ -937,6 +937,9 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                     b.Property<Guid?>("CandidateId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<bool?>("EmailSent")
+                        .HasColumnType("bit");
+
                     b.Property<Guid?>("JobApplicationApplicationId")
                         .HasColumnType("uniqueidentifier");
 

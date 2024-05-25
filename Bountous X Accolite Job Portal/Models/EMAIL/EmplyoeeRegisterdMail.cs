@@ -2,7 +2,7 @@
 {
     public static class EmplyoeeRegisterdMail
     {
-        public static string EmailStringBody()
+        public static string EmailStringBody(string password)
         {
 
             return $@"<html>
@@ -28,7 +28,7 @@ To get started, you are requested to reset your password by following simple ste
 Follow these simple steps:
 <ol>
 <li>Visit the login page of our job portal.</li>
-<li>Click on the ""Forgot Password"" link below the login form.</li>
+<li>You can lofin using password {password}</li>
 <li>Enter your registered email address.</li>
 <li>You'll receive an email with further instructions on resetting your password.</li>
 <li>Follow the provided link and instructions to set a new password for your account.</li>
