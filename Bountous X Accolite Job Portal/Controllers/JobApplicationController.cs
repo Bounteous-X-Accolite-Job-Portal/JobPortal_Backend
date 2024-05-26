@@ -1,5 +1,5 @@
-﻿using Azure;
-using Bountous_X_Accolite_Job_Portal.Helpers;
+﻿using Bountous_X_Accolite_Job_Portal.Helpers;
+using Bountous_X_Accolite_Job_Portal.Models;
 using Bountous_X_Accolite_Job_Portal.Models.JobApplicationModels;
 using Bountous_X_Accolite_Job_Portal.Models.JobApplicationModels.ResponseViewModels;
 using Bountous_X_Accolite_Job_Portal.Models.JobApplicationViewModel.JobApplicationResponse;
@@ -288,6 +288,26 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             }
 
             response = await _jobApplicationService.GetAllApplicationsWithSuccess();
+            return response;
+        }
+
+        [HttpPost("sendOfferLetter/{id}")]
+        public async Task<ResponseViewModel> SendOfferLetter(Guid id)
+        {
+            ResponseViewModel response;
+
+            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            bool hasPrivilege = Convert.ToBoolean(User.FindFirstValue("HasPrivilege"));
+            bool hasSpecialPrivilege = Convert.ToBoolean(User.FindFirstValue("HasSpecialPrivilege"));
+            if (!isEmployee || !hasPrivilege || !hasSpecialPrivilege)
+            {
+                response = new ResponseViewModel();
+                response.Status = 401;
+                response.Message = "You are either not loggedIn or not authorized to access all successfull applications.";
+                return response;
+            }
+            
+            response = await _jobApplicationService.SendOfferLetter(id);
             return response;
         }
 
