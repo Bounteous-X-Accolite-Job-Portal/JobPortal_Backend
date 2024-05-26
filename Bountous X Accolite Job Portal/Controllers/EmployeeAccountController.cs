@@ -148,7 +148,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
         {
             ProfileDataResponseViewModel response = new ProfileDataResponseViewModel();
 
-            var employee = await GetEmployeesById(Id);
+            var employee = await _employeeAuthService.GetEmployeeById(Id);
             if(employee.Employee == null)
             {
                 response.Status = 404;

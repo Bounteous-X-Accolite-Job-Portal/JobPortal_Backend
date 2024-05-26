@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Bountous_X_Accolite_Job_Portal.JwtFeatures;
+using PdfSharp.Fonts;
+using PdfSharp.Snippets.Font;
 
 namespace Bountous_X_Accolite_Job_Portal
 {
@@ -18,6 +20,8 @@ namespace Bountous_X_Accolite_Job_Portal
     {
         public static void Main(string[] args)
         {
+            ThreadPool.SetMinThreads(500, 500);
+
             var builder = WebApplication.CreateBuilder(args);
 
             builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("LocalConnection")));
@@ -76,7 +80,6 @@ namespace Bountous_X_Accolite_Job_Portal
                     ClockSkew = TimeSpan.Zero
                 };
             });
-
 
             builder.Services.AddControllers();
 

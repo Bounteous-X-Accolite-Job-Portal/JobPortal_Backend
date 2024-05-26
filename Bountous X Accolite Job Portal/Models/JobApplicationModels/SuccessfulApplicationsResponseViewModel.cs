@@ -1,9 +1,7 @@
 ﻿namespace Bountous_X_Accolite_Job_Portal.Models.JobApplicationModels
 {
-    public class SuccessfulApplicationsResponseViewModel
+    public class SuccessfulApplicationsResponseViewModel : ResponseViewModel
     {
-        public int Status { get; set; }
-        public string Message { get; set; }
-        public SuccessfulJobApplication successfulJobApplication { get; set; }
+        public List<SuccessfulApplicationViewModel> successfulJobApplication { get; set; }
     }
 }

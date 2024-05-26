@@ -9,11 +9,11 @@ using Microsoft.Extensions.Caching.Distributed;
 using System.Text.Json;
 using Bountous_X_Accolite_Job_Portal.Models.JobViewModels.JobResponseViewModel;
 using PdfSharp.Pdf;
-using PdfSharp;
-using System.Text;
 using PdfSharp.Drawing;
 using PdfSharp.Drawing.Layout;
 using Bountous_X_Accolite_Job_Portal.Models.EMAIL;
+using PdfSharp.Fonts;
+using Bountous_X_Accolite_Job_Portal.Helpers;
 
 namespace Bountous_X_Accolite_Job_Portal.Services
 {
@@ -372,6 +372,18 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             }
             else
             {
+                if (StatusId == (await _jobStatusService.getInitialSuccesstatus()))
+                {
+                    SuccessfulJobApplication successfulApplication = new SuccessfulJobApplication();
+                    successfulApplication.ApplicationId = app.ApplicationId;
+                    successfulApplication.CandidateId = app.CandidateId;
+                    successfulApplication.JobId = app.JobId;
+                    successfulApplication.ClosedJobId = app.ClosedJobId;
+
+                    await _dbContext.AddAsync(successfulApplication);
+                    await _cache.RemoveAsync($"allSuccessfulJobApplications");
+                }
+
                 app.StatusId = StatusId;
                 _dbContext.JobApplications.Update(app);
 
@@ -612,77 +624,61 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             return response;
         }
 
-        public async Task<List<SuccessfulJobApplication>> GetAllApplicationsWithSuccess()
+        public async Task<SuccessfulApplicationsResponseViewModel> GetAllApplicationsWithSuccess()
         {
-            List<SuccessfulJobApplication> successfulApplications = new List<SuccessfulJobApplication>();
-            JobApplicationResponseViewModel response;
+            SuccessfulApplicationsResponseViewModel response = new SuccessfulApplicationsResponseViewModel();
 
-            int successStatusId = await _jobStatusService.getInitialSuccesstatus();
-            if (successStatusId == -1)
+            string key = $"allSuccessfulJobApplications";
+            string? allSuccessfulJobApplicationsFromCache = await _cache.GetStringAsync(key);
+
+            List<SuccessfulJobApplication> allSuccessfulJobApplications;
+            if (string.IsNullOrWhiteSpace(allSuccessfulJobApplicationsFromCache))
             {
-                response = new JobApplicationResponseViewModel();
-                response.Status = 404;
-                response.Message = "Referral Status i.e 'ReferralStatusId' not found in the database";
-                return successfulApplications;
-            }
-
-            String key = $"allJobApplications";
-            string? allJobApplicationsFromCache = await _cache.GetStringAsync(key);
-
-            List<JobApplication> allJobApplications;
-            if (string.IsNullOrWhiteSpace(allJobApplicationsFromCache))
-            {
-                allJobApplications = _dbContext.JobApplications.ToList();
-                await _cache.SetStringAsync(key, JsonSerializer.Serialize(allJobApplications));
+                allSuccessfulJobApplications = _dbContext.SuccessfulJobs.ToList();
+                await _cache.SetStringAsync(key, JsonSerializer.Serialize(allSuccessfulJobApplications));
             }
             else
             {
-                allJobApplications = JsonSerializer.Deserialize<List<JobApplication>>(allJobApplicationsFromCache);
+                allSuccessfulJobApplications = JsonSerializer.Deserialize<List<SuccessfulJobApplication>>(allSuccessfulJobApplicationsFromCache);
             }
 
-            foreach (var application in allJobApplications)
+            List<SuccessfulApplicationViewModel> successfulApplications = new List<SuccessfulApplicationViewModel>();
+            foreach (var application in allSuccessfulJobApplications)
             {
-                if (application.StatusId == successStatusId)
+                if (!application.IsOfferLetterGenerated)
                 {
-                    SuccessfulJobApplication successfulJobApplication = new SuccessfulJobApplication
-                    {
-                        CandidateId = application.CandidateId,
-                        ApplicationId = application.ApplicationId,
-                    };
-
-                    await _dbContext.SuccessfulJobs.AddAsync(successfulJobApplication);
-                    successfulApplications.Add(successfulJobApplication);
+                    successfulApplications.Add(new SuccessfulApplicationViewModel(application));
                 }
             }
 
-            await _dbContext.SaveChangesAsync();
-
-            return successfulApplications;
+            response.Status = 200;
+            response.Message = "Successfully fetched all successful application.";
+            response.successfulJobApplication = successfulApplications;
+            return response;
         }
-        public async Task SendOfferLetter(Guid Id)
+        public async Task<ResponseViewModel> SendOfferLetter(Guid Id)
         {
+            ResponseViewModel response = new ResponseViewModel();
             try
             {
-              
-                var job = _dbContext.SuccessfulJobs.FirstOrDefault(j => j.Id == Id);
-                if (job == null && job.EmailSent!=true)
+                var successfulOffer = _dbContext.SuccessfulJobs.Find(Id);
+                if (successfulOffer == null)
                 {
-                    
-                    return;
+                    response.Status = 404;
+                    response.Message = "Successful offer with this Id does not exist.";
+                    return response;
                 }
 
-                
-                var user = _dbContext.Candidates.FirstOrDefault(c => c.CandidateId == job.CandidateId);
-
-                if (user == null)
+                var candidate = await _candidateAccountService.GetCandidateById((Guid)successfulOffer.CandidateId);
+                if(candidate.Candidate == null)
                 {
-                    
-                    return;
+                    response.Status = candidate.Status;
+                    response.Message = candidate.Message;
+                    return response;
                 }
 
                 var offerLetterText = "bounteous x Accolite\n\n\n\n\n\nDear Candidate,\n\n\nI hope this email finds you well. I am pleased to inform you that after careful consideration, we have selected you for the position at bounteous X Accolite.\n\n Your qualifications, experience, and enthusiasm for the role stood out among the many candidates we interviewed.\n\n We are confident that you will make a valuable contribution to our team.\r\n\r\nPlease find attached the formal offer letter outlining the terms and conditions of your employment. Kindly review the offer carefully, including details such as your start date, salary, benefits, and other relevant information.\r\n\r\n\n\n\n\nBest Regards,\nTalent Acquistion Team\nbounteous x Accolite";
                 var pdfBytes = await GeneratePdfAsync(offerLetterText);
-
 
                 var attachment = new Attachment
                 {
@@ -690,28 +686,34 @@ namespace Bountous_X_Accolite_Job_Portal.Services
                     Data = pdfBytes
                 };
 
-
                 var emailData = new OfferLetterEmailData(
-                    user.Email,
+                    candidate.Candidate.Email,
                     "Congratulations! Offer of Employment with bounteous x Accolite",
                     OfferLetterEmailBody.EmailStringBody(),
                     attachment
                 );
-
               
                 _emailService.SendOfferLetterEmail(emailData);
 
-                job.EmailSent = true;
+                // updating status
+                successfulOffer.IsOfferLetterGenerated = true;
+
+                _dbContext.SuccessfulJobs.Update(successfulOffer);
                 await _dbContext.SaveChangesAsync();
+
+                await _cache.RemoveAsync($"allSuccessfulJobApplications");
+
+                response.Status = 200;
+                response.Message = "Successfully generated offer letter.";
             }
             catch (Exception ex)
             {
+                response.Status = 500;
+                response.Message = $"Error sending offer letter - {ex.Message}";
                 
-                throw new ApplicationException("Error sending offer letter", ex);
             }
+            return response;
         }
-
-
         private async Task<byte[]> GeneratePdfAsync(string offerLetterText)
         {
             return await Task.Run(() =>
@@ -720,8 +722,12 @@ namespace Bountous_X_Accolite_Job_Portal.Services
 
                 PdfPage page = document.AddPage();
 
-                
                 XGraphics gfx = XGraphics.FromPdfPage(page);
+
+                if (PdfSharp.Fonts.GlobalFontSettings.FontResolver is null)
+                {
+                    GlobalFontSettings.FontResolver = new NewFontResolver();
+                }
 
                 // Draw the offer letter text on the page
                 XFont font = new XFont("Arial", 12);
