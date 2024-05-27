@@ -10,7 +10,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+ //   [Authorize]
     public class EmployeeAccountController : ControllerBase
     {
         private readonly IEmployeeAccountService _employeeAuthService;
