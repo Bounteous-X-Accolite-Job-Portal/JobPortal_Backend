@@ -18,7 +18,7 @@ namespace Bountous_X_Accolite_Job_Portal
     {
         public static void Main(string[] args)
         {
-            ThreadPool.SetMinThreads(500, 500);
+            ThreadPool.SetMinThreads(50, 1000);
 
             var builder = WebApplication.CreateBuilder(args);
 
