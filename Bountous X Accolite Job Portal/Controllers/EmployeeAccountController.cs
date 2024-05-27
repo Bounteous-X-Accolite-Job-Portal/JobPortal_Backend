@@ -10,7 +10,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class EmployeeAccountController : ControllerBase
     {
         private readonly IEmployeeAccountService _employeeAuthService;
@@ -72,7 +72,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
         {
             EmployeeResponseViewModel response;
 
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 response = new EmployeeResponseViewModel();
                 response.Status = 404;
@@ -92,15 +92,15 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             }
 
             DesignationResponseViewModel designation = await _designationService.GetDesignationById(employee.DesignationId);
-            if(designation.Designation == null)
+            if (designation.Designation == null)
             {
                 response = new EmployeeResponseViewModel();
                 response.Status = designation.Status;
                 response.Message = designation.Message;
                 return response;
             }
-             
-            if(string.Equals(designation.Designation.DesignationName.ToLower(), "admin") && !_designationService.HasSpecialPrivilege(role))
+
+            if (string.Equals(designation.Designation.DesignationName.ToLower(), "admin") && !_designationService.HasSpecialPrivilege(role))
             {
                 response = new EmployeeResponseViewModel();
                 response.Status = 401;

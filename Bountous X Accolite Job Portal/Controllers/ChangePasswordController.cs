@@ -19,14 +19,17 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
         private readonly IEmailService _emailService;
         private readonly IConfiguration _config;
         private readonly UserManager<User> _userManager;
-        public ChangePasswordController(IEmailService emailService, IConfiguration config, ApplicationDbContext applicationDbContext, UserManager<User> userManager)
+        private readonly SignInManager<User>   _signInManager;
+        public ChangePasswordController(IEmailService emailService, IConfiguration config, ApplicationDbContext applicationDbContext, UserManager<User> userManager, SignInManager<User> signInManager)
         {
             _emailService = emailService;
             _config = config;
             _authContext = applicationDbContext;
             _userManager = userManager;
+            _signInManager = signInManager;
 
         }
+
         [HttpPost("ChangePasswordEmail/{email}")]
         public async Task<IActionResult> SendEmail(string email, IConfiguration _config)
         {
@@ -49,27 +52,41 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
 
         }
 
-        [HttpPost("ChangePasswordEmail")]
-        public async Task<IActionResult> ChangePassword(ChangePasswordDTO changePassword)
+        [HttpPost]
+        [Route("ChangePassword")]
+        public async Task<ResponseViewModel> ChangePassword(ResetPassword resetPassword)
         {
-            var user = await _userManager.FindByEmailAsync(changePassword.Email);
-            if (user == null) { return NotFound(); }
+            var user = await _userManager.FindByEmailAsync(resetPassword.Email);
+            ResponseViewModel response = new ResponseViewModel();
+
+            if (user == null) 
+            {
+                response.Status = 404;
+                response.Message = "User Not Found !!";
+
+                return response;
+            }
 
             var TokenCode = await _userManager.GeneratePasswordResetTokenAsync(user);
-            DateTime emailTokenExpiry = (DateTime)user.ChangePasswordExpiry;
-            if (emailTokenExpiry < DateTime.Now)
+   
+            var oldPassword = await _signInManager.CheckPasswordSignInAsync(user, resetPassword.CurrentPassword, lockoutOnFailure: false);
+            if (oldPassword.Succeeded == true)
             {
-                return BadRequest(
-                    new
-                    {
-                        StatusCode = 400,
-                        Message = "NO"
-                    });
+                var result = await _userManager.ResetPasswordAsync(user, TokenCode, resetPassword.NewPassword);
+                _authContext.Entry(user).State = EntityState.Modified;
+                await _authContext.SaveChangesAsync();
+
+
+                response.Status = 200;
+                response.Message = "Password Changed Successfully !!";
             }
-            var result = await _userManager.ResetPasswordAsync(user, TokenCode, changePassword.NewPassword);
-            _authContext.Entry(user).State = EntityState.Modified;
-            await _authContext.SaveChangesAsync();
-            return Ok();
+            else
+            {
+                response.Status = 403;
+                response.Message = "Current Password is not valid!!";
+            }
+
+            return response;
         }
 
     }
