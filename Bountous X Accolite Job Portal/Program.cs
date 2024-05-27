@@ -24,7 +24,7 @@ namespace Bountous_X_Accolite_Job_Portal
 
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("LocalConnection")));
+            builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             builder.Services.AddStackExchangeRedisCache(options =>
             {
