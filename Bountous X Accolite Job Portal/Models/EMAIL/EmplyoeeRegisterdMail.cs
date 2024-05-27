@@ -28,10 +28,8 @@ To get started, you are requested to reset your password by following simple ste
 Follow these simple steps:
 <ol>
 <li>Visit the login page of our job portal.</li>
-<li>You can lofin using password {password}</li>
+<li>You can login using password {password}</li>
 <li>Enter your registered email address.</li>
-<li>You'll receive an email with further instructions on resetting your password.</li>
-<li>Follow the provided link and instructions to set a new password for your account.</li>
 <br>
 </ol>
 If you have any questions or need assistance, don't hesitate to reach out to our support team. We're here to help you make the most of your experience on our job portal.
@@ -45,8 +43,7 @@ Once again, welcome to bounteous x Accolite] Job Portal! We look forward to your
 </div>
 <div>
 Regards,<br>
-Team<br>
-bounteuous x Accolite Job Portal
+Team bounteuous x Accolite Job Portal
 
 </div>
 

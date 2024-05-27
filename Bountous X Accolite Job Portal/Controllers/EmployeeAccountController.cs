@@ -10,7 +10,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class EmployeeAccountController : ControllerBase
     {
         private readonly IEmployeeAccountService _employeeAuthService;
@@ -114,7 +114,8 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
 
         [HttpPut]
         [Route("disableAccount/{Id}")]
-        public async Task<EmployeeResponseViewModel> DisableEmployeeAccount(Guid Id)
+        [Route("enableAccount/{Id}")]
+        public async Task<EmployeeResponseViewModel> ToggleEmployeeAccountStatus(Guid Id)
         {
             EmployeeResponseViewModel response;
 
@@ -138,7 +139,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
 
-            response = await _employeeAuthService.DisableEmployeeAccount(Id, _designationService.HasSpecialPrivilege(role));
+            response = await _employeeAuthService.ToggleEmployeeAccountStatus(Id, _designationService.HasSpecialPrivilege(role));
             return response;
         }
 

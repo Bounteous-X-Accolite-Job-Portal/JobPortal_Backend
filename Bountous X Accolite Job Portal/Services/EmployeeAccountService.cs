@@ -56,7 +56,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             return response;
         }
 
-        public async Task<EmployeeResponseViewModel> DisableEmployeeAccount(Guid EmployeeId, bool HasSpecialPrivilege)
+        public async Task<EmployeeResponseViewModel> ToggleEmployeeAccountStatus(Guid EmployeeId, bool HasSpecialPrivilege)
         {
             EmployeeResponseViewModel response = new EmployeeResponseViewModel();
 
@@ -97,7 +97,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
                 return response;
             }
 
-            employee.Inactive = true;
+            employee.Inactive = !employee.Inactive;
 
             _dbContext.Employees.Update(employee);
             await _dbContext.SaveChangesAsync();
@@ -107,7 +107,15 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             await _cache.RemoveAsync($"getEmployeesByDesignationId-{employee.DesignationId}");
 
             response.Status = 200;
-            response.Message = "Successfully diabled the account.";
+            if(employee.Inactive)
+            {
+                response.Message = "Successfully diabled the account.";
+            }
+            else
+            {
+                response.Message = "Successfully enabled the account.";
+            }
+            
             response.Employee = new EmployeeViewModels(employee);
             return response;
         }
@@ -154,7 +162,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             user.EmpId = employee.EmployeeId;
 
             var password = GeneratePassword.GenerateRandomPassword();
-            Console.WriteLine("Employee Password", password);
+            //Console.WriteLine("Employee Password", password);
 
             var result = await _userManager.CreateAsync(user, password);
             if (!result.Succeeded)

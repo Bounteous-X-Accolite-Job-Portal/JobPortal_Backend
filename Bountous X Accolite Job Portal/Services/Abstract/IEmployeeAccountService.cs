@@ -6,7 +6,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services.Abstract
     {
         Task<EmployeeResponseViewModel> GetEmployeeById(Guid Id);
         Task<AllEmployeesResponseViewModel> GetAllEmployees();
-        Task<EmployeeResponseViewModel> DisableEmployeeAccount(Guid EmployeeId, bool HasSpecialPrivilege);
+        Task<EmployeeResponseViewModel> ToggleEmployeeAccountStatus(Guid EmployeeId, bool HasSpecialPrivilege);
         Task<EmployeeResponseViewModel> Register(EmployeeRegisterViewModel employee);
     }
 }
