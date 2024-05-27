@@ -24,7 +24,8 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
         public async Task<AllDesignationResponseViewModel> GetAllDesignations()
         {
             bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
-            if (!isEmployee)
+            bool hasPrivilege = Convert.ToBoolean(User.FindFirstValue("HasPrivilege"));
+            if (!isEmployee || !hasPrivilege)
             {
                 AllDesignationResponseViewModel response = new AllDesignationResponseViewModel();
                 response.Status = 403;
@@ -32,7 +33,8 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
 
-            return await _designationService.GetAllDesignation();
+            bool hasSpecialPrivilege = Convert.ToBoolean(User.FindFirstValue("HasSpecialPrivilege"));
+            return await _designationService.GetAllDesignation(hasSpecialPrivilege);
         }
 
         [HttpGet]

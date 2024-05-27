@@ -11,8 +11,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Bountous_X_Accolite_Job_Portal.JwtFeatures;
-using PdfSharp.Fonts;
-using PdfSharp.Snippets.Font;
 
 namespace Bountous_X_Accolite_Job_Portal
 {
