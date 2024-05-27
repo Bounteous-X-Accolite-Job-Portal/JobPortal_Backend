@@ -870,7 +870,9 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                     IsOfferLetterGenerated = table.Column<bool>(type: "bit", nullable: false),
                     CandidateId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     ApplicationId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    JobApplicationApplicationId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    JobApplicationApplicationId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    JobId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    ClosedJobId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -881,10 +883,20 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                         principalTable: "Candidates",
                         principalColumn: "CandidateId");
                     table.ForeignKey(
+                        name: "FK_SuccessfulJobs_ClosedJobs_ClosedJobId",
+                        column: x => x.ClosedJobId,
+                        principalTable: "ClosedJobs",
+                        principalColumn: "ClosedJobId");
+                    table.ForeignKey(
                         name: "FK_SuccessfulJobs_JobApplications_JobApplicationApplicationId",
                         column: x => x.JobApplicationApplicationId,
                         principalTable: "JobApplications",
                         principalColumn: "ApplicationId");
+                    table.ForeignKey(
+                        name: "FK_SuccessfulJobs_Jobs_JobId",
+                        column: x => x.JobId,
+                        principalTable: "Jobs",
+                        principalColumn: "JobId");
                 });
 
             migrationBuilder.CreateIndex(
@@ -1199,9 +1211,19 @@ namespace Bountous_X_Accolite_Job_Portal.Migrations
                 column: "CandidateId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_SuccessfulJobs_ClosedJobId",
+                table: "SuccessfulJobs",
+                column: "ClosedJobId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_SuccessfulJobs_JobApplicationApplicationId",
                 table: "SuccessfulJobs",
                 column: "JobApplicationApplicationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SuccessfulJobs_JobId",
+                table: "SuccessfulJobs",
+                column: "JobId");
         }
 
         /// <inheritdoc />

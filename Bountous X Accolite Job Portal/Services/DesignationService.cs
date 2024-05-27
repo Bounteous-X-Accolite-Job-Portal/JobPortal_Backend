@@ -146,6 +146,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             }
 
             await _cache.RemoveAsync($"allDesignations");
+            await _cache.RemoveAsync($"allDesignationsWithAdmin");
 
             response.Status = 200;
             response.Message = "Successfully add designation.";
@@ -153,9 +154,17 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             return response;
         }
 
-        public async Task<AllDesignationResponseViewModel> GetAllDesignation()
+        public async Task<AllDesignationResponseViewModel> GetAllDesignation(bool hasSpecialPrivilege)
         {
-            string key = $"allDesignations";
+            string key = "";
+            if (hasSpecialPrivilege)
+            {
+                key = $"allDesignationsWithAdmin";
+            }
+            else
+            {
+                key = $"allDesignations";
+            }
             string? getAllDesignationsFromCache = await _cache.GetStringAsync(key);
 
             List<Designation> list;
@@ -172,7 +181,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             List<DesignationViewModel> designations = new List<DesignationViewModel>();
             foreach (var item in list)
             {
-                if(!string.Equals(item.DesignationName.ToLower(), "admin")) 
+                if(hasSpecialPrivilege || !string.Equals(item.DesignationName.ToLower(), "admin")) 
                 {
                     designations.Add(new DesignationViewModel(item));
                 }
@@ -235,6 +244,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             await _dbContext.SaveChangesAsync();
 
             await _cache.RemoveAsync($"allDesignations");
+            await _cache.RemoveAsync($"allDesignationsWithAdmin");
             await _cache.RemoveAsync($"getDesignationById-{designation.DesignationId}");
             await _cache.RemoveAsync($"getPrivilegeByDesignationId-{designation.DesignationId}");
             await _cache.RemoveAsync($"getEmployeesByDesignationId-{designation.DesignationId}");
