@@ -1,14 +1,3 @@
-C:\Users\vishal.s_INT1587\Desktop\JobPortal_WebAPI\Bountous X Accolite Job Portal\obj\Debug\net8.0\Bountous X Accolite Job Portal.csproj.AssemblyReference.cache
-C:\Users\vishal.s_INT1587\Desktop\JobPortal_WebAPI\Bountous X Accolite Job Portal\obj\Debug\net8.0\Bountous X Accolite Job Portal.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\vishal.s_INT1587\Desktop\JobPortal_WebAPI\Bountous X Accolite Job Portal\obj\Debug\net8.0\Bountous X Accolite Job Portal.AssemblyInfoInputs.cache
-C:\Users\vishal.s_INT1587\Desktop\JobPortal_WebAPI\Bountous X Accolite Job Portal\obj\Debug\net8.0\Bountous X Accolite Job Portal.AssemblyInfo.cs
-C:\Users\vishal.s_INT1587\Desktop\JobPortal_WebAPI\Bountous X Accolite Job Portal\obj\Debug\net8.0\Bountous X Accolite Job Portal.csproj.CoreCompileInputs.cache
-C:\Users\vishal.s_INT1587\Desktop\JobPortal_WebAPI\Bountous X Accolite Job Portal\obj\Debug\net8.0\Bountous X Accolite Job Portal.MvcApplicationPartsAssemblyInfo.cs
-C:\Users\vishal.s_INT1587\Desktop\JobPortal_WebAPI\Bountous X Accolite Job Portal\obj\Debug\net8.0\Bountous X Accolite Job Portal.MvcApplicationPartsAssemblyInfo.cache
-C:\Users\vishal.s_INT1587\Desktop\JobPortal_WebAPI\Bountous X Accolite Job Portal\obj\Debug\net8.0\Bountous X Accolite Job Portal.sourcelink.json
-C:\Users\vishal.s_INT1587\Desktop\JobPortal_WebAPI\Bountous X Accolite Job Portal\obj\Debug\net8.0\Bountous X Accolite Job Portal.dll
-C:\Users\vishal.s_INT1587\Desktop\JobPortal_WebAPI\Bountous X Accolite Job Portal\obj\Debug\net8.0\refint\Bountous X Accolite Job Portal.dll
-C:\Users\vishal.s_INT1587\Desktop\JobPortal_WebAPI\Bountous X Accolite Job Portal\obj\Debug\net8.0\Bountous X Accolite Job Portal.pdb
 C:\Users\vishal.s_INT1587\Desktop\JobPortal_WebAPI\Bountous X Accolite Job Portal\bin\Debug\net8.0\appsettings.Development.json
 C:\Users\vishal.s_INT1587\Desktop\JobPortal_WebAPI\Bountous X Accolite Job Portal\bin\Debug\net8.0\appsettings.json
 C:\Users\vishal.s_INT1587\Desktop\JobPortal_WebAPI\Bountous X Accolite Job Portal\bin\Debug\net8.0\Bountous X Accolite Job Portal.exe
@@ -146,6 +135,14 @@ C:\Users\vishal.s_INT1587\Desktop\JobPortal_WebAPI\Bountous X Accolite Job Porta
 C:\Users\vishal.s_INT1587\Desktop\JobPortal_WebAPI\Bountous X Accolite Job Portal\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Runtime.Caching.dll
 C:\Users\vishal.s_INT1587\Desktop\JobPortal_WebAPI\Bountous X Accolite Job Portal\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Security.Cryptography.ProtectedData.dll
 C:\Users\vishal.s_INT1587\Desktop\JobPortal_WebAPI\Bountous X Accolite Job Portal\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Windows.Extensions.dll
+C:\Users\vishal.s_INT1587\Desktop\JobPortal_WebAPI\Bountous X Accolite Job Portal\obj\Debug\net8.0\Bountous X Accolite Job Portal.csproj.AssemblyReference.cache
+C:\Users\vishal.s_INT1587\Desktop\JobPortal_WebAPI\Bountous X Accolite Job Portal\obj\Debug\net8.0\Bountous X Accolite Job Portal.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\vishal.s_INT1587\Desktop\JobPortal_WebAPI\Bountous X Accolite Job Portal\obj\Debug\net8.0\Bountous X Accolite Job Portal.AssemblyInfoInputs.cache
+C:\Users\vishal.s_INT1587\Desktop\JobPortal_WebAPI\Bountous X Accolite Job Portal\obj\Debug\net8.0\Bountous X Accolite Job Portal.AssemblyInfo.cs
+C:\Users\vishal.s_INT1587\Desktop\JobPortal_WebAPI\Bountous X Accolite Job Portal\obj\Debug\net8.0\Bountous X Accolite Job Portal.csproj.CoreCompileInputs.cache
+C:\Users\vishal.s_INT1587\Desktop\JobPortal_WebAPI\Bountous X Accolite Job Portal\obj\Debug\net8.0\Bountous X Accolite Job Portal.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\vishal.s_INT1587\Desktop\JobPortal_WebAPI\Bountous X Accolite Job Portal\obj\Debug\net8.0\Bountous X Accolite Job Portal.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\vishal.s_INT1587\Desktop\JobPortal_WebAPI\Bountous X Accolite Job Portal\obj\Debug\net8.0\Bountous X Accolite Job Portal.sourcelink.json
 C:\Users\vishal.s_INT1587\Desktop\JobPortal_WebAPI\Bountous X Accolite Job Portal\obj\Debug\net8.0\staticwebassets.build.json
 C:\Users\vishal.s_INT1587\Desktop\JobPortal_WebAPI\Bountous X Accolite Job Portal\obj\Debug\net8.0\staticwebassets.development.json
 C:\Users\vishal.s_INT1587\Desktop\JobPortal_WebAPI\Bountous X Accolite Job Portal\obj\Debug\net8.0\staticwebassets\msbuild.Bountous X Accolite Job Portal.Microsoft.AspNetCore.StaticWebAssets.props
@@ -155,5 +152,8 @@ C:\Users\vishal.s_INT1587\Desktop\JobPortal_WebAPI\Bountous X Accolite Job Porta
 C:\Users\vishal.s_INT1587\Desktop\JobPortal_WebAPI\Bountous X Accolite Job Portal\obj\Debug\net8.0\staticwebassets.pack.json
 C:\Users\vishal.s_INT1587\Desktop\JobPortal_WebAPI\Bountous X Accolite Job Portal\obj\Debug\net8.0\scopedcss\bundle\Bountous X Accolite Job Portal.styles.css
 C:\Users\vishal.s_INT1587\Desktop\JobPortal_WebAPI\Bountous X Accolite Job Portal\obj\Debug\net8.0\Bountous.C7E2B7F3.Up2Date
+C:\Users\vishal.s_INT1587\Desktop\JobPortal_WebAPI\Bountous X Accolite Job Portal\obj\Debug\net8.0\Bountous X Accolite Job Portal.dll
+C:\Users\vishal.s_INT1587\Desktop\JobPortal_WebAPI\Bountous X Accolite Job Portal\obj\Debug\net8.0\refint\Bountous X Accolite Job Portal.dll
+C:\Users\vishal.s_INT1587\Desktop\JobPortal_WebAPI\Bountous X Accolite Job Portal\obj\Debug\net8.0\Bountous X Accolite Job Portal.pdb
 C:\Users\vishal.s_INT1587\Desktop\JobPortal_WebAPI\Bountous X Accolite Job Portal\obj\Debug\net8.0\Bountous X Accolite Job Portal.genruntimeconfig.cache
 C:\Users\vishal.s_INT1587\Desktop\JobPortal_WebAPI\Bountous X Accolite Job Portal\obj\Debug\net8.0\ref\Bountous X Accolite Job Portal.dll
