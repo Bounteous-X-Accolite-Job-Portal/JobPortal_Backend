@@ -6,6 +6,7 @@
         public string JobCode { get; set; }
         public string JobTitle { get; set; }
         public string JobDescription { get; set; }
+        public DateTime PostDate { get; set; }
         public DateTime LastDate { get; set; }
         public Guid? DegreeId { get; set; }
         public string Experience { get; set; }
@@ -21,6 +22,7 @@
             JobCode = closedJob.JobCode;
             JobTitle = closedJob.JobTitle;
             JobDescription = closedJob.JobDescription;
+            PostDate = closedJob.PostDate;
             LastDate = closedJob.LastDate;
             DegreeId = closedJob.DegreeId;
             Experience = closedJob.Experience;

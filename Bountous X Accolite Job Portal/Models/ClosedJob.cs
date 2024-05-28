@@ -10,7 +10,7 @@ namespace Bountous_X_Accolite_Job_Portal.Models
         public string JobCode { get; set; }
         public string JobTitle { get; set; }
         public string JobDescription { get; set; }
-        public DateTime PostDate { get; set; } = DateTime.Now;
+        public DateTime PostDate { get; set; }
         public DateTime LastDate { get; set; }
         public Guid? DegreeId { get; set; }
         public virtual Degree? Degree { get; set; }
