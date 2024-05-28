@@ -14,7 +14,7 @@
 <h5>Dear User,</h5>
 
 Your request to change your password has been completed successfully.
-< a href = ""http://localhost:4200/changePasswordEmail?email={email}&code={emailToken}""> Reset Password</a>
+< a href = ""http://localhost:4200/forgot-password?email={email}&code={emailToken}""> Reset Password</a>
 </body>
 </html>
 
