@@ -65,7 +65,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
 
             foreach (Status s in status)
             {
-                if (String.Equals(s.StatusName.ToLower(), "selected"))
+                if (String.Equals(s.StatusName.ToLower(), "offered"))
                 {
                     statusId = s.StatusId;
                 }

@@ -299,6 +299,10 @@ namespace Bountous_X_Accolite_Job_Portal.Services
                     app.ClosedJobId = closedDic[(Guid)app.JobId];
                     app.JobId = null;
                     _context.JobApplications.Update(app);
+
+                    await _cache.RemoveAsync($"getJobApplicationsById-{app.ApplicationId}");
+                    await _cache.RemoveAsync($"getJobApplicationsByCandidateId-{app.CandidateId}");
+                    await _cache.RemoveAsync($"getJobApplicationsByJobId-{app.JobId}");
                 }
 
                 foreach (ClosedJobApplication app in validClosedApplications)
@@ -306,11 +310,15 @@ namespace Bountous_X_Accolite_Job_Portal.Services
                     app.ClosedJobId = closedDic[(Guid)app.JobId];
                     app.JobId = null;
                     _context.ClosedJobApplications.Update(app);
+
+                    await _cache.RemoveAsync($"getJobApplicationsByClosedJobId-{app.ClosedJobId}");
+                    await _cache.RemoveAsync($"getClosedJobApplicationsByCandidateId-{app.CandidateId}");
                 }
 
                 foreach (KeyValuePair<Guid, Job> entry in dic)
                 {
                     await _cache.RemoveAsync($"getJobById-{entry.Key}");
+                    await _cache.RemoveAsync($"getAllJobsByEmployeeId-{entry.Value.EmployeeId}");
                     _context.Jobs.Remove(entry.Value);
                 }
 
