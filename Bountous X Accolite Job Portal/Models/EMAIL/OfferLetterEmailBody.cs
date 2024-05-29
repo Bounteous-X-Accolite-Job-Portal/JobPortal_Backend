@@ -25,7 +25,7 @@ We are confident that you will make a valuable contribution to our team.<br><br>
 Please find attached the formal offer letter outlining the terms and conditions of your employment. 
 Kindly review the offer carefully, including details such as your start date, salary, benefits, and other relevant information.
 
-If you have any questions or require further clarification about the offer, please don't hesitate to reach out to me or Talent Acquistion Team at ta@gmail.com or 1234567892.<br><br>
+If you have any questions or require further clarification about the offer, please don't hesitate to reach out to me or Talent Acquistion Team at humanresource@accolitedigital.com or 1234567892.<br><br>
 
 We are excited about the opportunity to welcome you aboard and look forward to your positive response. Once again, congratulations on your selection, and we are eager to have you join our team.
 <br><br>
