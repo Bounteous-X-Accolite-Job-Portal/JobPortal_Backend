@@ -48,7 +48,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             user.ResetPasswordExpiry = DateTime.Now.AddMinutes(5);
 
             string from = _config["EmailSettings:From"];
-            var emailModel = new EmailData(email, "ResetPassword", EmailBody.EmailStringBody(email, emailToken));
+            var emailModel = new EmailData(email, "ResetPassword", EmailBody.EmailStringBody(user.UserName,email, emailToken));
             //Debug.WriteLine("INSIDE CONTROLLER", emailModel);
 
             _emailService.SendEmail(emailModel);

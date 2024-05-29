@@ -70,7 +70,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
                 cand.ReferalToken = referalToken;
                 cand.AutoPassword = newCandidate.Password;
 
-                EmailData emailRef = new EmailData(cand.Email, "bounteous x Accolite Job Portal!", ReferalEmailBody.EmailStringBody(cand.Email, cand.ReferalToken, cand.AutoPassword));
+                EmailData emailRef = new EmailData(cand.Email, "bounteous x Accolite Job Portal!", ReferalEmailBody.EmailStringBody(newCandidate.FirstName, cand.Email, cand.ReferalToken, cand.AutoPassword));
                 _emailService.SendEmail(emailRef);
 
                 //await _dbContext.Users.AddAsync(cand);
@@ -84,7 +84,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
                 var token = RandomNumberGenerator.GetBytes(64);
                 var referal = Convert.ToBase64String(token);
                 candRegisterd.ReferalToken = referal;
-                EmailData email = new EmailData(candRegisterd.Email, "You are being referred", ReferalBodyForAlreadyRegisterd.EmailStringBody());
+                EmailData email = new EmailData(candRegisterd.Email, "You are being referred", ReferalBodyForAlreadyRegisterd.EmailStringBody(addReferral.FirstName));
                 _emailService.SendEmail(email);
 
                 candidateId = (Guid)user.CandidateId;

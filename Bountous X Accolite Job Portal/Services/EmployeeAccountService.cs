@@ -175,7 +175,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
                 return response;
             }
 
-            EmailData email = new EmailData(employee.Email, "bounteous x Accolite Job Portal!", EmplyoeeRegisterdMail.EmailStringBody(password));
+            EmailData email = new EmailData(employee.Email, "bounteous x Accolite Job Portal!", EmplyoeeRegisterdMail.EmailStringBody(employee.FirstName,password));
             _emailService.SendEmail(email);
 
             await _cache.RemoveAsync($"allEmployees");

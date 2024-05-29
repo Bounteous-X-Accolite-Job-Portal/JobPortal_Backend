@@ -2,7 +2,7 @@
 {
     public static class ReferalBodyForAlreadyRegisterd
     {
-        public static string EmailStringBody()
+        public static string EmailStringBody(string name)
         {
 
             return $@"<html>
@@ -12,7 +12,7 @@
 <h1>You've Been Referred to bounteous x Accolite Job Portal!</h1>
 
 
-<h3>Dear User,</h3>
+<h3>Dear {name},</h3>
 We hope this email finds you well. We are excited to inform you that you've been referred to bounteous x Accolite  by one of our esteemed employees.
 <br>
 
@@ -20,7 +20,7 @@ This referral is a testament to your skills and qualifications, and we are thril
 
 <h5>To take advantage of this referral and explore job opportunities with us, please follow these simple steps:</h5>
 <ol>
-<li>Visit the bounteous x Accolite Job Portal login page at http://localhost:4200/login .</li>
+<li>Visit the bounteous x Accolite Job Portal login page at https://kind-dune-058eee70f.5.azurestaticapps.net/login .</li>
 <li>Login to your account using the password using your credentials</li>
 <li>Once logged in, navigate to the ""Job Listings"" section to view our current job openings.</li>
 <li>Browse through the available positions and select the ones that align with your skills, experience, and career goals.</li>

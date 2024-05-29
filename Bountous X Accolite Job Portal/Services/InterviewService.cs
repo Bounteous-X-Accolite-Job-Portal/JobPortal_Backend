@@ -1,5 +1,6 @@
 ﻿using Bountous_X_Accolite_Job_Portal.Data;
 using Bountous_X_Accolite_Job_Portal.Models;
+using Bountous_X_Accolite_Job_Portal.Models.EMAIL;
 using Bountous_X_Accolite_Job_Portal.Models.InterviewFeedbackModels.InterviewFeedbackResponseViewModel;
 using Bountous_X_Accolite_Job_Portal.Models.InterviewViewModel;
 using Bountous_X_Accolite_Job_Portal.Models.InterviewViewModel.InterviewResponseViewModel;
@@ -15,17 +16,22 @@ namespace Bountous_X_Accolite_Job_Portal.Services
         private readonly IEmployeeAccountService _employeeAccountService;
         private readonly IJobApplicationService _jobApplicationService;
         private readonly IDistributedCache _cache;
+        private readonly ICandidateAccountService _candidateAccountService;
+        private readonly IEmailService _emailService;
         public InterviewService(
             ApplicationDbContext context, 
             IEmployeeAccountService employeeAccountService,
             IDistributedCache cache,
-            IJobApplicationService jobApplicationService
-        )
+            IJobApplicationService jobApplicationService,
+            ICandidateAccountService candiateAccountService,
+            IEmailService emailService)
         {
             _context = context;
             _employeeAccountService = employeeAccountService;
-            _cache = cache; 
+            _cache = cache;
             _jobApplicationService = jobApplicationService;
+            _candidateAccountService = candiateAccountService;
+            _emailService = emailService;
         }
 
         public async Task<InterviewResponseViewModel> AddInterview(CreateInterviewViewModel interview , Guid EmpId)
@@ -48,6 +54,15 @@ namespace Bountous_X_Accolite_Job_Portal.Services
                 return response;
             }
 
+            var candidate = await _candidateAccountService.GetCandidateById((Guid)application.Application.CandidateId);
+            if(candidate.Candidate == null)
+            {
+                response.Status = 404;
+                response.Message = "Candidate does not exist.";
+                return response;
+            }
+
+
             Interview newInterview = new Interview();
             newInterview.ApplicationId = interview.ApplicationId;
             newInterview.InterViewerId = interview.InterViewerId;
@@ -59,7 +74,13 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             await _context.Interviews.AddAsync(newInterview);
             await _context.SaveChangesAsync();
 
-            if(newInterview == null)
+            EmailData emailInterviewCandidate = new EmailData(candidate.Candidate.Email , "bounteous x Accolite Job Portal!" , InterviewSendEmail.EmailStringBody(candidate.Candidate.FirstName , newInterview.Link ,newInterview.InterviewDate, newInterview.InterviewTime));
+            _emailService.SendEmail(emailInterviewCandidate);
+
+            //EmailData emailInterviewEmployee = new EmailData(interviewer.Employee.Email, "bounteous x Accolite Job Portal!", InterviewEmployeeEmail.EmailStringBody(interviewer.Employee.FirstName , candidate.Candidate.FirstName, newInterview.Link, newInterview.InterviewDate, newInterview.InterviewTime));
+            //_emailService.SendEmail(emailInterviewEmployee);
+
+            if (newInterview == null)
             {
                 response.Status = 500;
                 response.Message = "Unable to Add Interview !!";
