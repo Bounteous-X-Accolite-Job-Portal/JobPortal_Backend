@@ -51,7 +51,7 @@ namespace Bountous_X_Accolite_Job_Portal
             builder.Services.AddCors(options => options.AddPolicy(name: "FrontendUI",
                 policy =>
                 {
-                    policy.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowAnyMethod();
+                    policy.WithOrigins("http://localhost:4200", "https://kind-dune-058eee70f.5.azurestaticapps.net").AllowAnyHeader().AllowAnyMethod();
                 }));
 
            // Adding JWT Authentication
@@ -73,7 +73,11 @@ namespace Bountous_X_Accolite_Job_Portal
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
                     ValidIssuer = jwtSettings["validIssuer"],
-                    ValidAudience = jwtSettings["validAudience"],
+                    //ValidAudience = jwtSettings["validAudience"],
+                    ValidAudiences = new List<String> {
+                        jwtSettings["validAudience"],
+                        jwtSettings["validAudience1"],
+                    },
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.GetSection("securityKey").Value)),
                     ClockSkew = TimeSpan.Zero
                 };
