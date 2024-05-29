@@ -8,6 +8,8 @@ namespace Bountous_X_Accolite_Job_Portal.Services.Abstract
     {
         Task<AllReferralResponseViewModel> GetAllReferralsOfLoggedInEmployee(Guid EmpId);
         Task<ReferralResponseViewModel> Refer(AddReferralViewModel addReferral, Guid EmpId);
-        //void SendEmail(EmailData request);
+        Task<bool> AddApplicationIdToReferral(Guid ReferralId, Guid ApplicationId);
+        Task<bool> AddClosedApplicationIdToReferral(Guid ReferralId, Guid ClosedApplicationId);
+        Task<bool> AddClosedJobIdToReferral(Guid ReferralId, Guid ClosedJobId);
     }
 }
