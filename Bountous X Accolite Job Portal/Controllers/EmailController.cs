@@ -59,55 +59,32 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             
         }
         [HttpPost("reset-Password")]
-        public async Task<IActionResult> ResetPassword(ResetPasswordDTO resetPassword)
-        {
-           
+         public async Task<ResponseViewModel> ResetPassword(ResetPasswordDTO resetPassword)
+ {
+     ResponseViewModel response = new ResponseViewModel();
 
-            var user = await _userManager.FindByEmailAsync(resetPassword.Email);
-            if (user == null) { return NotFound(); }
+      var user = await _userManager.FindByEmailAsync(resetPassword.Email);
+     if (user == null) 
+     {
+         response.Status = 403;
+         response.Message = "User Not Exist !!";
+         return response;
+     }
 
-            var TokenCode = await _userManager.GeneratePasswordResetTokenAsync(user);
-            DateTime emailTokenExpiry= (DateTime)user.ResetPasswordExpiry;
-            if(emailTokenExpiry<DateTime.Now)
-            {
-                return BadRequest(
-                    new
-                    {
-                        StatusCode = 400,
-                        Message = "NO"
-                    });
-            }
-            var result = await _userManager.ResetPasswordAsync(user, TokenCode, resetPassword.NewPassword);
+     var TokenCode = await _userManager.GeneratePasswordResetTokenAsync(user);
+     
+     var result = await _userManager.ResetPasswordAsync(user, TokenCode, resetPassword.NewPassword);
 
-            //String hashedNewPassword = _userManager.PasswordHasher.HashPassword(user, resetPassword.NewPassword);
+     _authContext.Entry(user).State=EntityState.Modified;
+     await _authContext.SaveChangesAsync();
 
-            //user.PasswordHash = hashedNewPassword;
-            _authContext.Entry(user).State=EntityState.Modified;
-            await _authContext.SaveChangesAsync();
-            //_authContext.Update(user);
-            //await _authContext.SaveChangesAsync();
-            return Ok();
+     response.Status = 200;
+     response.Message = "Password Reset Successfully !!";
 
-            }
+     return response;
 
+     }
         
     }
     }
-    
-   
-         //var email = new MimeMessage();
-        //email.From.Add(MailboxAddress.Parse("euna.beatty55@ethereal.email"));
-        //email.To.Add(MailboxAddress.Parse("shagunpsit@gmail.com"));
-        //email.Subject = "HELLL";
-        //email.Body = new TextPart(MimeKit.Text.TextFormat.Html) { Text = body };
-
-        //using var smtp = new SmtpClient();
-        //smtp.Connect("smtp.ethereal.email", 587, SecureSocketOptions.StartTls);
-        //smtp.Authenticate("euna.beatty55@ethereal.email", "Wz1BrHgkvF1fwxqJ35");
-        //smtp.Send(email);
-        //smtp.Disconnect(true);
-
-        //return Ok();
-    
-
 
