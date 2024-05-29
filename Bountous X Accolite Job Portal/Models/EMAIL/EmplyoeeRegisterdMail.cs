@@ -17,7 +17,7 @@
 Welcome aboard to bounteous x Accolite Job Portal! We're thrilled to have you join our team and embark on this exciting journey with us.<br>
 As a registered employee on our job portal, you now have access to a range of features designed to streamline your hiring process and enhance your experience.
 <br><br>
-<h4>Visit our Job Portal:- http://localhost:4200/login </h4>
+<h4>Visit our Job Portal:-https://kind-dune-058eee70f.5.azurestaticapps.net/login </h4>
 <br>
 
 To get started, you are requested to reset your password by following simple steps.
