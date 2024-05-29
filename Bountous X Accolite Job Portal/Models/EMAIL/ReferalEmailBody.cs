@@ -2,7 +2,7 @@
 {
     public static class ReferalEmailBody
     {
-        public static string EmailStringBody(string email, string referalToken,string AutoPassword)
+        public static string EmailStringBody(string name ,string email, string referalToken,string AutoPassword)
         {
             return $@"<html>
 <head>
@@ -11,7 +11,7 @@
 <h1>You've Been Referred to bounteous x Accolite Job Portal!</h1>
 
 
-<h5>Dear User,</h5>
+<h5>Dear {name},</h5>
 
 We hope this email finds you well. We are excited to inform you that you've been referred to bounteous x Accolite  by one of our esteemed employees.
 <br>

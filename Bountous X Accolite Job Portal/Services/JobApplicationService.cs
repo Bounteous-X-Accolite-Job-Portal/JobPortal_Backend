@@ -689,7 +689,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
                 var emailData = new OfferLetterEmailData(
                     candidate.Candidate.Email,
                     "Congratulations! Offer of Employment with bounteous x Accolite",
-                    OfferLetterEmailBody.EmailStringBody(),
+                    OfferLetterEmailBody.EmailStringBody(candidate.Candidate.FirstName),
                     attachment
                 );
               

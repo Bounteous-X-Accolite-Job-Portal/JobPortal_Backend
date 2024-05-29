@@ -2,7 +2,7 @@
 {
     public static class OfferLetterEmailBody
     {
-        public static string EmailStringBody()
+        public static string EmailStringBody(string name)
         {
 
             return $@"<html>
@@ -12,10 +12,7 @@
 <h1>Congratulations! Offer of Employment with bounteous x Accolite</h1>
 
 
-<h3>Dear User,</h3>
-
-
-Dear Candidate,
+<h3>Dear {name},</h3>
 
 I hope this email finds you well. I am pleased to inform you that after careful consideration, we have selected you.<br>
 <br>

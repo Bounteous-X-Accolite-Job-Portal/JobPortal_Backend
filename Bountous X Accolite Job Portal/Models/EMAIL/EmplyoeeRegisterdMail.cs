@@ -2,7 +2,7 @@
 {
     public static class EmplyoeeRegisterdMail
     {
-        public static string EmailStringBody(string password)
+        public static string EmailStringBody(string name ,string password)
         {
 
             return $@"<html>
@@ -12,7 +12,7 @@
 <h1>Welcome to bounteous x Accolite Job Portal!</h1>
 
 
-<h3>Dear Employer,</h3>
+<h3>Dear Employer {name},</h3>
 <div>
 Welcome aboard to bounteous x Accolite Job Portal! We're thrilled to have you join our team and embark on this exciting journey with us.<br>
 As a registered employer on our job portal, you now have access to a range of features designed to streamline your hiring process and enhance your experience.

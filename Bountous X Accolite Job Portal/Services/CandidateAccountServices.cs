@@ -118,7 +118,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             var emailToken = Convert.ToBase64String(tokenBytes);
             userEmail.EmailToken = emailToken;
             userEmail.EmailConfirmExpiry = DateTime.Now.AddMinutes(5);
-            EmailData emailRef = new EmailData(userEmail.Email, "bounteous x Accolite Job Portal!", ConfirmEmailBody.EmailStringBody(userEmail.Email, userEmail.EmailToken));
+            EmailData emailRef = new EmailData(userEmail.Email, "bounteous x Accolite Job Portal!", ConfirmEmailBody.EmailStringBody(candidate.FirstName,userEmail.Email, userEmail.EmailToken));
             _emailService.SendEmail(emailRef);
 
             _dbContext.Entry(userEmail).State = EntityState.Modified;

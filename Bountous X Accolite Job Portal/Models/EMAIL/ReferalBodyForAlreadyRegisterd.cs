@@ -2,7 +2,7 @@
 {
     public static class ReferalBodyForAlreadyRegisterd
     {
-        public static string EmailStringBody()
+        public static string EmailStringBody(string name)
         {
 
             return $@"<html>
@@ -12,7 +12,7 @@
 <h1>You've Been Referred to bounteous x Accolite Job Portal!</h1>
 
 
-<h3>Dear User,</h3>
+<h3>Dear {name},</h3>
 We hope this email finds you well. We are excited to inform you that you've been referred to bounteous x Accolite  by one of our esteemed employees.
 <br>
 
