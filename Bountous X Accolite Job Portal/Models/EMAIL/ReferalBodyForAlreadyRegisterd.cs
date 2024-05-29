@@ -20,7 +20,7 @@ This referral is a testament to your skills and qualifications, and we are thril
 
 <h5>To take advantage of this referral and explore job opportunities with us, please follow these simple steps:</h5>
 <ol>
-<li>Visit the bounteous x Accolite Job Portal login page at http://localhost:4200/login .</li>
+<li>Visit the bounteous x Accolite Job Portal login page at https://kind-dune-058eee70f.5.azurestaticapps.net/login .</li>
 <li>Login to your account using the password using your credentials</li>
 <li>Once logged in, navigate to the ""Job Listings"" section to view our current job openings.</li>
 <li>Browse through the available positions and select the ones that align with your skills, experience, and career goals.</li>
