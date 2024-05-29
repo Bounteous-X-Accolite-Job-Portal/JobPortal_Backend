@@ -2,7 +2,7 @@
 {
     public static class ConfirmEmailBody
     {
-        public static string EmailStringBody(string email, string emailToken)
+        public static string EmailStringBody(string name ,string email, string emailToken)
         {
             return $@"<html>
 <head>
@@ -11,7 +11,7 @@
 <h1>Confirm Your Email Address</h1>
 
 
-<h3>Dear User</h3>
+<h3>Dear {name}</h3>
 Welcome to bounteous x Accolite Job Portal!
 Thank you for registering with us. Before you can access your account, we need to confirm your email address.
 

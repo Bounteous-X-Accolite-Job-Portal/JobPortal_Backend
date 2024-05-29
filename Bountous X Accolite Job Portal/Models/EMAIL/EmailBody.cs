@@ -2,7 +2,7 @@
 {
     public static class EmailBody
     {
-        public static string EmailStringBody(string email, string emailToken)
+        public static string EmailStringBody(string name , string email, string emailToken)
         {
             return $@"<html>
 <head>
@@ -11,7 +11,7 @@
 <h1>Reset Your bounteous x Accolite Job Portal Password</h1>
 
 
-<h3>Dear User,</h3>
+<h3>Dear {name},</h3>
 <div>
 
 It seems like you've forgotten your password for the bounteous x Accolite Job Portal. Not to worry, we're here to help you regain access to your account.<br>
