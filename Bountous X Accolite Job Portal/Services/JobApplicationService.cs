@@ -14,6 +14,8 @@ using PdfSharp.Drawing.Layout;
 using Bountous_X_Accolite_Job_Portal.Models.EMAIL;
 using PdfSharp.Fonts;
 using Bountous_X_Accolite_Job_Portal.Helpers;
+using Org.BouncyCastle.Ocsp;
+using Microsoft.AspNetCore.Builder;
 
 namespace Bountous_X_Accolite_Job_Portal.Services
 {
@@ -33,6 +35,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
         private readonly ICompanyService _companyService;
         private readonly IDistributedCache _cache;
         private readonly IEmailService _emailService;
+        private readonly IReferralService _referralService;
         public JobApplicationService(
             ApplicationDbContext applicationDbContext, 
             IJobStatusService jobStatusService, 
@@ -47,7 +50,8 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             IDegreeService degreeService,
             ICompanyService companyService,
             IDistributedCache cache,
-            IEmailService emailService
+            IEmailService emailService,
+            IReferralService referralService
         )
         {
             _dbContext = applicationDbContext;
@@ -64,6 +68,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             _companyService = companyService;
             _cache = cache;
             _emailService = emailService;
+            _referralService = referralService;
         }
 
         public async Task<JobApplicationResponseViewModel> GetJobApplicaionById(Guid Id)
@@ -93,6 +98,37 @@ namespace Bountous_X_Accolite_Job_Portal.Services
 
             response.Status = 200;
             response.Message = "Successfully retrieved job application.";
+            response.Application = new JobApplicationViewModel(application);
+            return response;
+        }
+
+        public async Task<JobApplicationResponseViewModel> GetClosedJobApplicaionById(Guid Id)
+        {
+            JobApplicationResponseViewModel response = new JobApplicationResponseViewModel();
+
+            string key = $"getClosedJobApplicationsById-{Id}";
+            string? getClosedJobApplicationsByIdFromCache = await _cache.GetStringAsync(key);
+
+            ClosedJobApplication application;
+            if (string.IsNullOrWhiteSpace(getClosedJobApplicationsByIdFromCache))
+            {
+                application = _dbContext.ClosedJobApplications.Find(Id);
+                if (application == null)
+                {
+                    response.Status = 404;
+                    response.Message = "Closed Application with this Id does not exist";
+                    return response;
+                }
+
+                await _cache.SetStringAsync(key, JsonSerializer.Serialize(application));
+            }
+            else
+            {
+                application = JsonSerializer.Deserialize<ClosedJobApplication>(getClosedJobApplicationsByIdFromCache);
+            }
+
+            response.Status = 200;
+            response.Message = "Successfully retrieved closed job application.";
             response.Application = new JobApplicationViewModel(application);
             return response;
         }
@@ -301,6 +337,40 @@ namespace Bountous_X_Accolite_Job_Portal.Services
                 return response;
             }
 
+            // check and change referal status
+            string key = $"getAllReferrals";
+            string? getAllReferralsFromCache = await _cache.GetStringAsync(key);
+
+            List<Referral> referrals;
+            if (string.IsNullOrWhiteSpace(getAllReferralsFromCache))
+            {
+                referrals = _dbContext.Referrals.ToList();
+                await _cache.SetStringAsync(key, JsonSerializer.Serialize(referrals));
+            }
+            else
+            {
+                referrals = JsonSerializer.Deserialize<List<Referral>>(getAllReferralsFromCache);
+            }
+
+            foreach (var item in referrals)
+            {
+                if(item.CandidateId == jobApplication.CandidateId && item.JobId == jobApplication.JobId)
+                {
+                    var checkStatusOfAddition = await _referralService.AddApplicationIdToReferral(item.ReferralId, jobApplication.ApplicationId);
+                    if (!checkStatusOfAddition)
+                    {
+                        _dbContext.JobApplications.Remove(jobApplication);
+                        await _dbContext.SaveChangesAsync();
+
+                        response = new JobApplicationResponseViewModel();
+                        response.Status = 500;
+                        response.Message = "Unable to apply to this job, please try again.";
+                        return response;
+                    }
+                    break;
+                }
+            }
+
             await _cache.RemoveAsync($"allJobApplications");
             await _cache.RemoveAsync($"getJobApplicationsByCandidateId-{jobApplication.CandidateId}");
             await _cache.RemoveAsync($"getJobApplicationsByJobId-{jobApplication.JobId}");
@@ -361,8 +431,39 @@ namespace Bountous_X_Accolite_Job_Portal.Services
                     return response;
                 }
 
-                ChangeInterviewApplicationToClosedApplication(ApplicationId, closedApplication.ClosedJobApplicationId);
+                await ChangeInterviewApplicationToClosedApplication(ApplicationId, closedApplication.ClosedJobApplicationId);
                 _dbContext.JobApplications.Remove(app);
+
+                // Add ClosedApplication Id to referral
+                string key = $"getAllReferrals";
+                string? getAllReferralsFromCache = await _cache.GetStringAsync(key);
+
+                List<Referral> referrals;
+                if (string.IsNullOrWhiteSpace(getAllReferralsFromCache))
+                {
+                    referrals = _dbContext.Referrals.ToList();
+                    await _cache.SetStringAsync(key, JsonSerializer.Serialize(referrals));
+                }
+                else
+                {
+                    referrals = JsonSerializer.Deserialize<List<Referral>>(getAllReferralsFromCache);
+                }
+
+                foreach (var item in referrals)
+                {
+                    if (item.ApplicationId != null && item.ApplicationId == app.ApplicationId)
+                    {
+                        var checkStatusOfAddition = await _referralService.AddClosedApplicationIdToReferral(item.ReferralId, closedApplication.ClosedJobApplicationId);
+                        if (!checkStatusOfAddition)
+                        {
+                            response = new JobApplicationResponseViewModel();
+                            response.Status = 500;
+                            response.Message = "Unable to apply to this job, please try again.";
+                            return response;
+                        }
+                        break;
+                    }
+                }
 
                 response.Application = new JobApplicationViewModel(closedApplication);
 
@@ -399,7 +500,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             return response;
         }
 
-        public async void ChangeInterviewApplicationToClosedApplication(Guid ApplicationId, Guid ClosedApplicationId)
+        public async Task<bool> ChangeInterviewApplicationToClosedApplication(Guid ApplicationId, Guid ClosedApplicationId)
         {
             string key = $"getAllInterviewsByApplicationId-{ApplicationId}";
             string? getAllInterviewsByApplicationIdFromCache = await _cache.GetStringAsync(key);
@@ -430,6 +531,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
 
             await _cache.RemoveAsync($"allInterviews");
             await _cache.RemoveAsync($"getAllInterviewsByApplicationId-{ApplicationId}");
+            return true;
         }
 
         public async Task<AllApplicantResponseViewModel> GetApplicantsByJobId(Guid JobId)
