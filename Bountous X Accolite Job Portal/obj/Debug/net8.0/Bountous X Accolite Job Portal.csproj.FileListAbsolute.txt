@@ -316,3 +316,9 @@ C:\Assignments\bxA Job Portal\JobPortal_Backend\Bountous X Accolite Job Portal\o
 C:\Assignments\bxA Job Portal\JobPortal_Backend\Bountous X Accolite Job Portal\obj\Debug\net8.0\Bountous X Accolite Job Portal.pdb
 C:\Assignments\bxA Job Portal\JobPortal_Backend\Bountous X Accolite Job Portal\obj\Debug\net8.0\Bountous X Accolite Job Portal.genruntimeconfig.cache
 C:\Assignments\bxA Job Portal\JobPortal_Backend\Bountous X Accolite Job Portal\obj\Debug\net8.0\ref\Bountous X Accolite Job Portal.dll
+C:\Users\vishal.s_INT1587\Desktop\JobPortal_WebAPI\Bountous X Accolite Job Portal\bin\Debug\net8.0\System.Web.Cors.dll
+C:\Users\vishal.s_INT1587\Desktop\JobPortal_WebAPI\Bountous X Accolite Job Portal\bin\Debug\net8.0\System.Net.Http.Formatting.dll
+C:\Users\vishal.s_INT1587\Desktop\JobPortal_WebAPI\Bountous X Accolite Job Portal\bin\Debug\net8.0\System.Web.Http.dll
+C:\Users\vishal.s_INT1587\Desktop\JobPortal_WebAPI\Bountous X Accolite Job Portal\bin\Debug\net8.0\System.Web.Http.Cors.dll
+C:\Users\vishal.s_INT1587\Desktop\JobPortal_WebAPI\Bountous X Accolite Job Portal\bin\Debug\net8.0\Newtonsoft.Json.dll
+C:\Users\vishal.s_INT1587\Desktop\JobPortal_WebAPI\Bountous X Accolite Job Portal\bin\Debug\net8.0\Newtonsoft.Json.Bson.dll
