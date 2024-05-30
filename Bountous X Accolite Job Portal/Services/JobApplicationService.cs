@@ -375,6 +375,9 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             await _cache.RemoveAsync($"getJobApplicationsByCandidateId-{jobApplication.CandidateId}");
             await _cache.RemoveAsync($"getJobApplicationsByJobId-{jobApplication.JobId}");
 
+            EmailData jobAppliedEmail = new EmailData(candidate.Candidate.Email, "bounteous x Accolite Job Portal!", JobAppliedEmail.EmailStringBody(candidate.Candidate.FirstName , job.job.JobCode , job.job.JobTitle));
+            _emailService.SendEmail(jobAppliedEmail);
+
             response = new JobApplicationResponseViewModel();
             response.Status = 200;
             response.Message = "Successfully applied too the job.";
