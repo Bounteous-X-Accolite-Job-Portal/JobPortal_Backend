@@ -10,6 +10,8 @@ using Microsoft.Extensions.Caching.Distributed;
 using System.Text.Json;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Cryptography;
+using Bountous_X_Accolite_Job_Portal.Models.JobApplicationModels;
+using Microsoft.AspNetCore.Builder;
 
 namespace Bountous_X_Accolite_Job_Portal.Services
 {
@@ -37,7 +39,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             Guid candidateId = Guid.Empty;
 
             int referralStatusId = await _jobStatusService.getInitialReferralStatus();
-            if(referralStatusId == -1)
+            if (referralStatusId == -1)
             {
                 response = new ReferralResponseViewModel();
                 response.Status = 404;
@@ -46,6 +48,40 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             }
 
             var user = _dbContext.Users.Where(item => String.Equals(item.Email, addReferral.Email)).FirstOrDefault();
+            if(user != null && user.EmpId != null)
+            {
+                response = new ReferralResponseViewModel();
+                response.Status = 403;
+                response.Message = "You are refering an employee which is not authorised.";
+                return response;
+            }
+
+            // check and change referal status
+            string key = $"getAllReferrals";
+            string? getAllReferralsFromCache = await _cache.GetStringAsync(key);
+
+            List<Referral> referrals;
+            if (string.IsNullOrWhiteSpace(getAllReferralsFromCache))
+            {
+                referrals = _dbContext.Referrals.ToList();
+                await _cache.SetStringAsync(key, JsonSerializer.Serialize(referrals));
+            }
+            else
+            {
+                referrals = JsonSerializer.Deserialize<List<Referral>>(getAllReferralsFromCache);
+            }
+
+            foreach (var item in referrals)
+            {
+                if (user != null && item.JobId == addReferral.JobId && item.CandidateId == user.CandidateId)
+                {
+                    response = new ReferralResponseViewModel();
+                    response.Status = 409;
+                    response.Message = "This user has already been referred.";
+                    return response;
+                }
+            }
+
             if (user == null)
             {
                 CandidateRegisterViewModel newCandidate = new CandidateRegisterViewModel();
