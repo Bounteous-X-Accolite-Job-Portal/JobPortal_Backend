@@ -83,5 +83,13 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
         {
             return await _jobStatusService.GetAllStatus();
         }
+
+        [HttpGet]
+        [Route("getSuccessStatus")]
+        [Authorize]
+        public async Task<int> GetSuccessStatus()
+        {
+            return await _jobStatusService.getInitialSuccesstatus();
+        }
     }
 }
