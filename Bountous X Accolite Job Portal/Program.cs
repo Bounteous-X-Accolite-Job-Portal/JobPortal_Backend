@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Bountous_X_Accolite_Job_Portal.JwtFeatures;
+using static Org.BouncyCastle.Math.EC.ECCurve;
+using PdfSharp.Charting;
 
 namespace Bountous_X_Accolite_Job_Portal
 {
@@ -54,8 +56,15 @@ namespace Bountous_X_Accolite_Job_Portal
                     policy.WithOrigins("http://localhost:4200", "https://kind-dune-058eee70f.5.azurestaticapps.net").SetIsOriginAllowedToAllowWildcardSubdomains().AllowAnyHeader().AllowAnyMethod();
                 }));
 
-           // Adding JWT Authentication
-           var jwtSettings = builder.Configuration.GetSection("JwtSettings");
+            // Add handler to deal with preflight requests, this is the important part
+            builder.Services.AddTransient<HttpClient>();
+            builder.Services.AddTransient<PreflightRequestsHandler>();
+            builder.Services.AddHttpClient("PreflightRequestsHandlerClient")
+                .AddHttpMessageHandler<PreflightRequestsHandler>();
+
+
+            // Adding JWT Authentication
+            var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 
             builder.Services.AddAuthentication(opt =>
             {
