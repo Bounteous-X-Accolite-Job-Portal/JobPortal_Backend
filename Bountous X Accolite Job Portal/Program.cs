@@ -51,7 +51,7 @@ namespace Bountous_X_Accolite_Job_Portal
             builder.Services.AddCors(options => options.AddPolicy(name: "FrontendUI",
                 policy =>
                 {
-                    policy.WithOrigins("http://localhost:4200", "https://kind-dune-058eee70f.5.azurestaticapps.net").AllowAnyHeader().AllowAnyMethod();
+                    policy.WithOrigins("http://localhost:4200", "https://kind-dune-058eee70f.5.azurestaticapps.net").SetIsOriginAllowedToAllowWildcardSubdomains().AllowAnyHeader().AllowAnyMethod();
                 }));
 
            // Adding JWT Authentication
