@@ -32,11 +32,11 @@ namespace Bountous_X_Accolite_Job_Portal
 
             builder.Services.Configure<IdentityOptions>(options =>
             {
-                options.Password.RequiredLength = 4;
-                options.Password.RequireLowercase = false;
-                options.Password.RequireUppercase = false;
-                options.Password.RequireDigit = false;
-                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequiredLength = 6;
+                options.Password.RequireLowercase = true;
+                options.Password.RequireUppercase = true;
+                options.Password.RequireDigit = true;
+                options.Password.RequireNonAlphanumeric = true;
             });
 
             builder.Services.AddIdentity<User, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = false)
@@ -47,15 +47,14 @@ namespace Bountous_X_Accolite_Job_Portal
             options => options.SignIn.RequireConfirmedEmail = false);
 
 
-
             builder.Services.AddCors(options => options.AddPolicy(name: "FrontendUI",
                 policy =>
                 {
                     policy.WithOrigins("http://localhost:4200", "https://kind-dune-058eee70f.5.azurestaticapps.net").AllowAnyHeader().AllowAnyMethod();
                 }));
 
-           // Adding JWT Authentication
-           var jwtSettings = builder.Configuration.GetSection("JwtSettings");
+            // Adding JWT Authentication
+            var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 
             builder.Services.AddAuthentication(opt =>
             {

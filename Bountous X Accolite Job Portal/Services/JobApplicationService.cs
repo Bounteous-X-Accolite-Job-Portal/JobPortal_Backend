@@ -398,6 +398,14 @@ namespace Bountous_X_Accolite_Job_Portal.Services
                 return response;
             }
 
+            if(application.Application.StatusId == (await _jobStatusService.getInitialSuccesstatus()))
+            {
+                response = new JobApplicationResponseViewModel();
+                response.Status = 409;
+                response.Message = "This application has been already offered a position.";
+                return response;
+            }
+
             var status = await _jobStatusService.GetStatusById(StatusId);
             if(status.StatusViewModel == null)
             {
