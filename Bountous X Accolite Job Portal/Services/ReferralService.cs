@@ -100,6 +100,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             await _dbContext.SaveChangesAsync();
 
             await _cache.RemoveAsync($"getAllReferralsByEmployeeId-{EmpId}");
+            await _cache.RemoveAsync($"getAllReferrals");
 
             response = new ReferralResponseViewModel();
             response.Status = 200;
@@ -136,6 +137,65 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             response.Message = "Successfully retrieved all referrals of loggedIn candidate";
             response.Referrals = allReferrals;
             return response;
+        }
+
+        public async Task<bool> AddApplicationIdToReferral(Guid ReferralId, Guid ApplicationId)
+        {
+            var referral = _dbContext.Referrals.Find(ReferralId);
+            if (referral == null)
+            {
+                return false;
+            }
+
+            referral.ApplicationId = ApplicationId;
+
+            _dbContext.Referrals.Update(referral);
+            await _dbContext.SaveChangesAsync();
+
+            await _cache.RemoveAsync($"getAllReferralsByEmployeeId-{referral.EmpId}");
+            await _cache.RemoveAsync($"getAllReferrals");
+
+            return true;
+        }
+
+        public async Task<bool> AddClosedApplicationIdToReferral(Guid ReferralId, Guid ClosedApplicationId)
+        {
+            var referral = _dbContext.Referrals.Find(ReferralId);
+            if (referral == null)
+            {
+                return false;
+            }
+
+            referral.ApplicationId = null;
+            referral.ClosedApplicationId = ClosedApplicationId;
+
+            _dbContext.Referrals.Update(referral);
+            await _dbContext.SaveChangesAsync();
+
+            await _cache.RemoveAsync($"getAllReferralsByEmployeeId-{referral.EmpId}");
+            await _cache.RemoveAsync($"getAllReferrals");
+
+            return true;
+        }
+
+        public async Task<bool> AddClosedJobIdToReferral(Guid ReferralId, Guid ClosedJobId)
+        {
+            var referral = _dbContext.Referrals.Find(ReferralId);
+            if (referral == null)
+            {
+                return false;
+            }
+
+            referral.JobId = null;
+            referral.ClosedJobId = ClosedJobId;
+
+            _dbContext.Referrals.Update(referral);
+            await _dbContext.SaveChangesAsync();
+
+            await _cache.RemoveAsync($"getAllReferralsByEmployeeId-{referral.EmpId}");
+            await _cache.RemoveAsync($"getAllReferrals");
+
+            return true;
         }
     }
 }

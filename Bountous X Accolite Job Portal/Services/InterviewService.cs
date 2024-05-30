@@ -77,8 +77,8 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             EmailData emailInterviewCandidate = new EmailData(candidate.Candidate.Email , "bounteous x Accolite Job Portal!" , InterviewSendEmail.EmailStringBody(candidate.Candidate.FirstName , newInterview.Link ,newInterview.InterviewDate, newInterview.InterviewTime));
             _emailService.SendEmail(emailInterviewCandidate);
 
-            EmailData emailInterviewEmployee = new EmailData(interviewer.Employee.Email, "bounteous x Accolite Job Portal!", InterviewEmployeeEmail.EmailStringBody(interviewer.Employee.FirstName , candidate.Candidate.FirstName, newInterview.Link, newInterview.InterviewDate, newInterview.InterviewTime));
-            _emailService.SendEmail(emailInterviewEmployee);
+            //EmailData emailInterviewEmployee = new EmailData(interviewer.Employee.Email, "bounteous x Accolite Job Portal!", InterviewEmployeeEmail.EmailStringBody(interviewer.Employee.FirstName , candidate.Candidate.FirstName, newInterview.Link, newInterview.InterviewDate, newInterview.InterviewTime));
+            //_emailService.SendEmail(emailInterviewEmployee);
 
             if (newInterview == null)
             {

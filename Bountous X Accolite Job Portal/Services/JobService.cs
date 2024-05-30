@@ -13,10 +13,12 @@ namespace Bountous_X_Accolite_Job_Portal.Services
     {
         private readonly ApplicationDbContext _context;
         private readonly IDistributedCache _cache;
-        public JobService(ApplicationDbContext context, IDistributedCache cache)
+        private readonly IReferralService _referralService;
+        public JobService(ApplicationDbContext context, IDistributedCache cache, IReferralService referralService)
         {
             _context = context;
-            _cache = cache; 
+            _cache = cache;
+            _referralService = referralService;
         }
 
         public async Task<AllClosedJobResponseViewModel> GetAllClosedJobs()
@@ -282,6 +284,30 @@ namespace Bountous_X_Accolite_Job_Portal.Services
                     await _cache.RemoveAsync($"allClosedJobApplications");
                 }
 
+                // Add ClosedApplication Id to referral
+                key = $"getAllReferrals";
+                string? getAllReferralsFromCache = await _cache.GetStringAsync(key);
+
+                List<Referral> referrals;
+                if (string.IsNullOrWhiteSpace(getAllReferralsFromCache))
+                {
+                    referrals = _context.Referrals.ToList();
+                    await _cache.SetStringAsync(key, JsonSerializer.Serialize(referrals));
+                }
+                else
+                {
+                    referrals = JsonSerializer.Deserialize<List<Referral>>(getAllReferralsFromCache);
+                }
+
+                Dictionary<Guid, Referral> referal = new Dictionary<Guid, Referral>();
+                foreach (var item in referrals)
+                {
+                    if (item.ClosedJobId == null)
+                    {
+                        referal.Add((Guid)item.JobId, item);
+                    }
+                }
+
                 Dictionary<Guid, Guid> closedDic = new Dictionary<Guid, Guid>();
                 foreach (KeyValuePair<Guid, Job> entry in dic)
                 {
@@ -290,6 +316,12 @@ namespace Bountous_X_Accolite_Job_Portal.Services
                     await _context.ClosedJobs.AddAsync(closedJob);
 
                     closedDic.Add(entry.Key, closedJob.ClosedJobId);
+
+                    if (referal.ContainsKey(entry.Key))
+                    {
+                        var refe = referal[entry.Key];
+                        await _referralService.AddClosedJobIdToReferral(refe.ReferralId, closedJob.ClosedJobId);
+                    }
 
                     await _cache.RemoveAsync($"getAllClosedJobsByEmployeeId-{entry.Value.EmployeeId}");
                 }
