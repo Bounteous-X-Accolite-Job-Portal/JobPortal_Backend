@@ -3,12 +3,20 @@
   "WorkspaceRootPath": "C:\\Assignments\\bxA Job Portal\\JobPortal_Backend\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{0FFFF4ED-1FD1-4AA5-B96D-A907C3FFB4F6}|Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj|c:\\assignments\\bxa job portal\\jobportal_backend\\bountous x accolite job portal\\models\\email\\interviewemployeeemail.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0FFFF4ED-1FD1-4AA5-B96D-A907C3FFB4F6}|Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj|solutionrelative:bountous x accolite job portal\\models\\email\\interviewemployeeemail.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{0FFFF4ED-1FD1-4AA5-B96D-A907C3FFB4F6}|Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj|c:\\assignments\\bxa job portal\\jobportal_backend\\bountous x accolite job portal\\services\\interviewservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0FFFF4ED-1FD1-4AA5-B96D-A907C3FFB4F6}|Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj|solutionrelative:bountous x accolite job portal\\services\\interviewservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0FFFF4ED-1FD1-4AA5-B96D-A907C3FFB4F6}|Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj|c:\\assignments\\bxa job portal\\jobportal_backend\\bountous x accolite job portal\\services\\emailservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0FFFF4ED-1FD1-4AA5-B96D-A907C3FFB4F6}|Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj|solutionrelative:bountous x accolite job portal\\services\\emailservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{0FFFF4ED-1FD1-4AA5-B96D-A907C3FFB4F6}|Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj|c:\\assignments\\bxa job portal\\jobportal_backend\\bountous x accolite job portal\\services\\candidateaccountservices.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{0FFFF4ED-1FD1-4AA5-B96D-A907C3FFB4F6}|Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj|solutionrelative:bountous x accolite job portal\\services\\candidateaccountservices.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{0FFFF4ED-1FD1-4AA5-B96D-A907C3FFB4F6}|Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj|c:\\assignments\\bxa job portal\\jobportal_backend\\bountous x accolite job portal\\models\\email\\interviewemployeeemail.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{0FFFF4ED-1FD1-4AA5-B96D-A907C3FFB4F6}|Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj|solutionrelative:bountous x accolite job portal\\models\\email\\interviewemployeeemail.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{0FFFF4ED-1FD1-4AA5-B96D-A907C3FFB4F6}|Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj|c:\\assignments\\bxa job portal\\jobportal_backend\\bountous x accolite job portal\\controllers\\candidateaccountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -29,10 +37,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{0FFFF4ED-1FD1-4AA5-B96D-A907C3FFB4F6}|Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj|c:\\assignments\\bxa job portal\\jobportal_backend\\bountous x accolite job portal\\services\\jobapplicationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{0FFFF4ED-1FD1-4AA5-B96D-A907C3FFB4F6}|Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj|solutionrelative:bountous x accolite job portal\\services\\jobapplicationservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0FFFF4ED-1FD1-4AA5-B96D-A907C3FFB4F6}|Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj|c:\\assignments\\bxa job portal\\jobportal_backend\\bountous x accolite job portal\\services\\interviewservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0FFFF4ED-1FD1-4AA5-B96D-A907C3FFB4F6}|Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj|solutionrelative:bountous x accolite job portal\\services\\interviewservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{0FFFF4ED-1FD1-4AA5-B96D-A907C3FFB4F6}|Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj|c:\\assignments\\bxa job portal\\jobportal_backend\\bountous x accolite job portal\\services\\employeeaccountservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -65,10 +69,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{0FFFF4ED-1FD1-4AA5-B96D-A907C3FFB4F6}|Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj|c:\\assignments\\bxa job portal\\jobportal_backend\\bountous x accolite job portal\\services\\educationinstitutionservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{0FFFF4ED-1FD1-4AA5-B96D-A907C3FFB4F6}|Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj|solutionrelative:bountous x accolite job portal\\services\\educationinstitutionservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{0FFFF4ED-1FD1-4AA5-B96D-A907C3FFB4F6}|Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj|c:\\assignments\\bxa job portal\\jobportal_backend\\bountous x accolite job portal\\services\\emailservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{0FFFF4ED-1FD1-4AA5-B96D-A907C3FFB4F6}|Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj|solutionrelative:bountous x accolite job portal\\services\\emailservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{0FFFF4ED-1FD1-4AA5-B96D-A907C3FFB4F6}|Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj|c:\\assignments\\bxa job portal\\jobportal_backend\\bountous x accolite job portal\\models\\email\\confirmemailbody.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -190,7 +190,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 4,
               "Title": "CandidateAccountController.cs",
               "DocumentMoniker": "C:\\Assignments\\bxA Job Portal\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Controllers\\CandidateAccountController.cs",
               "RelativeDocumentMoniker": "Bountous X Accolite Job Portal\\Controllers\\CandidateAccountController.cs",
@@ -198,12 +198,11 @@
               "RelativeToolTip": "Bountous X Accolite Job Portal\\Controllers\\CandidateAccountController.cs",
               "ViewState": "AQIAAD8AAAAAAAAAAAAUwEoAAAA+AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-29T16:18:27.821Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-29T16:18:27.821Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "CandidateAccountServices.cs",
               "DocumentMoniker": "C:\\Assignments\\bxA Job Portal\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Services\\CandidateAccountServices.cs",
               "RelativeDocumentMoniker": "Bountous X Accolite Job Portal\\Services\\CandidateAccountServices.cs",
@@ -216,7 +215,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 5,
               "Title": "EmailController.cs",
               "DocumentMoniker": "C:\\Assignments\\bxA Job Portal\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Controllers\\EmailController.cs",
               "RelativeDocumentMoniker": "Bountous X Accolite Job Portal\\Controllers\\EmailController.cs",
@@ -224,12 +223,11 @@
               "RelativeToolTip": "Bountous X Accolite Job Portal\\Controllers\\EmailController.cs",
               "ViewState": "AQIAACYAAAAAAAAAAAASwDMAAAA/AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-29T11:33:30.744Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-29T11:33:30.744Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 8,
               "Title": "JobApplicationService.cs",
               "DocumentMoniker": "C:\\Assignments\\bxA Job Portal\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Services\\JobApplicationService.cs",
               "RelativeDocumentMoniker": "Bountous X Accolite Job Portal\\Services\\JobApplicationService.cs",
@@ -237,12 +235,11 @@
               "RelativeToolTip": "Bountous X Accolite Job Portal\\Services\\JobApplicationService.cs",
               "ViewState": "AQIAAGkBAAAAAAAAAAAlwLMCAABWAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-29T16:11:23.95Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-29T16:11:23.95Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 7,
               "Title": "ReferralService.cs",
               "DocumentMoniker": "C:\\Assignments\\bxA Job Portal\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Services\\ReferralService.cs",
               "RelativeDocumentMoniker": "Bountous X Accolite Job Portal\\Services\\ReferralService.cs",
@@ -250,12 +247,11 @@
               "RelativeToolTip": "Bountous X Accolite Job Portal\\Services\\ReferralService.cs",
               "ViewState": "AQIAAEwAAAAAAAAAAAAAAFsAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-29T11:50:52.053Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-29T11:50:52.053Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 9,
               "Title": "EmployeeAccountService.cs",
               "DocumentMoniker": "C:\\Assignments\\bxA Job Portal\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Services\\EmployeeAccountService.cs",
               "RelativeDocumentMoniker": "Bountous X Accolite Job Portal\\Services\\EmployeeAccountService.cs",
@@ -263,8 +259,7 @@
               "RelativeToolTip": "Bountous X Accolite Job Portal\\Services\\EmployeeAccountService.cs",
               "ViewState": "AQIAAHEAAAAAAAAAAAArwK0AAABSAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-29T15:59:37.157Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-29T15:59:37.157Z"
             },
             {
               "$type": "Document",
@@ -276,8 +271,7 @@
               "RelativeToolTip": "Bountous X Accolite Job Portal\\Models\\EMAIL\\EmplyoeeRegisterdMail.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAkAAAAHAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-29T16:03:47.483Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-29T16:03:47.483Z"
             },
             {
               "$type": "Document",
@@ -289,8 +283,7 @@
               "RelativeToolTip": "Bountous X Accolite Job Portal\\Models\\Employee.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAsAAAAbAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-29T11:34:23.25Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-29T11:34:23.25Z"
             },
             {
               "$type": "Document",
@@ -302,8 +295,7 @@
               "RelativeToolTip": "Bountous X Accolite Job Portal\\Controllers\\InterviewController.cs",
               "ViewState": "AQIAAFUAAAAAAAAAAAAcwG4AAAANAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-29T11:29:42.047Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-29T11:29:42.047Z"
             }
           ]
         },
@@ -313,33 +305,7 @@
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "InterviewService.cs",
-              "DocumentMoniker": "C:\\Assignments\\bxA Job Portal\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Services\\InterviewService.cs",
-              "RelativeDocumentMoniker": "Bountous X Accolite Job Portal\\Services\\InterviewService.cs",
-              "ToolTip": "C:\\Assignments\\bxA Job Portal\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Services\\InterviewService.cs",
-              "RelativeToolTip": "Bountous X Accolite Job Portal\\Services\\InterviewService.cs",
-              "ViewState": "AQIAACkAAAAAAAAAAAAAADgAAAAMAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-29T11:35:19.083Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "EmailBody.cs",
-              "DocumentMoniker": "C:\\Assignments\\bxA Job Portal\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Models\\EMAIL\\EmailBody.cs",
-              "RelativeDocumentMoniker": "Bountous X Accolite Job Portal\\Models\\EMAIL\\EmailBody.cs",
-              "ToolTip": "C:\\Assignments\\bxA Job Portal\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Models\\EMAIL\\EmailBody.cs",
-              "RelativeToolTip": "Bountous X Accolite Job Portal\\Models\\EMAIL\\EmailBody.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAqwA0AAAAOAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-29T15:56:20.998Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 3,
               "Title": "InterviewEmployeeEmail.cs",
               "DocumentMoniker": "C:\\Assignments\\bxA Job Portal\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Models\\EMAIL\\InterviewEmployeeEmail.cs",
               "RelativeDocumentMoniker": "Bountous X Accolite Job Portal\\Models\\EMAIL\\InterviewEmployeeEmail.cs",
@@ -352,7 +318,45 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 1,
+              "Title": "EmailService.cs",
+              "DocumentMoniker": "C:\\Assignments\\bxA Job Portal\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Services\\EmailService.cs",
+              "RelativeDocumentMoniker": "Bountous X Accolite Job Portal\\Services\\EmailService.cs",
+              "ToolTip": "C:\\Assignments\\bxA Job Portal\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Services\\EmailService.cs",
+              "RelativeToolTip": "Bountous X Accolite Job Portal\\Services\\EmailService.cs",
+              "ViewState": "AQIAAB0AAAAAAAAAAAAlwCUAAAAjAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-29T15:58:53.956Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "InterviewService.cs",
+              "DocumentMoniker": "C:\\Assignments\\bxA Job Portal\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Services\\InterviewService.cs",
+              "RelativeDocumentMoniker": "Bountous X Accolite Job Portal\\Services\\InterviewService.cs",
+              "ToolTip": "C:\\Assignments\\bxA Job Portal\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Services\\InterviewService.cs",
+              "RelativeToolTip": "Bountous X Accolite Job Portal\\Services\\InterviewService.cs",
+              "ViewState": "AQIAAEcAAAAAAAAAAAAAAFAAAAAMAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-29T11:35:19.083Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "EmailBody.cs",
+              "DocumentMoniker": "C:\\Assignments\\bxA Job Portal\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Models\\EMAIL\\EmailBody.cs",
+              "RelativeDocumentMoniker": "Bountous X Accolite Job Portal\\Models\\EMAIL\\EmailBody.cs",
+              "ToolTip": "C:\\Assignments\\bxA Job Portal\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Models\\EMAIL\\EmailBody.cs",
+              "RelativeToolTip": "Bountous X Accolite Job Portal\\Models\\EMAIL\\EmailBody.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAqwA0AAAAOAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-05-29T15:56:20.998Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
               "Title": "AuthService.cs",
               "DocumentMoniker": "C:\\Assignments\\bxA Job Portal\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Services\\AuthService.cs",
               "RelativeDocumentMoniker": "Bountous X Accolite Job Portal\\Services\\AuthService.cs",
@@ -360,12 +364,11 @@
               "RelativeToolTip": "Bountous X Accolite Job Portal\\Services\\AuthService.cs",
               "ViewState": "AQIAAFEAAAAAAAAAAAAowAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-29T15:58:04.35Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-29T15:58:04.35Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 11,
               "Title": "CandidateExperienceService.cs",
               "DocumentMoniker": "C:\\Assignments\\bxA Job Portal\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Services\\CandidateExperienceService.cs",
               "RelativeDocumentMoniker": "Bountous X Accolite Job Portal\\Services\\CandidateExperienceService.cs",
@@ -373,12 +376,11 @@
               "RelativeToolTip": "Bountous X Accolite Job Portal\\Services\\CandidateExperienceService.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-29T16:13:33.566Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-29T16:13:33.566Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 12,
               "Title": "CompanyService.cs",
               "DocumentMoniker": "C:\\Assignments\\bxA Job Portal\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Services\\CompanyService.cs",
               "RelativeDocumentMoniker": "Bountous X Accolite Job Portal\\Services\\CompanyService.cs",
@@ -386,12 +388,11 @@
               "RelativeToolTip": "Bountous X Accolite Job Portal\\Services\\CompanyService.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-29T16:13:30.297Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-29T16:13:30.297Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 13,
               "Title": "DegreeService.cs",
               "DocumentMoniker": "C:\\Assignments\\bxA Job Portal\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Services\\DegreeService.cs",
               "RelativeDocumentMoniker": "Bountous X Accolite Job Portal\\Services\\DegreeService.cs",
@@ -399,12 +400,11 @@
               "RelativeToolTip": "Bountous X Accolite Job Portal\\Services\\DegreeService.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-29T16:13:27.243Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-29T16:13:27.243Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 14,
               "Title": "DesignationService.cs",
               "DocumentMoniker": "C:\\Assignments\\bxA Job Portal\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Services\\DesignationService.cs",
               "RelativeDocumentMoniker": "Bountous X Accolite Job Portal\\Services\\DesignationService.cs",
@@ -412,12 +412,11 @@
               "RelativeToolTip": "Bountous X Accolite Job Portal\\Services\\DesignationService.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-29T16:13:24.088Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-29T16:13:24.088Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 15,
               "Title": "DesignationWithPrivilegeService.cs",
               "DocumentMoniker": "C:\\Assignments\\bxA Job Portal\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Services\\DesignationWithPrivilegeService.cs",
               "RelativeDocumentMoniker": "Bountous X Accolite Job Portal\\Services\\DesignationWithPrivilegeService.cs",
@@ -425,12 +424,11 @@
               "RelativeToolTip": "Bountous X Accolite Job Portal\\Services\\DesignationWithPrivilegeService.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-29T16:13:21.235Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-29T16:13:21.235Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 15,
+              "DocumentIndex": 16,
               "Title": "EducationInstitutionService.cs",
               "DocumentMoniker": "C:\\Assignments\\bxA Job Portal\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Services\\EducationInstitutionService.cs",
               "RelativeDocumentMoniker": "Bountous X Accolite Job Portal\\Services\\EducationInstitutionService.cs",
@@ -438,8 +436,7 @@
               "RelativeToolTip": "Bountous X Accolite Job Portal\\Services\\EducationInstitutionService.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-29T16:13:19.009Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-29T16:13:19.009Z"
             },
             {
               "$type": "Document",
@@ -451,21 +448,7 @@
               "RelativeToolTip": "Bountous X Accolite Job Portal\\Models\\EMAIL\\ConfirmEmailBody.cs",
               "ViewState": "AQIAABAAAAAAAAAAAAAgwAkAAAAGAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-29T15:55:49.865Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 16,
-              "Title": "EmailService.cs",
-              "DocumentMoniker": "C:\\Assignments\\bxA Job Portal\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Services\\EmailService.cs",
-              "RelativeDocumentMoniker": "Bountous X Accolite Job Portal\\Services\\EmailService.cs",
-              "ToolTip": "C:\\Assignments\\bxA Job Portal\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Services\\EmailService.cs",
-              "RelativeToolTip": "Bountous X Accolite Job Portal\\Services\\EmailService.cs",
-              "ViewState": "AQIAADAAAAAAAAAAAAAowAAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-29T15:58:53.956Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-29T15:55:49.865Z"
             },
             {
               "$type": "Document",
@@ -477,8 +460,7 @@
               "RelativeToolTip": "Bountous X Accolite Job Portal\\Models\\EMAIL\\EmailData.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-29T11:59:27.308Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-29T11:59:27.308Z"
             },
             {
               "$type": "Document",
@@ -490,8 +472,7 @@
               "RelativeToolTip": "Bountous X Accolite Job Portal\\Models\\EMAIL\\InterviewSendEmail.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAABUAAAAFAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-29T11:59:20.873Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-29T11:59:20.873Z"
             },
             {
               "$type": "Document",
@@ -503,8 +484,7 @@
               "RelativeToolTip": "Bountous X Accolite Job Portal\\Models\\EMAIL\\OfferLetterEmailBody.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAQAAAA4AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-29T16:05:13.858Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-29T16:05:13.858Z"
             },
             {
               "$type": "Document",
@@ -516,8 +496,7 @@
               "RelativeToolTip": "Bountous X Accolite Job Portal\\Models\\EMAIL\\OfferLetterEmailData.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-29T16:06:17.959Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-29T16:06:17.959Z"
             },
             {
               "$type": "Document",
@@ -529,8 +508,7 @@
               "RelativeToolTip": "Bountous X Accolite Job Portal\\Models\\EMAIL\\ReferalBodyForAlreadyRegisterd.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAA0AAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-29T16:06:19.676Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-29T16:06:19.676Z"
             },
             {
               "$type": "Document",
@@ -542,8 +520,7 @@
               "RelativeToolTip": "Bountous X Accolite Job Portal\\Models\\EMAIL\\ReferalEmailBody.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAsAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-29T16:06:52.433Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-29T16:06:52.433Z"
             },
             {
               "$type": "Document",
@@ -555,8 +532,7 @@
               "RelativeToolTip": "Bountous X Accolite Job Portal\\Models\\EMAIL\\ReferalPasswordDTO.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-29T16:07:19.387Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-29T16:07:19.387Z"
             },
             {
               "$type": "Document",
@@ -568,8 +544,7 @@
               "RelativeToolTip": "Bountous X Accolite Job Portal\\Models\\EMAIL\\ResetPasswordDTO.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-29T16:07:20.512Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-29T16:07:20.512Z"
             },
             {
               "$type": "Document",
@@ -581,8 +556,7 @@
               "RelativeToolTip": "Bountous X Accolite Job Portal\\Models\\EMAIL\\ConfirmPasswordDTO.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-29T15:56:19.54Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-29T15:56:19.54Z"
             }
           ]
         }
