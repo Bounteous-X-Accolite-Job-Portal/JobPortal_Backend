@@ -1,13 +1,13 @@
-﻿using Bountous_X_Accolite_Job_Portal.Data;
-using Bountous_X_Accolite_Job_Portal.Models.AuthenticationViewModel.CandidateViewModels;
+﻿using System.Security.Cryptography;
+using System.Text.Json;
+using Bountous_X_Accolite_Job_Portal.Data;
 using Bountous_X_Accolite_Job_Portal.Models;
+using Bountous_X_Accolite_Job_Portal.Models.AuthenticationViewModel.CandidateViewModels;
+using Bountous_X_Accolite_Job_Portal.Models.EMAIL;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
 using Microsoft.AspNetCore.Identity;
-using Bountous_X_Accolite_Job_Portal.Models.EMAIL;
-using Microsoft.Extensions.Caching.Distributed;
-using System.Text.Json;
-using System.Security.Cryptography;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Distributed;
 
 namespace Bountous_X_Accolite_Job_Portal.Services
 {
@@ -118,7 +118,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             var emailToken = Convert.ToBase64String(tokenBytes);
             userEmail.EmailToken = emailToken;
             userEmail.EmailConfirmExpiry = DateTime.Now.AddMinutes(5);
-            EmailData emailRef = new EmailData(userEmail.Email, "bounteous x Accolite Job Portal!", ConfirmEmailBody.EmailStringBody(candidate.FirstName,userEmail.Email, userEmail.EmailToken));
+            EmailData emailRef = new EmailData(userEmail.Email, "bounteous x Accolite Job Portal!", ConfirmEmailBody.EmailStringBody(candidate.FirstName, userEmail.Email, userEmail.EmailToken));
             _emailService.SendEmail(emailRef);
 
             _dbContext.Entry(userEmail).State = EntityState.Modified;
@@ -168,8 +168,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             candidate.LastName = updatedCandidate.LastName;
             candidate.Phone = updatedCandidate.Phone;
             candidate.AddressLine1 = updatedCandidate.AddressLine1;
-            candidate.City = updatedCandidate.City;
-            candidate.State = updatedCandidate.State;
+            candidate.City = updatedCandidate.City; candidate.State = updatedCandidate.State;
             candidate.Country = updatedCandidate.Country;
             candidate.ZipCode = updatedCandidate.ZipCode;
 
