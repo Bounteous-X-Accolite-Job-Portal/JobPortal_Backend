@@ -2,7 +2,7 @@ namespace Bountous_X_Accolite_Job_Portal.Models.EMAIL
 {
     public static class InterviewSendEmail
     {
-        public static string EmailStringBody(string name,string link , DateOnly? InterviewDate , TimeOnly? InterviewTime)
+        public static string EmailStringBody(string name, string link, DateOnly? InterviewDate, TimeOnly? InterviewTime)
         {
             return $@"<html>
 <head>
