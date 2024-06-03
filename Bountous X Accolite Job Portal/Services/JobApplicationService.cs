@@ -388,16 +388,29 @@ namespace Bountous_X_Accolite_Job_Portal.Services
         {
             JobApplicationResponseViewModel response;
 
-            var application = await GetJobApplicaionById(ApplicationId);
-            if(application.Application == null)
-            {
-                response = new JobApplicationResponseViewModel();
-                response.Status = 404;
-                response.Message = "Application with this Id does not exist.";
-                return response;
-            }
+            string key = $"getJobApplicationsById-{ApplicationId}";
+            string? getJobApplicationsByIdFromCache = await _cache.GetStringAsync(key);
 
-            if(application.Application.StatusId == (await _jobStatusService.getInitialSuccesstatus()))
+            JobApplication application;
+            if (string.IsNullOrWhiteSpace(getJobApplicationsByIdFromCache))
+            {
+                application = _dbContext.JobApplications.Find(ApplicationId);
+                if (application == null)
+                {
+                    response = new JobApplicationResponseViewModel();
+                    response.Status = 404;
+                    response.Message = "Application with this Id does not exist";
+                    return response;
+                }
+
+                await _cache.SetStringAsync(key, JsonSerializer.Serialize(application));
+            }
+            else
+            {
+                application = JsonSerializer.Deserialize<JobApplication>(getJobApplicationsByIdFromCache);
+            }
+            
+            if(application.StatusId == (await _jobStatusService.getInitialSuccesstatus()))
             {
                 response = new JobApplicationResponseViewModel();
                 response.Status = 409;
@@ -418,17 +431,9 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             response.Status = 200;
             response.Message = "Successfully changed the status of application.";
 
-            JobApplication app = new JobApplication();
-            app.ApplicationId = application.Application.ApplicationId;
-            app.CandidateId = application.Application.CandidateId;
-            app.JobId = application.Application.JobId;
-            app.AppliedOn = application.Application.AppliedOn;
-            app.ClosedJobId = application.Application.ClosedJobId;
-            app.StatusId = application.Application.StatusId;
-
             if (await _jobStatusService.IsRejectedStatus(StatusId))
             {
-                ClosedJobApplication closedApplication = new ClosedJobApplication(app);
+                ClosedJobApplication closedApplication = new ClosedJobApplication(application);
                 closedApplication.StatusId = StatusId;
 
                 await _dbContext.ClosedJobApplications.AddAsync(closedApplication);
@@ -442,10 +447,10 @@ namespace Bountous_X_Accolite_Job_Portal.Services
                 }
 
                 await ChangeInterviewApplicationToClosedApplication(ApplicationId, closedApplication.ClosedJobApplicationId);
-                _dbContext.JobApplications.Remove(app);
+                _dbContext.JobApplications.Remove(application);
 
                 // Add ClosedApplication Id to referral
-                string key = $"getAllReferrals";
+                key = $"getAllReferrals";
                 string? getAllReferralsFromCache = await _cache.GetStringAsync(key);
 
                 List<Referral> referrals;
@@ -461,7 +466,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
 
                 foreach (var item in referrals)
                 {
-                    if (item.ApplicationId != null && item.ApplicationId == app.ApplicationId)
+                    if (item.ApplicationId != null && item.ApplicationId == application.ApplicationId)
                     {
                         var checkStatusOfAddition = await _referralService.AddClosedApplicationIdToReferral(item.ReferralId, closedApplication.ClosedJobApplicationId);
                         if (!checkStatusOfAddition)
@@ -478,7 +483,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
                 response.Application = new JobApplicationViewModel(closedApplication);
 
                 await _cache.RemoveAsync($"allClosedJobApplications");
-                await _cache.RemoveAsync($"getClosedJobApplicationsByCandidateId-{application.Application.CandidateId}");
+                await _cache.RemoveAsync($"getClosedJobApplicationsByCandidateId-{application.CandidateId}");
                 await _cache.RemoveAsync($"getJobApplicationsByClosedJobId-{closedApplication.ClosedJobId}");
             }
             else
@@ -486,27 +491,27 @@ namespace Bountous_X_Accolite_Job_Portal.Services
                 if (StatusId == (await _jobStatusService.getInitialSuccesstatus()))
                 {
                     SuccessfulJobApplication successfulApplication = new SuccessfulJobApplication();
-                    successfulApplication.ApplicationId = app.ApplicationId;
-                    successfulApplication.CandidateId = app.CandidateId;
-                    successfulApplication.JobId = app.JobId;
-                    successfulApplication.ClosedJobId = app.ClosedJobId;
+                    successfulApplication.ApplicationId = application.ApplicationId;
+                    successfulApplication.CandidateId = application.CandidateId;
+                    successfulApplication.JobId = application.JobId;
+                    successfulApplication.ClosedJobId = application.ClosedJobId;
 
                     await _dbContext.AddAsync(successfulApplication);
                     await _cache.RemoveAsync($"allSuccessfulJobApplications");
                 }
 
-                app.StatusId = StatusId;
-                _dbContext.JobApplications.Update(app);
+                application.StatusId = StatusId;
+                _dbContext.JobApplications.Update(application);
 
-                response.Application = new JobApplicationViewModel(app);
+                response.Application = new JobApplicationViewModel(application);
             }
 
             await _dbContext.SaveChangesAsync();
 
             await _cache.RemoveAsync($"allJobApplications");
-            await _cache.RemoveAsync($"getJobApplicationsById-{app.ApplicationId}");
-            await _cache.RemoveAsync($"getJobApplicationsByCandidateId-{app.CandidateId}");
-            await _cache.RemoveAsync($"getJobApplicationsByJobId-{app.JobId}");
+            await _cache.RemoveAsync($"getJobApplicationsById-{application.ApplicationId}");
+            await _cache.RemoveAsync($"getJobApplicationsByCandidateId-{application.CandidateId}");
+            await _cache.RemoveAsync($"getJobApplicationsByJobId-{application.JobId}");
             return response;
         }
 

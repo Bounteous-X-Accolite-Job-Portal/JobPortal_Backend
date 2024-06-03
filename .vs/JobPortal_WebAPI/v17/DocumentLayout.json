@@ -146,8 +146,7 @@
               "RelativeToolTip": "Bountous X Accolite Job Portal\\Services\\EducationInstitutionService.cs",
               "ViewState": "AQIAAFAAAAAAAAAAAAAIwAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-03T06:45:05.566Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-06-03T06:45:05.566Z"
             },
             {
               "$type": "Document",
@@ -157,7 +156,7 @@
               "RelativeDocumentMoniker": "Bountous X Accolite Job Portal\\Services\\OfferLetterEmailService.cs",
               "ToolTip": "C:\\Assignments\\bxA Job Portal\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Services\\OfferLetterEmailService.cs",
               "RelativeToolTip": "Bountous X Accolite Job Portal\\Services\\OfferLetterEmailService.cs",
-              "ViewState": "AQIAABAAAAAAAAAAAAAgwD8AAAAQAAAA",
+              "ViewState": "AQIAABAAAAAAAAAAAAAgwBcAAABAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-05-31T06:52:13.624Z",
               "EditorCaption": ""
@@ -172,8 +171,7 @@
               "RelativeToolTip": "Bountous X Accolite Job Portal\\Services\\EmailService.cs",
               "ViewState": "AQIAABIAAAAAAAAAAAAowEMAAAA9AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-31T05:11:12.259Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-31T05:11:12.259Z"
             },
             {
               "$type": "Document",
@@ -185,8 +183,7 @@
               "RelativeToolTip": "Bountous X Accolite Job Portal\\Services\\JobApplicationService.cs",
               "ViewState": "AQIAACMDAAAAAAAAAAAYwAIDAAA2AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-31T05:05:41.321Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-31T05:05:41.321Z"
             },
             {
               "$type": "Document",
@@ -198,8 +195,7 @@
               "RelativeToolTip": "Bountous X Accolite Job Portal\\Controllers\\EmailController.cs",
               "ViewState": "AQIAADwAAAAAAAAAAAAQwBcAAAAJAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-31T07:08:51.254Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-31T07:08:51.254Z"
             },
             {
               "$type": "Document",
@@ -211,8 +207,7 @@
               "RelativeToolTip": "Bountous X Accolite Job Portal\\Controllers\\ChangePasswordController.cs",
               "ViewState": "AQIAAA4AAAAAAAAAAAA0wAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-31T07:07:39.817Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-31T07:07:39.817Z"
             },
             {
               "$type": "Document",
@@ -224,8 +219,7 @@
               "RelativeToolTip": "Bountous X Accolite Job Portal\\Services\\JobService.cs",
               "ViewState": "AQIAAMYAAAAAAAAAAAA4wM4AAAAuAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-03T05:21:09.847Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-06-03T05:21:09.847Z"
             },
             {
               "$type": "Document",
@@ -237,8 +231,7 @@
               "RelativeToolTip": "Bountous X Accolite Job Portal\\Controllers\\JobController.cs",
               "ViewState": "AQIAACYAAAAAAAAAAAAuwDEAAAAoAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-06-03T05:10:35.258Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-06-03T05:10:35.258Z"
             },
             {
               "$type": "Document",
@@ -250,8 +243,7 @@
               "RelativeToolTip": "Bountous X Accolite Job Portal\\Controllers\\CandidateAccountController.cs",
               "ViewState": "AQIAAHkAAAAAAAAAAAAcwAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-31T07:08:24.434Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-31T07:08:24.434Z"
             },
             {
               "$type": "Document",
@@ -263,8 +255,7 @@
               "RelativeToolTip": "Bountous X Accolite Job Portal\\Models\\Attachment.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAYAAAAbAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-31T09:00:26.432Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-31T09:00:26.432Z"
             },
             {
               "$type": "Document",
@@ -276,8 +267,7 @@
               "RelativeToolTip": "Bountous X Accolite Job Portal\\Models\\EMAIL\\OfferLetterEmailBody.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAA4AAAAOAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-31T05:25:50.402Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-31T05:25:50.402Z"
             },
             {
               "$type": "Document",
@@ -289,8 +279,7 @@
               "RelativeToolTip": "Bountous X Accolite Job Portal\\Controllers\\AccountController.cs",
               "ViewState": "AQIAACoAAAAAAAAAAAAowAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-31T07:08:25.507Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-31T07:08:25.507Z"
             },
             {
               "$type": "Document",
@@ -302,8 +291,7 @@
               "RelativeToolTip": "Bountous X Accolite Job Portal\\Program.cs",
               "ViewState": "AQIAAHwAAAAAAAAAAAAgwIUAAABdAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-31T07:28:51.256Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-31T07:28:51.256Z"
             },
             {
               "$type": "Document",
@@ -315,8 +303,7 @@
               "RelativeToolTip": "Bountous X Accolite Job Portal\\Services\\Abstract\\IOfferLetterEmailService.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAqwAYAAAANAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-31T06:51:09.411Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-31T06:51:09.411Z"
             },
             {
               "$type": "Document",
@@ -328,8 +315,7 @@
               "RelativeToolTip": "Bountous X Accolite Job Portal\\Services\\Abstract\\IEmailService.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAqwAcAAAAhAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-31T06:50:17.6Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-31T06:50:17.6Z"
             },
             {
               "$type": "Document",
@@ -341,8 +327,7 @@
               "RelativeToolTip": "Bountous X Accolite Job Portal\\appsettings.json",
               "ViewState": "AQIAAAQAAAAAAAAAAABhwBYAAAAmAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2024-05-31T06:11:42.224Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-31T06:11:42.224Z"
             },
             {
               "$type": "Document",
@@ -354,8 +339,7 @@
               "RelativeToolTip": "Bountous X Accolite Job Portal\\Controllers\\JobApplicationController.cs",
               "ViewState": "AQIAAPAAAAAAAAAAAIBZwPkAAAAVAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-05-31T04:52:23.874Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-05-31T04:52:23.874Z"
             }
           ]
         }
