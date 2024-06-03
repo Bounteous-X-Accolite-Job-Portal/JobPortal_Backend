@@ -73,7 +73,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             {
                 response = new LoginServiceResponseViewModel();
                 response.Status = 404;
-                response.Message = "Invalid Ceredentials !";
+                response.Message = "Invalid Credentials !";
                 return response;
             }
 
