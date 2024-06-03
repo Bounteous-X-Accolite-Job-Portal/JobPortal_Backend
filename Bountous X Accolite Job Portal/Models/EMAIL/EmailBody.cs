@@ -23,7 +23,7 @@ It seems like you've forgotten your password for the bounteous x Accolite Job Po
 </ol>
 Once you receive the email, follow the instructions provided to set a new password for your account. Make sure to choose a strong and secure password to protect your account information.
 
-If you have any questions or need further assistance, please don't hesitate to contact our support team at [support email/phone number]. We're here to assist you with any concerns you may have.
+If you have any questions or need further assistance, please don't hesitate to contact our support team at support@accolitedigital.com . We're here to assist you with any concerns you may have.
 
 Thank you for choosing bounteous x Accolite. We appreciate your patience and cooperation in resetting your password.
 

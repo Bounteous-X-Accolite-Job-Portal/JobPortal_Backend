@@ -8,11 +8,7 @@ using Bountous_X_Accolite_Job_Portal.Models.CandidateExperienceViewModel;
 using Microsoft.Extensions.Caching.Distributed;
 using System.Text.Json;
 using Bountous_X_Accolite_Job_Portal.Models.JobViewModels.JobResponseViewModel;
-using PdfSharp.Pdf;
-using PdfSharp.Drawing;
-using PdfSharp.Drawing.Layout;
 using Bountous_X_Accolite_Job_Portal.Models.EMAIL;
-using PdfSharp.Fonts;
 using Bountous_X_Accolite_Job_Portal.Helpers;
 using Org.BouncyCastle.Ocsp;
 using Microsoft.AspNetCore.Builder;
@@ -36,6 +32,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
         private readonly IDistributedCache _cache;
         private readonly IEmailService _emailService;
         private readonly IReferralService _referralService;
+        private readonly IOfferLetterEmailService _offerLetterEmailService;
         public JobApplicationService(
             ApplicationDbContext applicationDbContext, 
             IJobStatusService jobStatusService, 
@@ -51,7 +48,8 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             ICompanyService companyService,
             IDistributedCache cache,
             IEmailService emailService,
-            IReferralService referralService
+            IReferralService referralService,
+            IOfferLetterEmailService offerLetterEmailService
         )
         {
             _dbContext = applicationDbContext;
@@ -69,6 +67,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             _cache = cache;
             _emailService = emailService;
             _referralService = referralService;
+            _offerLetterEmailService = offerLetterEmailService;
         }
 
         public async Task<JobApplicationResponseViewModel> GetJobApplicaionById(Guid Id)
@@ -795,25 +794,36 @@ namespace Bountous_X_Accolite_Job_Portal.Services
                     return response;
                 }
 
-                var offerLetterText = "bounteous x Accolite\n\n\n\n\n\nDear Candidate,\n\n\nI hope this email finds you well. I am pleased to inform you that after careful consideration, we have selected you for the position at bounteous X Accolite.\n\n Your qualifications, experience, and enthusiasm for the role stood out among the many candidates we interviewed.\n\n We are confident that you will make a valuable contribution to our team.\r\n\r\nPlease find attached the formal offer letter outlining the terms and conditions of your employment. Kindly review the offer carefully, including details such as your start date, salary, benefits, and other relevant information.\r\n\r\n\n\n\n\nBest Regards,\nTalent Acquistion Team\nbounteous x Accolite";
-                var pdfBytes = await GeneratePdfAsync(offerLetterText);
+                //var offerLetterText = "bounteous x Accolite\n\n\n\n\n\nDear "+ candidate.Candidate.FirstName +",\n\n\nI hope this email finds you well. I am pleased to inform you that after careful consideration, we have selected you for the position at bounteous X Accolite." +
+                //     "\n\n Your qualifications, experience, and enthusiasm for the role stood out among the many candidates we interviewed.\n\n We are confident that you will make a valuable contribution to our team." +
+                //     "\r\n\r\nPlease find attached the formal offer letter outlining the terms and conditions of your employment. Kindly review the offer carefully, including details such as your start date, salary, benefits, and other relevant information." +
+                //     "\r\n\r\n\n\n\n\nBest Regards,\nTalent Acquistion Team\nbounteous x Accolite";
+                // //var pdfBytes = await GeneratePdfAsync(offerLetterText);
 
-                var attachment = new Attachment
-                {
-                    FileName = "offer_letter.pdf",
-                    Data = pdfBytes
-                };
+                //var attachment = new Attachment
+                //{
+                //    FileName = "offer_letter.pdf",
+                //    Data = pdfBytes
+                //};
 
-                var emailData = new OfferLetterEmailData(
-                    candidate.Candidate.Email,
-                    "Congratulations! Offer of Employment with bounteous x Accolite",
-                    OfferLetterEmailBody.EmailStringBody(candidate.Candidate.FirstName),
-                    attachment
-                );
-              
-                _emailService.SendOfferLetterEmail(emailData);
+                //var emailData = new OfferLetterEmailData(
+                //    candidate.Candidate.Email,
+                //    "Congratulations! Offer of Employment with bounteous x Accolite",
+                //    OfferLetterEmailBody.EmailStringBody(candidate.Candidate.FirstName),
+                //    attachment
+                //);
+
+                //_emailService.SendOfferLetterEmail(emailData);
 
                 // updating status
+
+                EmailData emailModel = new EmailData(candidate.Candidate.Email, "Congratulations! Offer of Employment with bounteous x Accolite",
+                    OfferLetterEmailBody.EmailStringBody(candidate.Candidate.FirstName));
+
+
+                _offerLetterEmailService.SendEmail(emailModel, candidate.Candidate.FirstName);
+
+
                 successfulOffer.IsOfferLetterGenerated = true;
 
                 _dbContext.SuccessfulJobs.Update(successfulOffer);
@@ -832,33 +842,33 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             }
             return response;
         }
-        private async Task<byte[]> GeneratePdfAsync(string offerLetterText)
-        {
-            return await Task.Run(() =>
-            {
-                PdfDocument document = new PdfDocument();
+        //private async Task<byte[]> GeneratePdfAsync(string offerLetterText)
+        //{
+        //    return await Task.Run(() =>
+        //    {
+        //        PdfDocument document = new PdfDocument();
 
-                PdfPage page = document.AddPage();
+        //        PdfPage page = document.AddPage();
 
-                XGraphics gfx = XGraphics.FromPdfPage(page);
+        //        XGraphics gfx = XGraphics.FromPdfPage(page);
 
-                if (PdfSharp.Fonts.GlobalFontSettings.FontResolver is null)
-                {
-                    GlobalFontSettings.FontResolver = new NewFontResolver();
-                }
+        //        if (PdfSharp.Fonts.GlobalFontSettings.FontResolver is null)
+        //        {
+        //            GlobalFontSettings.FontResolver = new NewFontResolver();
+        //        }
 
-                // Draw the offer letter text on the page
-                XFont font = new XFont("Arial", 12);
-                XRect rect = new XRect(10, 10, page.Width - 20, page.Height - 20);
-                XTextFormatter textFormatter = new XTextFormatter(gfx);
-                textFormatter.DrawString(offerLetterText, font, XBrushes.Black, rect, XStringFormats.TopLeft);
+        //        // Draw the offer letter text on the page
+        //        XFont font = new XFont("Arial", 12);
+        //        XRect rect = new XRect(10, 10, page.Width - 20, page.Height - 20);
+        //        XTextFormatter textFormatter = new XTextFormatter(gfx);
+        //        textFormatter.DrawString(offerLetterText, font, XBrushes.Black, rect, XStringFormats.TopLeft);
 
-                using (MemoryStream stream = new MemoryStream())
-                {
-                    document.Save(stream, false);
-                    return stream.ToArray();
-                }
-            });
-        }
+        //        using (MemoryStream stream = new MemoryStream())
+        //        {
+        //            document.Save(stream, false);
+        //            return stream.ToArray();
+        //        }
+        //    });
+        //}
     }
 }

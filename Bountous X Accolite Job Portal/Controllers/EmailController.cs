@@ -19,13 +19,14 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
         private readonly IEmailService _emailService;
         private readonly IConfiguration _config;
         private readonly UserManager<User> _userManager;
-        public EmailController(IEmailService emailService,IConfiguration config,ApplicationDbContext applicationDbContext,UserManager<User> userManager)
+        private readonly IOfferLetterEmailService _offerLetterEmailService;
+        public EmailController(IEmailService emailService,IConfiguration config,ApplicationDbContext applicationDbContext,UserManager<User> userManager , IOfferLetterEmailService offerLetterEmailService)
         {
             _emailService = emailService;
             _config = config;
             _authContext = applicationDbContext;
             _userManager = userManager;
-            
+            _offerLetterEmailService = offerLetterEmailService;
         }
 
         [HttpPost("Email/{email}")]
@@ -51,7 +52,13 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             var emailModel = new EmailData(email, "ResetPassword", EmailBody.EmailStringBody(user.UserName,email, emailToken));
             //Debug.WriteLine("INSIDE CONTROLLER", emailModel);
 
-            _emailService.SendEmail(emailModel);
+           _emailService.SendEmail(emailModel);
+            
+            //EmailData emailModel = new EmailData(email, "Congratulations! Offer of Employment with bounteous x Accolite",
+            //        OfferLetterEmailBody.EmailStringBody("Tester"));
+
+
+            //_offerLetterEmailService.SendEmail(emailModel, "Tester");
 
             _authContext.Entry(user).State = EntityState.Modified;
             await _authContext.SaveChangesAsync();
