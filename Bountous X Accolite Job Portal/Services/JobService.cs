@@ -4,6 +4,7 @@ using Bountous_X_Accolite_Job_Portal.Models.ClosedJobViewModels;
 using Bountous_X_Accolite_Job_Portal.Models.JobViewModels;
 using Bountous_X_Accolite_Job_Portal.Models.JobViewModels.JobResponseViewModel;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
 using System.Text.Json;
 
@@ -299,12 +300,49 @@ namespace Bountous_X_Accolite_Job_Portal.Services
                     referrals = JsonSerializer.Deserialize<List<Referral>>(getAllReferralsFromCache);
                 }
 
-                Dictionary<Guid, Referral> referal = new Dictionary<Guid, Referral>();
+                Dictionary<Guid, List<Referral>> referal = new Dictionary<Guid, List<Referral>>();
                 foreach (var item in referrals)
                 {
                     if (item.ClosedJobId == null)
                     {
-                        referal.Add((Guid)item.JobId, item);
+                        if (!referal.ContainsKey((Guid)item.JobId))
+                        {
+                            referal.Add((Guid)item.JobId, new List<Referral>());
+                        }
+                        referal[(Guid)item.JobId].Add(item);
+                    }
+                }
+
+                // Add ClosedApplication Id to successfull job applications
+                key = $"allSuccessfulJobApplications";
+                string? allSuccessfulJobApplicationsFromCache = await _cache.GetStringAsync(key);
+
+                List<SuccessfulJobApplication> allSuccessfulJobApplications;
+                if (string.IsNullOrWhiteSpace(allSuccessfulJobApplicationsFromCache))
+                {
+                    allSuccessfulJobApplications = _context.SuccessfulJobs.ToList();
+                    await _cache.SetStringAsync(key, JsonSerializer.Serialize(allSuccessfulJobApplications));
+                }
+                else
+                {
+                    allSuccessfulJobApplications = JsonSerializer.Deserialize<List<SuccessfulJobApplication>>(allSuccessfulJobApplicationsFromCache);
+                }
+
+                if(allSuccessfulJobApplications.Count > 0)
+                {
+                    await _cache.RemoveAsync($"allSuccessfulJobApplications");
+                }
+
+                Dictionary<Guid, List<SuccessfulJobApplication>> successfulJobApplication = new Dictionary<Guid, List<SuccessfulJobApplication>>();
+                foreach (var item in allSuccessfulJobApplications)
+                {
+                    if (item.ClosedJobId == null)
+                    {
+                        if (!successfulJobApplication.ContainsKey((Guid)item.JobId))
+                        {
+                            successfulJobApplication.Add((Guid)item.JobId, new List<SuccessfulJobApplication>());
+                        }
+                        successfulJobApplication[(Guid)item.JobId].Add(item);
                     }
                 }
 
@@ -317,10 +355,25 @@ namespace Bountous_X_Accolite_Job_Portal.Services
 
                     closedDic.Add(entry.Key, closedJob.ClosedJobId);
 
-                    if (referal.ContainsKey(entry.Key))
+                    if (referal.TryGetValue(entry.Key, out List<Referral>? value))
                     {
-                        var refe = referal[entry.Key];
-                        await _referralService.AddClosedJobIdToReferral(refe.ReferralId, closedJob.ClosedJobId);
+                        var refe = value;
+                        foreach (var item in refe)
+                        {
+                            await _referralService.AddClosedJobIdToReferral(item, closedJob.ClosedJobId);
+                        }
+                    }
+
+                    if (successfulJobApplication.ContainsKey(entry.Key))
+                    {
+                        var successApplications = successfulJobApplication[entry.Key];
+                        foreach (var item in successApplications)
+                        {
+                            item.JobId = null;
+                            item.ClosedJobId = closedJob.ClosedJobId;
+
+                            _context.SuccessfulJobs.Update(item);
+                        }
                     }
 
                     await _cache.RemoveAsync($"getAllClosedJobsByEmployeeId-{entry.Value.EmployeeId}");

@@ -214,19 +214,12 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             return true;
         }
 
-        public async Task<bool> AddClosedJobIdToReferral(Guid ReferralId, Guid ClosedJobId)
+        public async Task<bool> AddClosedJobIdToReferral(Referral referral, Guid ClosedJobId)
         {
-            var referral = _dbContext.Referrals.Find(ReferralId);
-            if (referral == null)
-            {
-                return false;
-            }
-
             referral.JobId = null;
             referral.ClosedJobId = ClosedJobId;
 
             _dbContext.Referrals.Update(referral);
-            await _dbContext.SaveChangesAsync();
 
             await _cache.RemoveAsync($"getAllReferralsByEmployeeId-{referral.EmpId}");
             await _cache.RemoveAsync($"getAllReferrals");
