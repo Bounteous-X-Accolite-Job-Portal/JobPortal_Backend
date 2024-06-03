@@ -131,6 +131,7 @@ namespace Bountous_X_Accolite_Job_Portal
             builder.Services.AddScoped<IEmailService, EmailService>();
             builder.Services.AddScoped<IDesignationWithPrivilegeService, DesignationWithPrivilegeService>();
             builder.Services.AddScoped<IReferralService, ReferralService>();
+            builder.Services.AddScoped<IOfferLetterEmailService , OfferLetterEmailService>();
 
             // Addding JWT as a service
             builder.Services.AddScoped<JwtHandler>();
