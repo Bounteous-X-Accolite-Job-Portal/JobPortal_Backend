@@ -54,7 +54,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             _emailService.SendEmail(emailModel);
 
          //   EmailData emailModel = new EmailData(email, "Congratulations! Offer of Employment with bounteous x Accolite",
-                    OfferLetterEmailBody.EmailStringBody("Ankit"));
+            //        OfferLetterEmailBody.EmailStringBody("Ankit"));
 
 
          //   _offerLetterEmailService.SendEmail(emailModel, "Ankit");
