@@ -1,13 +1,12 @@
 ﻿
-using Microsoft.AspNetCore.Mvc;
-using Bountous_X_Accolite_Job_Portal.Models;
-using Bountous_X_Accolite_Job_Portal.Services.Abstract;
 using System.Security.Cryptography;
-using MailKit.Net.Smtp;
 using Bountous_X_Accolite_Job_Portal.Data;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity;
+using Bountous_X_Accolite_Job_Portal.Models;
 using Bountous_X_Accolite_Job_Portal.Models.EMAIL;
+using Bountous_X_Accolite_Job_Portal.Services.Abstract;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Bountous_X_Accolite_Job_Portal.Controllers
 {
@@ -20,7 +19,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
         private readonly IConfiguration _config;
         private readonly UserManager<User> _userManager;
         private readonly IOfferLetterEmailService _offerLetterEmailService;
-        public EmailController(IEmailService emailService,IConfiguration config,ApplicationDbContext applicationDbContext,UserManager<User> userManager , IOfferLetterEmailService offerLetterEmailService)
+        public EmailController(IEmailService emailService, IConfiguration config, ApplicationDbContext applicationDbContext, UserManager<User> userManager, IOfferLetterEmailService offerLetterEmailService)
         {
             _emailService = emailService;
             _config = config;
@@ -30,8 +29,8 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
         }
 
         [HttpPost("Email/{email}")]
-        
-        public async Task<IActionResult> SendEmail(string email,IConfiguration _config)
+
+        public async Task<IActionResult> SendEmail(string email, IConfiguration _config)
         {
             var user = await _userManager.FindByEmailAsync(email);
 
@@ -49,11 +48,11 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             user.ResetPasswordExpiry = DateTime.Now.AddMinutes(5);
 
             string from = _config["EmailSettings:From"];
-            var emailModel = new EmailData(email, "ResetPassword", EmailBody.EmailStringBody(user.UserName,email, emailToken));
+            var emailModel = new EmailData(email, "ResetPassword", EmailBody.EmailStringBody(user.UserName, email, emailToken));
             //Debug.WriteLine("INSIDE CONTROLLER", emailModel);
 
-           _emailService.SendEmail(emailModel);
-            
+            _emailService.SendEmail(emailModel);
+
             //EmailData emailModel = new EmailData(email, "Congratulations! Offer of Employment with bounteous x Accolite",
             //        OfferLetterEmailBody.EmailStringBody("Tester"));
 
@@ -63,35 +62,35 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             _authContext.Entry(user).State = EntityState.Modified;
             await _authContext.SaveChangesAsync();
             return Ok();
-            
+
         }
         [HttpPost("reset-Password")]
-         public async Task<ResponseViewModel> ResetPassword(ResetPasswordDTO resetPassword)
- {
-     ResponseViewModel response = new ResponseViewModel();
+        public async Task<ResponseViewModel> ResetPassword(ResetPasswordDTO resetPassword)
+        {
+            ResponseViewModel response = new ResponseViewModel();
 
-      var user = await _userManager.FindByEmailAsync(resetPassword.Email);
-     if (user == null) 
-     {
-         response.Status = 403;
-         response.Message = "User Not Exist !!";
-         return response;
-     }
+            var user = await _userManager.FindByEmailAsync(resetPassword.Email);
+            if (user == null)
+            {
+                response.Status = 403;
+                response.Message = "User Not Exist !!";
+                return response;
+            }
 
-     var TokenCode = await _userManager.GeneratePasswordResetTokenAsync(user);
-     
-     var result = await _userManager.ResetPasswordAsync(user, TokenCode, resetPassword.NewPassword);
+            var TokenCode = await _userManager.GeneratePasswordResetTokenAsync(user);
 
-     _authContext.Entry(user).State=EntityState.Modified;
-     await _authContext.SaveChangesAsync();
+            var result = await _userManager.ResetPasswordAsync(user, TokenCode, resetPassword.NewPassword);
 
-     response.Status = 200;
-     response.Message = "Password Reset Successfully !!";
+            _authContext.Entry(user).State = EntityState.Modified;
+            await _authContext.SaveChangesAsync();
 
-     return response;
+            response.Status = 200;
+            response.Message = "Password Reset Successfully !!";
 
-     }
-        
+            return response;
+
+        }
+
     }
-    }
+}
 

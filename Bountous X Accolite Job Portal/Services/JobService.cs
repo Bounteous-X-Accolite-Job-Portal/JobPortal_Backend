@@ -6,6 +6,7 @@ using Bountous_X_Accolite_Job_Portal.Models.JobViewModels.JobResponseViewModel;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Distributed;
+using System.Reflection.Metadata;
 using System.Text.Json;
 
 namespace Bountous_X_Accolite_Job_Portal.Services
@@ -547,6 +548,47 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             response.Status = 200;
             response.Message = "Job Successfully Found !";
             response.ClosedJob = new ClosedJobViewModel(closedJob);
+            return response;
+        }
+
+        public async Task<JobResponseViewModel> DisableJob(Guid jobId)
+        {
+            JobResponseViewModel response = new JobResponseViewModel();
+
+            string key = $"getJobById-{jobId}";
+            string? getJobByIdFromCache = await _cache.GetStringAsync(key);
+
+            Job? job;
+            if (string.IsNullOrWhiteSpace(getJobByIdFromCache))
+            {
+                job = _context.Jobs.Find(jobId);
+                if (job == null)
+                {
+                    response.Status = 404;
+                    response.Message = "Unable to Find Job !";
+                    return response;
+                }
+
+                await _cache.SetStringAsync(key, JsonSerializer.Serialize(job));
+            }
+            else
+            {
+                job = JsonSerializer.Deserialize<Job>(getJobByIdFromCache);
+            }
+
+            job.LastDate = DateTime.Now;
+
+            _context.Jobs.Update(job);
+            await _context.SaveChangesAsync();
+
+            await _cache.RemoveAsync($"allJobs");
+            await _cache.RemoveAsync($"getAllJobsByEmployeeId-{job.EmployeeId}");
+            await _cache.RemoveAsync($"getJobById-{jobId}");
+
+            response.job = new JobViewModel(job);
+            response.Status = 200;
+            response.Message = "Successfully Disabled Job !!";
+
             return response;
         }
     }
