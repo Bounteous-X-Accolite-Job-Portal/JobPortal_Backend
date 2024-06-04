@@ -53,11 +53,11 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
 
             _emailService.SendEmail(emailModel);
 
-            //EmailData emailModel = new EmailData(email, "Congratulations! Offer of Employment with bounteous x Accolite",
-            //        OfferLetterEmailBody.EmailStringBody("Tester"));
+         //   EmailData emailModel = new EmailData(email, "Congratulations! Offer of Employment with bounteous x Accolite",
+                    OfferLetterEmailBody.EmailStringBody("Ankit"));
 
 
-            //_offerLetterEmailService.SendEmail(emailModel, "Tester");
+         //   _offerLetterEmailService.SendEmail(emailModel, "Ankit");
 
             _authContext.Entry(user).State = EntityState.Modified;
             await _authContext.SaveChangesAsync();

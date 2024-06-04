@@ -1,9 +1,13 @@
 ﻿using Bountous_X_Accolite_Job_Portal.Models.EMAIL;
 using Bountous_X_Accolite_Job_Portal.Services.Abstract;
 using MimeKit;
-using iText.Kernel.Pdf;
-using iText.Forms;
-using iText.Forms.Fields;
+using Aspose;
+using System.Linq;
+using System.Text;
+using System;
+using System.Collections.Generic;
+using Aspose.Pdf;
+using Aspose.Pdf.Text;
 
 
 namespace Bountous_X_Accolite_Job_Portal.Services
@@ -17,8 +21,29 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             _config = config;
         }
 
+        public void AddNameToLetter(string name)
+        {
+            Document pdfDoc = new Document("offerletter.pdf");
+
+            TextFragmentAbsorber absorber = new TextFragmentAbsorber("<<NAME>>");
+
+            pdfDoc.Pages.Accept(absorber);
+
+            TextFragmentCollection textFragments = absorber.TextFragments;
+
+            foreach (var textFragment in textFragments)
+            {
+                textFragment.Text = name;
+                break;
+            }
+
+            pdfDoc.Save(name + "_offerletter.pdf");
+        }
+
         public void SendEmail(EmailData request, string name)
         {
+            AddNameToLetter(name);
+
             var email = new MimeMessage();
             var from = _config["EmailSettings:From"];
             email.From.Add(new MailboxAddress("Job Portal", from));
@@ -38,10 +63,10 @@ namespace Bountous_X_Accolite_Job_Portal.Services
 
             var attachment = new MimePart()
             {
-                Content = new MimeContent(System.IO.File.OpenRead("NewCandidateofferletter.pdf")),
-                ContentDisposition = new ContentDisposition(ContentDisposition.Attachment),
+                Content = new MimeContent(System.IO.File.OpenRead(name + "_offerletter.pdf")),
+                ContentDisposition = new MimeKit.ContentDisposition(MimeKit.ContentDisposition.Attachment),
                 ContentTransferEncoding = ContentEncoding.Base64,
-                FileName = name + "_offerletter.pdf"
+                FileName = name + "-offerletter.pdf"
             };
 
             multipart.Add(attachment);

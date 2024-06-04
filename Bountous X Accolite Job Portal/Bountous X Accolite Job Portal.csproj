@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Aspose.PDF" Version="24.5.1" />
     <PackageReference Include="itext7" Version="8.0.4" />
     <PackageReference Include="itext7.bouncy-castle-adapter" Version="8.0.4" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.4" />
@@ -26,9 +27,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="NewCandidateofferletter.pdf">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Update="offerletter.pdf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
