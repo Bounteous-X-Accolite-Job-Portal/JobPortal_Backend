@@ -32,15 +32,6 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
         [Authorize]
         public async Task<ClosedJobResponseViewModel> GetClosedJobById(Guid Id)
         {
-            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
-            if (!isEmployee)
-            {
-                ClosedJobResponseViewModel response = new ClosedJobResponseViewModel();
-                response.Status = 401;
-                response.Message = "Not Logged IN / Not Authorized to Get closed Jobs.";
-                return response;
-            }
-
             return await _job.GetClosedJobById(Id);
         }
 
