@@ -45,6 +45,10 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "Aspose.PDF": {
+              "target": "Package",
+              "version": "[24.5.1, )"
+            },
             "Microsoft.AspNetCore.Authentication.JwtBearer": {
               "target": "Package",
               "version": "[8.0.4, )"
@@ -79,10 +83,6 @@
               "target": "Package",
               "version": "[2.1.0, )"
             },
-            "PDFsharp": {
-              "target": "Package",
-              "version": "[6.0.0, )"
-            },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[6.4.0, )"
@@ -90,6 +90,14 @@
             "System.Drawing.Common": {
               "target": "Package",
               "version": "[8.0.5, )"
+            },
+            "itext7": {
+              "target": "Package",
+              "version": "[8.0.4, )"
+            },
+            "itext7.bouncy-castle-adapter": {
+              "target": "Package",
+              "version": "[8.0.4, )"
             }
           },
           "imports": [

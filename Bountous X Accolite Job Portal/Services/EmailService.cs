@@ -29,8 +29,8 @@ namespace Bountous_X_Accolite_Job_Portal.Services
                 try
                 {
                     smtp.Connect(_config["EmailSettings:SmtpServer"], 465, true);
-                    var temp = _config.GetSection("EmailSettings:From").Value;
-                    var temp2 = _config.GetSection("EmailSettings:EmailPassword").Value;
+                    //var temp = _config.GetSection("EmailSettings:From").Value;
+                    //var temp2 = _config.GetSection("EmailSettings:EmailPassword").Value;
 
                     smtp.Authenticate(_config.GetSection("EmailSettings:From").Value, _config.GetSection("EmailSettings:EmailPassword").Value);
                     smtp.Send(email);

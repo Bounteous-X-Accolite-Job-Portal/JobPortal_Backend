@@ -1,4 +1,5 @@
-﻿using Bountous_X_Accolite_Job_Portal.Helpers;
+﻿using Azure;
+using Bountous_X_Accolite_Job_Portal.Helpers;
 using Bountous_X_Accolite_Job_Portal.Models.ClosedJobViewModels;
 using Bountous_X_Accolite_Job_Portal.Models.JobViewModels;
 using Bountous_X_Accolite_Job_Portal.Models.JobViewModels.JobResponseViewModel;
@@ -31,15 +32,6 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
         [Authorize]
         public async Task<ClosedJobResponseViewModel> GetClosedJobById(Guid Id)
         {
-            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
-            if (!isEmployee)
-            {
-                ClosedJobResponseViewModel response = new ClosedJobResponseViewModel();
-                response.Status = 401;
-                response.Message = "Not Logged IN / Not Authorized to Get closed Jobs.";
-                return response;
-            }
-
             return await _job.GetClosedJobById(Id);
         }
 
@@ -171,6 +163,26 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
             }
 
             response = await _job.DeleteJob(JobId);
+            return response;
+        }
+
+        [HttpPut]
+        [Route("DisableJob/{jobId}")]
+        [Authorize]
+        public async Task<JobResponseViewModel> DisableJob(Guid jobId)
+        {
+            JobResponseViewModel response = new JobResponseViewModel();
+
+            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
+            Guid employeeId = GetGuidFromString.Get(User.FindFirstValue("Id"));
+            if (!isEmployee || employeeId == Guid.Empty)
+            {
+                response.Status = 401;
+                response.Message = "Not Logged IN / Not Authorized to Disable Job";
+                return response;
+            }
+
+            response = await _job.DisableJob(jobId);
             return response;
         }
     }

@@ -205,12 +205,6 @@ C:\Assignments\bxA Job Portal\JobPortal_Backend\Bountous X Accolite Job Portal\b
 C:\Assignments\bxA Job Portal\JobPortal_Backend\Bountous X Accolite Job Portal\bin\Debug\net8.0\MimeKit.dll
 C:\Assignments\bxA Job Portal\JobPortal_Backend\Bountous X Accolite Job Portal\bin\Debug\net8.0\Mono.TextTemplating.dll
 C:\Assignments\bxA Job Portal\JobPortal_Backend\Bountous X Accolite Job Portal\bin\Debug\net8.0\NETCore.MailKit.dll
-C:\Assignments\bxA Job Portal\JobPortal_Backend\Bountous X Accolite Job Portal\bin\Debug\net8.0\PdfSharp.Charting.dll
-C:\Assignments\bxA Job Portal\JobPortal_Backend\Bountous X Accolite Job Portal\bin\Debug\net8.0\PdfSharp.Quality.dll
-C:\Assignments\bxA Job Portal\JobPortal_Backend\Bountous X Accolite Job Portal\bin\Debug\net8.0\PdfSharp.Snippets.dll
-C:\Assignments\bxA Job Portal\JobPortal_Backend\Bountous X Accolite Job Portal\bin\Debug\net8.0\PdfSharp.System.dll
-C:\Assignments\bxA Job Portal\JobPortal_Backend\Bountous X Accolite Job Portal\bin\Debug\net8.0\PdfSharp.WPFonts.dll
-C:\Assignments\bxA Job Portal\JobPortal_Backend\Bountous X Accolite Job Portal\bin\Debug\net8.0\PdfSharp.dll
 C:\Assignments\bxA Job Portal\JobPortal_Backend\Bountous X Accolite Job Portal\bin\Debug\net8.0\Pipelines.Sockets.Unofficial.dll
 C:\Assignments\bxA Job Portal\JobPortal_Backend\Bountous X Accolite Job Portal\bin\Debug\net8.0\StackExchange.Redis.dll
 C:\Assignments\bxA Job Portal\JobPortal_Backend\Bountous X Accolite Job Portal\bin\Debug\net8.0\Swashbuckle.AspNetCore.Swagger.dll
@@ -282,8 +276,6 @@ C:\Assignments\bxA Job Portal\JobPortal_Backend\Bountous X Accolite Job Portal\b
 C:\Assignments\bxA Job Portal\JobPortal_Backend\Bountous X Accolite Job Portal\bin\Debug\net8.0\tr\Microsoft.CodeAnalysis.Workspaces.resources.dll
 C:\Assignments\bxA Job Portal\JobPortal_Backend\Bountous X Accolite Job Portal\bin\Debug\net8.0\zh-Hans\Microsoft.CodeAnalysis.Workspaces.resources.dll
 C:\Assignments\bxA Job Portal\JobPortal_Backend\Bountous X Accolite Job Portal\bin\Debug\net8.0\zh-Hant\Microsoft.CodeAnalysis.Workspaces.resources.dll
-C:\Assignments\bxA Job Portal\JobPortal_Backend\Bountous X Accolite Job Portal\bin\Debug\net8.0\de\PdfSharp.Charting.resources.dll
-C:\Assignments\bxA Job Portal\JobPortal_Backend\Bountous X Accolite Job Portal\bin\Debug\net8.0\de\PdfSharp.resources.dll
 C:\Assignments\bxA Job Portal\JobPortal_Backend\Bountous X Accolite Job Portal\bin\Debug\net8.0\runtimes\unix\lib\net6.0\Microsoft.Data.SqlClient.dll
 C:\Assignments\bxA Job Portal\JobPortal_Backend\Bountous X Accolite Job Portal\bin\Debug\net8.0\runtimes\win\lib\net6.0\Microsoft.Data.SqlClient.dll
 C:\Assignments\bxA Job Portal\JobPortal_Backend\Bountous X Accolite Job Portal\bin\Debug\net8.0\runtimes\win-arm\native\Microsoft.Data.SqlClient.SNI.dll
@@ -292,8 +284,6 @@ C:\Assignments\bxA Job Portal\JobPortal_Backend\Bountous X Accolite Job Portal\b
 C:\Assignments\bxA Job Portal\JobPortal_Backend\Bountous X Accolite Job Portal\bin\Debug\net8.0\runtimes\win-x86\native\Microsoft.Data.SqlClient.SNI.dll
 C:\Assignments\bxA Job Portal\JobPortal_Backend\Bountous X Accolite Job Portal\bin\Debug\net8.0\runtimes\win\lib\net8.0\Microsoft.Win32.SystemEvents.dll
 C:\Assignments\bxA Job Portal\JobPortal_Backend\Bountous X Accolite Job Portal\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Runtime.Caching.dll
-C:\Assignments\bxA Job Portal\JobPortal_Backend\Bountous X Accolite Job Portal\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Security.Cryptography.ProtectedData.dll
-C:\Assignments\bxA Job Portal\JobPortal_Backend\Bountous X Accolite Job Portal\bin\Debug\net8.0\runtimes\win\lib\net6.0\System.Windows.Extensions.dll
 C:\Assignments\bxA Job Portal\JobPortal_Backend\Bountous X Accolite Job Portal\obj\Debug\net8.0\Bountous X Accolite Job Portal.csproj.AssemblyReference.cache
 C:\Assignments\bxA Job Portal\JobPortal_Backend\Bountous X Accolite Job Portal\obj\Debug\net8.0\Bountous X Accolite Job Portal.GeneratedMSBuildEditorConfig.editorconfig
 C:\Assignments\bxA Job Portal\JobPortal_Backend\Bountous X Accolite Job Portal\obj\Debug\net8.0\Bountous X Accolite Job Portal.AssemblyInfoInputs.cache
@@ -316,3 +306,29 @@ C:\Assignments\bxA Job Portal\JobPortal_Backend\Bountous X Accolite Job Portal\o
 C:\Assignments\bxA Job Portal\JobPortal_Backend\Bountous X Accolite Job Portal\obj\Debug\net8.0\Bountous X Accolite Job Portal.pdb
 C:\Assignments\bxA Job Portal\JobPortal_Backend\Bountous X Accolite Job Portal\obj\Debug\net8.0\Bountous X Accolite Job Portal.genruntimeconfig.cache
 C:\Assignments\bxA Job Portal\JobPortal_Backend\Bountous X Accolite Job Portal\obj\Debug\net8.0\ref\Bountous X Accolite Job Portal.dll
+C:\Users\vishal.s_INT1587\Desktop\JobPortal_WebAPI\Bountous X Accolite Job Portal\bin\Debug\net8.0\System.Web.Cors.dll
+C:\Users\vishal.s_INT1587\Desktop\JobPortal_WebAPI\Bountous X Accolite Job Portal\bin\Debug\net8.0\System.Net.Http.Formatting.dll
+C:\Users\vishal.s_INT1587\Desktop\JobPortal_WebAPI\Bountous X Accolite Job Portal\bin\Debug\net8.0\System.Web.Http.dll
+C:\Users\vishal.s_INT1587\Desktop\JobPortal_WebAPI\Bountous X Accolite Job Portal\bin\Debug\net8.0\System.Web.Http.Cors.dll
+C:\Users\vishal.s_INT1587\Desktop\JobPortal_WebAPI\Bountous X Accolite Job Portal\bin\Debug\net8.0\Newtonsoft.Json.dll
+C:\Users\vishal.s_INT1587\Desktop\JobPortal_WebAPI\Bountous X Accolite Job Portal\bin\Debug\net8.0\Newtonsoft.Json.Bson.dll
+C:\Assignments\bxA Job Portal\JobPortal_Backend\Bountous X Accolite Job Portal\bin\Debug\net8.0\offerletter.pdf
+C:\Assignments\bxA Job Portal\JobPortal_Backend\Bountous X Accolite Job Portal\bin\Debug\net8.0\itext.barcodes.dll
+C:\Assignments\bxA Job Portal\JobPortal_Backend\Bountous X Accolite Job Portal\bin\Debug\net8.0\itext.bouncy-castle-connector.dll
+C:\Assignments\bxA Job Portal\JobPortal_Backend\Bountous X Accolite Job Portal\bin\Debug\net8.0\itext.forms.dll
+C:\Assignments\bxA Job Portal\JobPortal_Backend\Bountous X Accolite Job Portal\bin\Debug\net8.0\itext.io.dll
+C:\Assignments\bxA Job Portal\JobPortal_Backend\Bountous X Accolite Job Portal\bin\Debug\net8.0\itext.kernel.dll
+C:\Assignments\bxA Job Portal\JobPortal_Backend\Bountous X Accolite Job Portal\bin\Debug\net8.0\itext.layout.dll
+C:\Assignments\bxA Job Portal\JobPortal_Backend\Bountous X Accolite Job Portal\bin\Debug\net8.0\itext.pdfa.dll
+C:\Assignments\bxA Job Portal\JobPortal_Backend\Bountous X Accolite Job Portal\bin\Debug\net8.0\itext.pdfua.dll
+C:\Assignments\bxA Job Portal\JobPortal_Backend\Bountous X Accolite Job Portal\bin\Debug\net8.0\itext.sign.dll
+C:\Assignments\bxA Job Portal\JobPortal_Backend\Bountous X Accolite Job Portal\bin\Debug\net8.0\itext.styledxmlparser.dll
+C:\Assignments\bxA Job Portal\JobPortal_Backend\Bountous X Accolite Job Portal\bin\Debug\net8.0\itext.svg.dll
+C:\Assignments\bxA Job Portal\JobPortal_Backend\Bountous X Accolite Job Portal\bin\Debug\net8.0\itext.commons.dll
+C:\Assignments\bxA Job Portal\JobPortal_Backend\Bountous X Accolite Job Portal\bin\Debug\net8.0\Microsoft.DotNet.PlatformAbstractions.dll
+C:\Assignments\bxA Job Portal\JobPortal_Backend\Bountous X Accolite Job Portal\bin\Debug\net8.0\Newtonsoft.Json.dll
+C:\Assignments\bxA Job Portal\JobPortal_Backend\Bountous X Accolite Job Portal\bin\Debug\net8.0\itext.bouncy-castle-adapter.dll
+C:\Assignments\bxA Job Portal\JobPortal_Backend\Bountous X Accolite Job Portal\bin\Debug\net8.0\Aspose.PDF.dll
+C:\Assignments\bxA Job Portal\JobPortal_Backend\Bountous X Accolite Job Portal\bin\Debug\net8.0\System.Diagnostics.PerformanceCounter.dll
+C:\Assignments\bxA Job Portal\JobPortal_Backend\Bountous X Accolite Job Portal\bin\Debug\net8.0\runtimes\win\lib\net8.0\System.Diagnostics.PerformanceCounter.dll
+C:\Assignments\bxA Job Portal\JobPortal_Backend\Bountous X Accolite Job Portal\bin\Debug\net8.0\runtimes\win\lib\net8.0\System.Windows.Extensions.dll
