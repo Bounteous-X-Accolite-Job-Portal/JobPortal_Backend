@@ -106,21 +106,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
 
-            ResumeResponseViewModel resume = await _resumeService.GetResumeById(Id);
-            if (resume.Resume == null)
-            {
-                return resume;
-            }
-
-            if (resume.Resume.CandidateId == null || candidateId != resume.Resume.CandidateId)
-            {
-                response = new ResumeResponseViewModel();
-                response.Status = 401;
-                response.Message = "You are either not loggedIn or not authorized to remove resume.";
-                return response;
-            }
-
-            response = await _resumeService.RemoveResume(Id);
+            response = await _resumeService.RemoveResume(Id, candidateId);
             return response;
         }
     }
