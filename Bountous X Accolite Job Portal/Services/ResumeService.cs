@@ -116,7 +116,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             return response;
         }
 
-        public async Task<ResumeResponseViewModel> RemoveResume(Guid Id)
+        public async Task<ResumeResponseViewModel> RemoveResume(Guid Id, Guid CandidateId)
         {
             ResumeResponseViewModel response = new ResumeResponseViewModel();
 
@@ -139,6 +139,13 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             else
             {
                 resume = JsonSerializer.Deserialize<Resume>(getResumeByIdFromCache);
+            }
+
+            if(resume.CandidateId != CandidateId)
+            {
+                response.Status = 401;
+                response.Message = "You are either not loggedIn or not authorized to remove resume.";
+                return response;
             }
 
             _dbContext.Resumes.Remove(resume);
