@@ -114,7 +114,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             return response;
         }
 
-        public async Task<SkillsResponseViewModel> UpdateSkills(UpdateSkillsViewModel updateSkills)
+        public async Task<SkillsResponseViewModel> UpdateSkills(UpdateSkillsViewModel updateSkills, Guid candidateId)
         {
             SkillsResponseViewModel response = new SkillsResponseViewModel();
 
@@ -139,6 +139,13 @@ namespace Bountous_X_Accolite_Job_Portal.Services
                 skills = JsonSerializer.Deserialize<Skills>(getSkillsByIdFromCache);
             }
 
+            if(skills.CandidateId != candidateId)
+            {
+                response.Status = 401;
+                response.Message = "You are not authorised to update these skills.";
+                return response;
+            }
+
             skills.CandidateSkills = updateSkills.CandidateSkills;
 
             _dbContext.Skills.Update(skills);
@@ -149,43 +156,6 @@ namespace Bountous_X_Accolite_Job_Portal.Services
 
             response.Status = 200;
             response.Message = "Successfully updated that candidate experience.";
-            response.Skills = new SkillsViewModel(skills);
-            return response;
-        }
-
-        public async Task<SkillsResponseViewModel> RemoveSkills(Guid Id)
-        {
-            SkillsResponseViewModel response = new SkillsResponseViewModel();
-
-            string key = $"getSkillsById-{Id}";
-            string? getSkillsByIdFromCache = await _cache.GetStringAsync(key);
-
-            Skills skills;
-            if (string.IsNullOrEmpty(getSkillsByIdFromCache))
-            {
-                skills = _dbContext.Skills.Find(Id);
-                if (skills == null)
-                {
-                    response.Status = 404;
-                    response.Message = "Skills with this Id does not exist";
-                    return response;
-                }
-
-                await _cache.SetStringAsync(key, JsonSerializer.Serialize(skills));
-            }
-            else
-            {
-                skills = JsonSerializer.Deserialize<Skills>(getSkillsByIdFromCache);
-            }
-
-            _dbContext.Skills.Remove(skills);
-            await _dbContext.SaveChangesAsync();
-
-            await _cache.RemoveAsync($"getSkillsById-{Id}");
-            await _cache.RemoveAsync($"getSkillsByCandidateId-{skills.CandidateId}");
-
-            response.Status = 200;
-            response.Message = "Successfully removed that resume.";
             response.Skills = new SkillsViewModel(skills);
             return response;
         }
