@@ -114,55 +114,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 return response;
             }
 
-            SkillsResponseViewModel skills = await _skillsService.GetSkillsById(updateSkills.SkillsId);
-            if (skills.Skills == null)
-            {
-                return skills;
-            }
-
-            if (skills.Skills.CandidateId == null || candidateId != skills.Skills.CandidateId)
-            {
-                response = new SkillsResponseViewModel();
-                response.Status = 401;
-                response.Message = "You are either not loggedIn or not authorized to update skills.";
-                return response;
-            }
-
-            response = await _skillsService.UpdateSkills(updateSkills);
-            return response;
-        }
-
-        [HttpDelete]
-        [Route("removeSkills/{Id}")]
-        public async Task<SkillsResponseViewModel> RemoveSkills(Guid Id)
-        {
-            SkillsResponseViewModel response;
-
-            bool isEmployee = Convert.ToBoolean(User.FindFirstValue("IsEmployee"));
-            Guid candidateId = GetGuidFromString.Get(User.FindFirstValue("Id"));
-            if (isEmployee)
-            {
-                response = new SkillsResponseViewModel();
-                response.Status = 401;
-                response.Message = "You are either not loggedIn or not authorized to remove skills.";
-                return response;
-            }
-
-            SkillsResponseViewModel skills = await _skillsService.GetSkillsById(Id);
-            if (skills.Skills == null)
-            {
-                return skills;
-            }
-
-            if (skills.Skills.CandidateId == null || candidateId != skills.Skills.CandidateId)
-            {
-                response = new SkillsResponseViewModel();
-                response.Status = 401;
-                response.Message = "You are either not loggedIn or not authorized to remove skills.";
-                return response;
-            }
-
-            response = await _skillsService.RemoveSkills(Id);
+            response = await _skillsService.UpdateSkills(updateSkills, candidateId);
             return response;
         }
     }
