@@ -93,7 +93,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             if(checkSpecialPriviledge && !HasSpecialPrivilege)
             {
                 response.Status = 401;
-                response.Message = "You are not authorised to diable this account.";
+                response.Message = "You are not authorised to disable this account.";
                 return response;
             }
 
@@ -109,10 +109,16 @@ namespace Bountous_X_Accolite_Job_Portal.Services
             response.Status = 200;
             if(employee.Inactive)
             {
-                response.Message = "Successfully diabled the account.";
+                EmailData accountDisabled = new EmailData(employee.Email,"Account Disabled", DisableAccountEmail.EmailStringBody(employee.FirstName));
+                _emailService.SendEmail(accountDisabled);
+
+                response.Message = "Successfully disabled the account.";
             }
             else
             {
+                EmailData accountEnabled = new EmailData(employee.Email, "Account Enabled", EnableAccountEmail.EmailStringBody(employee.FirstName));
+                _emailService.SendEmail(accountEnabled);
+
                 response.Message = "Successfully enabled the account.";
             }
             
