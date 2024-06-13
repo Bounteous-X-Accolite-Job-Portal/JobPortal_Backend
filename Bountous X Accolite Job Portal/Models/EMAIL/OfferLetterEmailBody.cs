@@ -29,7 +29,7 @@ We are excited about the opportunity to welcome you aboard and look forward to y
 Warm regards,
 <br>
 Talent Acquistion Team<br>
-bonteous x Accolite
+bounteous x Accolite
 
 
 

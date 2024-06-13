@@ -19,7 +19,7 @@ namespace Bountous_X_Accolite_Job_Portal.Models.EMAIL
 <p>Interview Link : {link}</p>
 
 Regards,<br>
-Team bounteuous x Accolite Job Portal
+Team bounteous x Accolite Job Portal
 
 </body>
 </html>

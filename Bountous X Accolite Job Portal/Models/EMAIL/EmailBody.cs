@@ -35,7 +35,7 @@ Thank you for choosing bounteous x Accolite. We appreciate your patience and coo
 <div>
 Regards,<br>
 Team<br>
-bounteuous x Accolite Job Portal
+bounteous x Accolite Job Portal
 
 </div>
 

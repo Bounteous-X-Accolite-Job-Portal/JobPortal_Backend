@@ -43,7 +43,7 @@ Once again, welcome to bounteous x Accolite Job Portal! We look forward to your 
 </div>
 <div>
 Regards,<br>
-Team bounteuous x Accolite Job Portal
+Team bounteous x Accolite Job Portal
 
 </div>
 

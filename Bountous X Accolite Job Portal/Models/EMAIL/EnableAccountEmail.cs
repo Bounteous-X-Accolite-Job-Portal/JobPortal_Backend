@@ -14,9 +14,10 @@
 <h4>Dear {Empname},</h4>
 Your Account has been Enabled by the Administrator.<br>
 In case of any queries please contact to support@accolitedigital.com <br>
-
-Regards,<br>
-Team bounteuous x Accolite Job Portal
+<br>
+<br>
+<b>Regards,</b><br>
+Team bounteous x Accolite Job Portal
 
 </body>
 </html>";

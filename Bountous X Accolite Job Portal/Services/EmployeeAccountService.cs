@@ -112,14 +112,14 @@ namespace Bountous_X_Accolite_Job_Portal.Services
                 EmailData accountDisabled = new EmailData(employee.Email,"Account Disabled", DisableAccountEmail.EmailStringBody(employee.FirstName));
                 _emailService.SendEmail(accountDisabled);
 
-                response.Message = "Successfully disabled the account.";
+                response.Message = "Successfully Disabled the account.";
             }
             else
             {
                 EmailData accountEnabled = new EmailData(employee.Email, "Account Enabled", EnableAccountEmail.EmailStringBody(employee.FirstName));
                 _emailService.SendEmail(accountEnabled);
 
-                response.Message = "Successfully enabled the account.";
+                response.Message = "Successfully Enabled the account.";
             }
             
             response.Employee = new EmployeeViewModels(employee);
