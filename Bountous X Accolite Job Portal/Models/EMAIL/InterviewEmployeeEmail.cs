@@ -19,7 +19,7 @@
 <p>Interview Link : {link}</p>
 
 Regards,<br>
-Team bounteuous x Accolite Job Portal
+Team bounteous x Accolite Job Portal
 
 </body>
 </html>

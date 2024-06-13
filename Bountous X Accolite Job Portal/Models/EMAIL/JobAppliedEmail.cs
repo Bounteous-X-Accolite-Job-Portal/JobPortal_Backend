@@ -12,11 +12,11 @@
 
 
 <h4>Dear {name},</h4>
-Thanks for taking out time to apply for {jobTitle} [{jobCode}]. We appreciate your interest in bounteuous x Accolite.<br>
+Thanks for taking out time to apply for {jobTitle} [{jobCode}]. We appreciate your interest in bounteous x Accolite.<br>
 We're currently in the process of taking applications for this position. If you are selected to proceed for the interview process, our human resource department will be in contact with you soon.<br>
 
 Regards,<br>
-Team bounteuous x Accolite Job Portal
+Team bounteous x Accolite Job Portal
 
 </body>
 </html>

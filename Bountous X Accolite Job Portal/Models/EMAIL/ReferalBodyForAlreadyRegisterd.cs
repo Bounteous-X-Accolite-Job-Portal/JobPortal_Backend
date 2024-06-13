@@ -37,7 +37,7 @@ Thank you for considering a career with bounteous x Accolite. We appreciate your
 <br>
 Regards,<br>
 Team<br>
-bounteuous x Accolite Job Portal
+bounteous x Accolite Job Portal
 
 ""></a>
 </body>
