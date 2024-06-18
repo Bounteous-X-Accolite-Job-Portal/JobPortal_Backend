@@ -128,7 +128,7 @@ namespace Bountous_X_Accolite_Job_Portal.Controllers
                 user.EmailConfirmExpiry = DateTime.Now.AddMinutes(5);
 
                 string from = _config["EmailSettings:From"];
-                    var emailModel = new EmailData(email, "Confirm Email", ConfirmEmailBody.EmailStringBody(user.UserName,email, emailToken));
+                    var emailModel = new EmailData(email, "Confirm Email", NewRegisterEmailBody.EmailStringBody(user.UserName,email, emailToken));
                     _emailService.SendEmail(emailModel);
 
                     _authContext.Entry(user).State = EntityState.Modified;
