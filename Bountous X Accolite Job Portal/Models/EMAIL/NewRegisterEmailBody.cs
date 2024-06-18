@@ -21,7 +21,7 @@ Login to the Portal : <a href=https://kind-dune-058eee70f.5.azurestaticapps.net/
 <br>
 <br>
 Thank you for choosing bounteous x Accolite Job Portal.<br>
-If you have any questions or need assistance, please contact our support team at support@accolitedigital.com.
+In case you have any questions or need assistance, please contact our support team at support@accolitedigital.com.
 <div>
 Regards,<br>
 bounteous x Accolite Job Portal
