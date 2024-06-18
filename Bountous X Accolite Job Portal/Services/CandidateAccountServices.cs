@@ -164,11 +164,12 @@ namespace Bountous_X_Accolite_Job_Portal.Services
                 candidate = JsonSerializer.Deserialize<Candidate>(getCandidateByIdFromCache);
             }
 
-            candidate.FirstName = updatedCandidate.FirstName;
-            candidate.LastName = updatedCandidate.LastName;
+            //candidate.FirstName = updatedCandidate.FirstName;
+            //candidate.LastName = updatedCandidate.LastName;
             candidate.Phone = updatedCandidate.Phone;
             candidate.AddressLine1 = updatedCandidate.AddressLine1;
-            candidate.City = updatedCandidate.City; candidate.State = updatedCandidate.State;
+            candidate.City = updatedCandidate.City; 
+            candidate.State = updatedCandidate.State;
             candidate.Country = updatedCandidate.Country;
             candidate.ZipCode = updatedCandidate.ZipCode;
 

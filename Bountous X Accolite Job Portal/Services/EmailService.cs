@@ -35,7 +35,7 @@ namespace Bountous_X_Accolite_Job_Portal.Services
                     smtp.Authenticate(_config.GetSection("EmailSettings:From").Value, _config.GetSection("EmailSettings:EmailPassword").Value);
                     smtp.Send(email);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     throw;
 
