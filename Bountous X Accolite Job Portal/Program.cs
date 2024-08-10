@@ -22,7 +22,9 @@ namespace Bountous_X_Accolite_Job_Portal
 
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+            builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
+                        options => options.EnableRetryOnFailure()
+                    ));
 
             builder.Services.AddStackExchangeRedisCache(options =>
             {
@@ -137,6 +139,12 @@ namespace Bountous_X_Accolite_Job_Portal
             builder.Services.AddScoped<JwtHandler>();
 
             var app = builder.Build();
+
+            using(var scope = app.Services.CreateScope())
+            {
+                var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                db.Database.Migrate();
+            }
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())

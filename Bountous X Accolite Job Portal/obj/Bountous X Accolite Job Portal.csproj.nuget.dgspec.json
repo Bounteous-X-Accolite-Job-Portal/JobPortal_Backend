@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Assignments\\bxA Job Portal\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj": {}
+    "C:\\Users\\visha\\Downloads\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj": {}
   },
   "projects": {
-    "C:\\Assignments\\bxA Job Portal\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj": {
+    "C:\\Users\\visha\\Downloads\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Assignments\\bxA Job Portal\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj",
+        "projectUniqueName": "C:\\Users\\visha\\Downloads\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj",
         "projectName": "Bountous X Accolite Job Portal",
-        "projectPath": "C:\\Assignments\\bxA Job Portal\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj",
-        "packagesPath": "C:\\Users\\Ankit.G_INT1580\\.nuget\\packages\\",
-        "outputPath": "C:\\Assignments\\bxA Job Portal\\JobPortal_Backend\\Bountous X Accolite Job Portal\\obj\\",
+        "projectPath": "C:\\Users\\visha\\Downloads\\JobPortal_Backend\\Bountous X Accolite Job Portal\\Bountous X Accolite Job Portal.csproj",
+        "packagesPath": "C:\\Users\\visha\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\visha\\Downloads\\JobPortal_Backend\\Bountous X Accolite Job Portal\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\Ankit.G_INT1580\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\visha\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -48,37 +48,41 @@
           "dependencies": {
             "Aspose.PDF": {
               "target": "Package",
-              "version": "[24.5.1, )"
+              "version": "[24.7.0, )"
             },
             "Microsoft.AspNetCore.Authentication.JwtBearer": {
               "target": "Package",
-              "version": "[8.0.4, )"
+              "version": "[8.0.7, )"
             },
             "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[8.0.4, )"
+              "version": "[8.0.7, )"
             },
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[8.0.4, )"
+              "version": "[8.0.7, )"
             },
             "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
-              "version": "[8.0.4, )"
+              "version": "[8.0.7, )"
             },
             "Microsoft.EntityFrameworkCore.Tools": {
               "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
               "suppressParent": "All",
               "target": "Package",
-              "version": "[8.0.4, )"
+              "version": "[8.0.7, )"
             },
             "Microsoft.Extensions.Caching.StackExchangeRedis": {
               "target": "Package",
-              "version": "[8.0.5, )"
+              "version": "[8.0.7, )"
+            },
+            "Microsoft.VisualStudio.Azure.Containers.Tools.Targets": {
+              "target": "Package",
+              "version": "[1.20.1, )"
             },
             "MimeKit": {
               "target": "Package",
-              "version": "[4.5.0, )"
+              "version": "[4.7.1, )"
             },
             "NETCore.MailKit": {
               "target": "Package",
@@ -86,19 +90,19 @@
             },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
-              "version": "[6.4.0, )"
+              "version": "[6.7.0, )"
             },
             "System.Drawing.Common": {
               "target": "Package",
-              "version": "[8.0.5, )"
+              "version": "[8.0.7, )"
             },
             "itext7": {
               "target": "Package",
-              "version": "[8.0.4, )"
+              "version": "[8.0.5, )"
             },
             "itext7.bouncy-castle-adapter": {
               "target": "Package",
-              "version": "[8.0.4, )"
+              "version": "[8.0.5, )"
             }
           },
           "imports": [
@@ -120,7 +124,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.300/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.303/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

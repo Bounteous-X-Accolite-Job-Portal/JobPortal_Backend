@@ -1,0 +1,60 @@
+version: '3.4'
+
+networks:
+  jobPortal:
+
+services:
+  bountousxaccolitejobportal.database:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: JobPortalDb
+    environment:
+     - ACCEPT_EULA=Y
+     - MSSQL_SA_PASSWORD=Vishal@2003
+     - MSSQL_PID=Standard
+    volumes:
+     - sqlserver:/var/opt/mssql
+    ports:
+     - "1433:1433"
+    networks:
+     - jobPortal
+    healthcheck:
+        test: ["CMD-SHELL", "/opt/mssql-tools18/bin/sqlcmd -S localhost -U sa -P 'Vishal@2003' -C -Q 'SELECT 1' || exit 1"]
+        interval: 10s
+        retries: 10
+        start_period: 10s
+        timeout: 3s   
+
+  bountousxaccolitejobportal.cache:
+    image: redis:latest
+    container_name: JobPortalCache
+    restart: always
+    ports:
+     - "6379:6379"
+    networks:
+     - jobPortal
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli ping | grep PONG"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 5s
+
+  bountousxaccolitejobportal:
+    image: ${DOCKER_REGISTRY-}bountousxaccolitejobportal
+    container_name: JobPortalBackend
+    build:
+      context: .
+      dockerfile: Bountous X Accolite Job Portal/Dockerfile
+    ports:
+     - "8080:8080"
+     - "8081:8081"
+    depends_on:
+        bountousxaccolitejobportal.database:
+            condition: service_healthy
+        bountousxaccolitejobportal.cache:
+            condition: service_healthy
+    networks:
+     - jobPortal
+
+volumes:
+  sqlserver:
